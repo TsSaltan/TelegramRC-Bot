@@ -151,7 +151,7 @@ class Params extends AbstractForm {
                     $this->getBot()->startListener();
                     $this->setStartButton('on');
                 } else {
-                    alert('Произошла ошибка! Проверьте интернет-подключение.');
+                    alert('Произошла ошибка! Проверьте, корректный ли token и есть ли интернет-подключение.');
                     // $this->runBot('off');
                 }
                 break;

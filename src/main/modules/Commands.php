@@ -165,7 +165,7 @@ class Commands extends AbstractModule {
             $text .= "/vold - Громкость-\n";
             
             $text .= "\n-- Железо --\n";
-            $text .= "/hardware - Железо компьютера\n";
+            // $text .= "/hardware - Железо компьютера\n"; // @todo
             $text .= "/ram - Оперативная память\n";
             $text .= "/battery - Информация об аккумуляторе\n";
             $text .= "/temperature - Датчики температуры\n";
