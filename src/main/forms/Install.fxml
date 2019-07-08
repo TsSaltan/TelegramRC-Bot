@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?import javafx.scene.*?><?import javafx.collections.*?><?import javafx.scene.layout.*?><?import javafx.scene.control.*?><?import javafx.scene.text.*?><?import javafx.scene.image.*?><?import javafx.scene.shape.*?><?import javafx.scene.paint.*?><?import javafx.scene.web.*?><?import javafx.geometry.*?><?import java.lang.*?><?import org.develnext.jphp.ext.javafx.classes.data.*?><?import org.develnext.jphp.ext.javafx.support.*?><?import org.develnext.jphp.ext.javafx.support.control.*?><?import org.develnext.jphp.ext.game.support.*?><AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" focusTraversable="false" id="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320" prefWidth="576" styleClass="">
+  <children>
+    <ImageViewEx AnchorPane.bottomAnchor="-8" AnchorPane.leftAnchor="-8" AnchorPane.rightAnchor="-8" AnchorPane.topAnchor="-8" autoSize="false" centered="true" focusTraversable="false" height="336" id="image" layoutX="-8" layoutY="-8" mosaic="false" mosaicGap="0" proportional="true" stretch="true" styleClass="" textFill="#000000" width="592">
+      <font>
+        <Font name="System Regular" size="12"/>
+      </font>
+    </ImageViewEx>
+    <Data cursor="DEFAULT" enabled="1" id="data-image" image=".data/img/telegram-app.jpg" visible="1"/>
+    <Panel AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="32" backgroundColor="#5a5a5a60" borderColor="#f2f2f2" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="panel_1" layoutX="8" layoutY="32" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" opacity="0" prefHeight="280" prefWidth="560" styleClass="" title="Шаг 1. Пользовательское соглашение." titleColor="#ffffff" titleOffset="0" titlePosition="TOP_LEFT">
+      <children>
+        <TextArea editable="false" focusTraversable="true" id="terms_of_use_text" layoutX="8" layoutY="16" prefColumnCount="40" prefHeight="224" prefWidth="544" promptText="" styleClass="text-input text-area " text="&#10;Данное программное обеспечение создано для личного использования. &#10;Запрещается использовать программу в целях шпионажа, кражи какой-либо информации и в иных целях, которые могут нанести тот или иной ущерб. &#10;Автор программы снимает с себя всю ответственность за возможные последствия от использования данного ПО." wrapText="true">
+          <font>
+            <Font name="System Regular" size="14"/>
+          </font>
+        </TextArea>
+        <Data cursor="DEFAULT" enabled="1" id="data-terms_of_use_text" visible="1"/>
+        <Button AnchorPane.bottomAnchor="9" AnchorPane.rightAnchor="7" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_to_2" layoutX="280" layoutY="245" prefHeight="24" prefWidth="272" styleClass="button " text="Я прочитал(а) пользовательское соглашение" textAlignment="CENTER" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="12"/>
+          </font>
+        </Button>
+        <Data cursor="DEFAULT" enabled="1" id="data-button_to_2" visible="1"/>
+      </children>
+      <titleFont>
+        <Font name="System Regular" size="12"/>
+      </titleFont>
+    </Panel>
+    <Data cursor="DEFAULT" enabled="1" id="data-panel_1" visible=""/>
+    <Panel AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="32" backgroundColor="#5a5a5a60" borderColor="#f2f2f2" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="panel_0" layoutX="8" layoutY="32" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" opacity="0" prefHeight="280" prefWidth="560" styleClass="" title="Шаг 0. Приветствие" titleColor="#ffffff" titleOffset="0" titlePosition="TOP_LEFT">
+      <children>
+        <Button AnchorPane.bottomAnchor="12" AnchorPane.rightAnchor="7" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_to_1" layoutX="416" layoutY="242" prefHeight="25" prefWidth="136" styleClass="button " text="Начать установку" textAlignment="CENTER" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="12"/>
+          </font>
+        </Button>
+        <Data cursor="DEFAULT" enabled="1" id="data-button_to_1" visible="1"/>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label" layoutX="8" layoutY="8" prefHeight="72" prefWidth="544" styleClass="label " text="Добро пожаловать! &#10;Данная программа поможет дистанционно управлять вашим ПК через мессенджер Telegram." textAlignment="CENTER" textFill="#ffffff" underline="false" wrapText="true">
+          <font>
+            <Font name="System Bold" size="14"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-label" visible="1"/>
+      </children>
+      <titleFont>
+        <Font name="System Regular" size="12"/>
+      </titleFont>
+    </Panel>
+    <Data cursor="DEFAULT" enabled="1" id="data-panel_0" visible=""/>
+    <Data cursor="DEFAULT" enabled="1" id="data-panel_2" visible=""/>
+    <Data cursor="DEFAULT" enabled="1" id="data-panel_3" visible=""/>
+    <Panel AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="32" backgroundColor="#5a5a5a60" borderColor="#f2f2f2" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="panel_3" layoutX="8" layoutY="32" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" opacity="0" prefHeight="280" prefWidth="560" styleClass="" title="Шаг 3. Добавление пользователя" titleColor="#ffffff" titleOffset="0" titlePosition="TOP_LEFT">
+      <children>
+        <Button AnchorPane.rightAnchor="15" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_finish" layoutX="400" layoutY="240" prefHeight="25" prefWidth="144" styleClass="button " text="Завершить установку" textAlignment="CENTER" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="12"/>
+          </font>
+        </Button>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label11" layoutX="8" layoutY="16" prefHeight="19" prefWidth="528" styleClass="label " text="Введите имя пользователя, который сможет управлять ботом" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="13"/>
+          </font>
+        </LabelEx>
+        <TextField AnchorPane.bottomAnchor="214" AnchorPane.leftAnchor="7" AnchorPane.rightAnchor="15" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_user" layoutX="8" layoutY="40" prefColumnCount="12" prefHeight="25" prefWidth="536" promptText="Введите имя пользователя, без знака @" styleClass="text-input text-field " text="">
+          <font>
+            <Font name="System Regular" size="12"/>
+          </font>
+        </TextField>
+        <Data cursor="DEFAULT" enabled="1" id="data-button_finish" visible="1"/>
+        <Data cursor="DEFAULT" enabled="1" id="data-label11" visible="1"/>
+        <Data cursor="DEFAULT" enabled="1" id="data-edit_user" visible="1"/>
+      </children>
+      <titleFont>
+        <Font name="System Regular" size="12"/>
+      </titleFont>
+    </Panel>
+    <Panel AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="32" backgroundColor="#5a5a5a75" borderColor="#f2f2f2" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="panel_2" layoutX="8" layoutY="32" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="280" prefWidth="560" styleClass="" title="Шаг 2. Настройка токена" titleColor="#ffffff" titleOffset="0" titlePosition="TOP_LEFT">
+      <children>
+        <Button AnchorPane.rightAnchor="15" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_to_3" layoutX="448" layoutY="240" prefHeight="25" prefWidth="96" styleClass="button " text="Далее" textAlignment="CENTER" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="12"/>
+          </font>
+        </Button>
+        <Data cursor="DEFAULT" enabled="1" id="data-button_to_3" visible="1"/>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="labelAlt" layoutX="8" layoutY="16" prefHeight="19" prefWidth="528" styleClass="label " text="Необходимо создать или ввести уже готовый token для бота Telegram." textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="13"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-labelAlt" visible="1"/>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label3" layoutX="8" layoutY="48" prefHeight="19" prefWidth="528" styleClass="label " text="Как создать нового бота:" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+          <font>
+            <Font name="System Bold" size="13"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-label3" visible="1"/>
+        <Hyperlink alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="botfather_link" layoutX="312" layoutY="64" prefHeight="24" prefWidth="88" style="-fx-text-fill: #99CCFF;" styleClass="hyperlink " text="\@BotFather" textAlignment="LEFT" wrapText="false">
+          <font>
+            <Font name="System Bold" size="14"/>
+          </font>
+        </Hyperlink>
+        <Data cursor="DEFAULT" enabled="1" id="data-botfather_link" visible="1"/>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label4" layoutX="8" layoutY="64" prefHeight="24" prefWidth="304" styleClass="label " text="1. Через свой аккаунт Telegram обратитесь к боту" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="13"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-label4" visible="1"/>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label5" layoutX="8" layoutY="88" prefHeight="24" prefWidth="528" styleClass="label " text="2. Отправьте боту команду" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="13"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-label5" visible="1"/>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label6" layoutX="176" layoutY="88" prefHeight="24" prefWidth="96" styleClass="label " text="/newbot" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+          <font>
+            <Font name="System Bold" size="14"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-label6" visible="1"/>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label7" layoutX="8" layoutY="112" prefHeight="24" prefWidth="528" styleClass="label " text="3. Придумайте и введите имя для бота" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="13"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-label7" visible="1"/>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label9" layoutX="8" layoutY="176" prefHeight="24" prefWidth="528" styleClass="label " text="5. Скопируйте полученный token для своего нового бота" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="13"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-label9" visible="1"/>
+        <TextField AnchorPane.bottomAnchor="14" AnchorPane.leftAnchor="7" AnchorPane.rightAnchor="119" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_token" layoutX="8" layoutY="240" prefColumnCount="12" prefHeight="25" prefWidth="432" promptText="Введите сюда токен !!!" styleClass="text-input text-field " text="">
+          <font>
+            <Font name="System Regular" size="12"/>
+          </font>
+        </TextField>
+        <Data cursor="DEFAULT" enabled="1" id="data-edit_token" visible="1"/>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label8" layoutX="8" layoutY="136" prefHeight="40" prefWidth="528" styleClass="label " text="4. Придумайте и введите имя пользователя для бота (username). Оно должно быть уникальным и заканчиваться на `bot`. Например TetrisBot или tetris_bot." textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="true">
+          <font>
+            <Font name="System Regular" size="13"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-label8" visible="1"/>
+        <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label10" layoutX="8" layoutY="216" prefHeight="16" prefWidth="528" styleClass="label " text="Введите токен здесь" textAlignment="LEFT" textFill="#ffffff" underline="false" wrapText="false">
+          <font>
+            <Font name="System Bold" size="14"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-label10" visible="1"/>
+      </children>
+      <titleFont>
+        <Font name="System Regular" size="12"/>
+      </titleFont>
+    </Panel>
+  </children>
+</AnchorPane>

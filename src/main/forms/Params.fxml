@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?import javafx.scene.*?><?import javafx.collections.*?><?import javafx.scene.layout.*?><?import javafx.scene.control.*?><?import javafx.scene.text.*?><?import javafx.scene.image.*?><?import javafx.scene.shape.*?><?import javafx.scene.paint.*?><?import javafx.scene.web.*?><?import javafx.geometry.*?><?import java.lang.*?><?import org.develnext.jphp.ext.javafx.classes.data.*?><?import org.develnext.jphp.ext.javafx.support.*?><?import org.develnext.jphp.ext.javafx.support.control.*?><?import org.develnext.jphp.ext.game.support.*?><AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" focusTraversable="false" id="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520" prefWidth="480" styleClass="">
+  <children>
+    <Data cursor="DEFAULT" enabled="1" id="data-statusbar" visible="1"/>
+    <ScrollPane AnchorPane.bottomAnchor="24" AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8" fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" hvalue="0" id="container" layoutX="8" layoutY="8" prefHeight="488" prefWidth="464" styleClass="scroll-pane " vbarPolicy="ALWAYS" vvalue="0">
+      <content>
+        <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="456" prefWidth="451" styleClass="">
+          <children>
+            <VBox AnchorPane.bottomAnchor="-24" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" alignment="TOP_LEFT" focusTraversable="false" id="main_box" layoutX="0" layoutY="0" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="480" prefWidth="451" spacing="8" styleClass="">
+              <padding>
+                <Insets bottom="8" left="8" right="8" top="8"/>
+              </padding>
+              <children>
+                <Panel AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8" backgroundColor="#ffffff" borderColor="#c0c0c0" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="panel" layoutX="8" layoutY="8" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="66" prefWidth="435" styleClass="" titleColor="#333333" titleOffset="15" titlePosition="TOP_LEFT">
+                  <children>
+                    <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label" layoutX="24" layoutY="8" prefHeight="24" prefWidth="72" styleClass="label " text="Имя бота:" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </LabelEx>
+                    <Data cursor="DEFAULT" enabled="1" id="data-label" visible="1"/>
+                    <ToggleButton alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_run" layoutX="256" layoutY="16" prefHeight="32" prefWidth="168" styleClass="toggle-button " text="-" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </ToggleButton>
+                    <Data cursor="DEFAULT" enabled="1" id="data-button_run" visible="1"/>
+                    <Hyperlink alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="link_botnick" layoutX="96" layoutY="32" prefHeight="32" prefWidth="168" styleClass="hyperlink " text="N/A" textAlignment="LEFT" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </Hyperlink>
+                    <Data cursor="DEFAULT" enabled="1" id="data-link_botnick" visible="1"/>
+                    <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label_botname" layoutX="96" layoutY="8" prefHeight="24" prefWidth="168" styleClass="label " text="N/A" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Bold" size="12"/>
+                      </font>
+                    </LabelEx>
+                    <Data cursor="DEFAULT" enabled="1" id="data-label_botname" visible="1"/>
+                    <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label4" layoutX="24" layoutY="32" prefHeight="32" prefWidth="72" styleClass="label " text="Никнейм:" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </LabelEx>
+                    <Data cursor="DEFAULT" enabled="1" id="data-label4" visible="1"/>
+                  </children>
+                  <titleFont>
+                    <Font name="System Regular" size="12"/>
+                  </titleFont>
+                </Panel>
+                <TitledPane alignment="CENTER_LEFT" animated="true" collapsible="true" contentDisplay="LEFT" ellipsisString="..." expanded="false" focusTraversable="true" graphicTextGap="4" id="spoiler_run" layoutX="8" layoutY="82" prefHeight="24" prefWidth="448" styleClass="titled-pane " text="Параметры запуска" textAlignment="LEFT" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="12"/>
+                  </font>
+                  <content>
+                    <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="101" prefWidth="433" styleClass="">
+                      <padding>
+                        <Insets bottom="9.6" left="9.6" right="9.6" top="9.6"/>
+                      </padding>
+                      <children>
+                        <CheckBox AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="20.399993515015" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_tray" layoutX="17.6" layoutY="16" prefHeight="16" prefWidth="408" styleClass="check-box " text="Закрывать окно в трей, если бот запущен" textAlignment="LEFT" underline="false" wrapText="false">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </CheckBox>
+                        <Data cursor="DEFAULT" enabled="1" id="data-checkbox_tray" visible="1"/>
+                        <CheckBox AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="50.799995422363" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_autorun" layoutX="17.6" layoutY="40" prefHeight="17" prefWidth="416" styleClass="check-box " text="Автоматически запускать бота при запуске программы" textAlignment="LEFT" underline="false" wrapText="false">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </CheckBox>
+                        <Data cursor="DEFAULT" enabled="1" id="data-checkbox_autorun" visible="1"/>
+                        <CheckBox AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="111.00000152588" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_iconified" layoutX="17.6" layoutY="64" prefHeight="16" prefWidth="327" styleClass="check-box " text="Запускать программу свёрнутой" textAlignment="LEFT" underline="false" wrapText="false">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </CheckBox>
+                        <Data cursor="DEFAULT" enabled="1" id="data-checkbox_iconified" visible="1"/>
+                      </children>
+                    </AnchorPane>
+                  </content>
+                </TitledPane>
+                <TitledPane AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8" alignment="CENTER_LEFT" animated="true" collapsible="true" contentDisplay="LEFT" ellipsisString="..." expanded="false" focusTraversable="true" graphicTextGap="4" id="token_spoiler" layoutX="8" layoutY="115" prefHeight="24" prefWidth="448" styleClass="titled-pane " text="Токен" textAlignment="LEFT" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="12"/>
+                  </font>
+                  <content>
+                    <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="68" prefWidth="433" styleClass="">
+                      <padding>
+                        <Insets bottom="9.6" left="9.6" right="9.6" top="9.6"/>
+                      </padding>
+                      <children>
+                        <TextField AnchorPane.leftAnchor="24" AnchorPane.rightAnchor="138.79999656678" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_token" layoutX="33.6" layoutY="16" prefColumnCount="12" prefHeight="32" prefWidth="264" promptText="Введите token" styleClass="text-input text-field " text="">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </TextField>
+                        <Data cursor="DEFAULT" enabled="1" id="data-edit_token" visible="1"/>
+                        <Button AnchorPane.rightAnchor="20.4" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_save_token" layoutX="291" layoutY="16" prefHeight="32" prefWidth="112" styleClass="button " text="Сохранить" textAlignment="CENTER" underline="false" wrapText="false">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </Button>
+                        <Data cursor="DEFAULT" enabled="1" graphic=".data/img/save.png" id="data-button_save_token" visible="1"/>
+                      </children>
+                    </AnchorPane>
+                  </content>
+                </TitledPane>
+                <Data cursor="DEFAULT" enabled="1" graphic=".data/img/key.png" id="data-token_spoiler" visible="1"/>
+                <TitledPane AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="41" alignment="CENTER_LEFT" animated="true" collapsible="true" contentDisplay="LEFT" ellipsisString="..." expanded="false" focusTraversable="true" graphicTextGap="4" id="spoiler_users" layoutX="8" layoutY="148" prefHeight="24" prefWidth="448" styleClass="titled-pane " text="Список разрешённых пользователей" textAlignment="LEFT" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="12"/>
+                  </font>
+                  <content>
+                    <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="205" prefWidth="433" styleClass="">
+                      <padding>
+                        <Insets bottom="9.6" left="9.6" right="9.6" top="9.6"/>
+                      </padding>
+                      <children>
+                        <TextField AnchorPane.leftAnchor="24" AnchorPane.rightAnchor="164.39999847412" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_username" layoutX="33.6" layoutY="48" prefColumnCount="12" prefHeight="25" prefWidth="216" promptText="Введите имя пользователя без знака @" styleClass="text-input text-field " text="">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </TextField>
+                        <Data cursor="DEFAULT" enabled="1" id="data-edit_username" visible="1"/>
+                        <Button AnchorPane.rightAnchor="28.4" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_add_user" layoutX="275" layoutY="48" prefHeight="25" prefWidth="120" styleClass="button " text="Добавить" textAlignment="CENTER" underline="false" wrapText="false">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </Button>
+                        <Data cursor="DEFAULT" enabled="1" graphic=".data/img/user_add.png" id="data-button_add_user" visible="1"/>
+                        <LabelEx AnchorPane.leftAnchor="24" AnchorPane.rightAnchor="10.799995422363" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="labelAlt" layoutX="33.6" layoutY="16" prefHeight="17" prefWidth="384" styleClass="label " text="Только пользователи из этого списка могут управлять ботом" textAlignment="LEFT" underline="false" wrapText="false">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </LabelEx>
+                        <Data cursor="DEFAULT" enabled="1" id="data-labelAlt" visible="1"/>
+                        <ListViewEx AnchorPane.leftAnchor="24" AnchorPane.rightAnchor="162.79999847412" editable="false" fixedCellSize="-1" focusTraversable="true" id="list_users" layoutX="33.6" layoutY="88" prefHeight="96" prefWidth="240" styleClass="list-view ">
+                          <items xmlns:fx="http://javafx.com/fxml">
+                            <FXCollections fx:factory="observableArrayList"/>
+                          </items>
+                        </ListViewEx>
+                        <Data cursor="DEFAULT" enabled="1" id="data-list_users" visible="1"/>
+                        <Button AnchorPane.rightAnchor="28.4" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_delete_user" layoutX="275" layoutY="160" prefHeight="25" prefWidth="120" styleClass="button " text="Удалить" textAlignment="CENTER" underline="false" wrapText="false">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </Button>
+                        <Data cursor="DEFAULT" enabled="" graphic=".data/img/user_delete.png" id="data-button_delete_user" visible="1"/>
+                      </children>
+                    </AnchorPane>
+                  </content>
+                </TitledPane>
+                <Data cursor="DEFAULT" enabled="1" graphic=".data/img/users.png" id="data-spoiler_users" visible="1"/>
+                <TitledPane AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="249" alignment="CENTER_LEFT" animated="true" collapsible="true" contentDisplay="LEFT" ellipsisString="..." expanded="false" focusTraversable="true" graphicTextGap="4" id="spoiler_debug" layoutX="8" layoutY="181" prefHeight="24" prefWidth="448" styleClass="titled-pane " text="Отладочная информация" textAlignment="LEFT" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="12"/>
+                  </font>
+                  <content>
+                    <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="123" prefWidth="433" styleClass="">
+                      <padding>
+                        <Insets bottom="9.6" left="9.6" right="9.6" top="9.6"/>
+                      </padding>
+                      <children>
+                        <Button AnchorPane.bottomAnchor="12.4" AnchorPane.rightAnchor="20.4" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_clear_logs" layoutX="275" layoutY="76" prefHeight="25" prefWidth="128" styleClass="button " text="Очистить логи" textAlignment="CENTER" underline="false" wrapText="false">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </Button>
+                        <Data cursor="DEFAULT" enabled="1" graphic=".data/img/trash.png" id="data-button_clear_logs" visible="1"/>
+                        <TextArea AnchorPane.bottomAnchor="49.2" AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="19.2" AnchorPane.topAnchor="16" editable="false" focusTraversable="true" id="text_debug" layoutX="25.6" layoutY="25.6" prefColumnCount="40" prefHeight="114" prefWidth="392" promptText="" style="-fx-font-smoothing-type: lcd; " styleClass="text-input text-area " text="" wrapText="false">
+                          <font>
+                            <Font name="System Regular" size="12"/>
+                          </font>
+                        </TextArea>
+                        <Data cursor="DEFAULT" enabled="1" id="data-text_debug" visible="1"/>
+                      </children>
+                    </AnchorPane>
+                  </content>
+                </TitledPane>
+                <Data cursor="DEFAULT" enabled="1" graphic=".data/img/bug.png" id="data-spoiler_debug" visible="1"/>
+                <Data cursor="DEFAULT" enabled="1" id="data-panel" visible="1"/>
+                <Data cursor="DEFAULT" enabled="1" graphic=".data/img/console.png" id="data-spoiler_run" visible="1"/>
+              </children>
+            </VBox>
+            <Data cursor="DEFAULT" enabled="1" id="data-main_box" visible="1"/>
+          </children>
+        </AnchorPane>
+      </content>
+    </ScrollPane>
+    <Data cursor="DEFAULT" enabled="1" id="data-container" visible="1"/>
+    <Panel AnchorPane.bottomAnchor="-2" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" backgroundColor="#ffffff" borderColor="#c0c0c0" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="statusbar" layoutX="0" layoutY="496" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="26" prefWidth="480" styleClass="" titleColor="#333333" titleOffset="15" titlePosition="TOP_LEFT">
+      <children>
+        <LabelEx AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="6" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="0" id="label_debug" layoutX="9" layoutY="0" prefHeight="24" prefWidth="464" styleClass="label " text="[Debug]" textAlignment="LEFT" textFill="#000000" underline="false" wrapText="false">
+          <font>
+            <Font name="System Regular" size="12"/>
+          </font>
+        </LabelEx>
+        <Data cursor="DEFAULT" enabled="1" id="data-label_debug" visible="1"/>
+      </children>
+      <titleFont>
+        <Font name="System Regular" size="12"/>
+      </titleFont>
+    </Panel>
+  </children>
+</AnchorPane>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1562612607709">
+  <tree>
+    <expanded>
+    <path src=""/>
+      <path src="/src"/>
+      <path src="/src/.data"/>
+      <path src="/src/.data/img"/>
+      <path src="/src/.theme"/>
+      <path src="/src/main"/>
+      <path src="/src/main/forms"/>
+      <path src="/vendor"/>
+    </expanded>
+  </tree>
+  <openedFiles>
+  <file src="TelegramRC.dnproject"/>
+    <file selected="1" src="src/main/modules/AppModule.php"/>
+    <file src="src/main/forms/Params.php"/>
+    <file src="src/main/modules/Config.php"/>
+    <file src="src/main/modules/TelegramBot.php"/>
+    <file src="src/main/modules/Commands.php"/>
+    <file src="src/main/modules/Debug.php"/>
+  </openedFiles>
+  <files/>
+  <behaviours>
+  <behaviour class="ide\project\behaviours\BundleProjectBehaviour"/>
+    <behaviour class="ide\project\behaviours\PhpProjectBehaviour"/>
+    <behaviour class="ide\project\behaviours\JavaPlatformBehaviour"/>
+    <behaviour class="ide\project\behaviours\GuiFrameworkProjectBehaviour"/>
+    <behaviour class="ide\project\behaviours\RunBuildProjectBehaviour"/>
+    <behaviour class="ide\project\behaviours\ShareProjectBehaviour"/>
+    <behaviour class="ide\project\behaviours\BackupProjectBehaviour"/>
+    <behaviour class="ide\project\behaviours\GradleProjectBehaviour"/>
+  </behaviours>
+</project>

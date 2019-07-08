@@ -1,0 +1,25 @@
+{
+  "props": {
+    "singleton": true
+  },
+  "components": {
+    "systemTray": {
+      "type": "script\\SystemTrayScript",
+      "x": 80,
+      "y": 16,
+      "props": {
+        "visible": false,
+        "tooltip": "TelegramRC Bot",
+        "icon": ".data/img/remote_control.png",
+        "manualExit": true,
+        "alwaysShowing": true
+      }
+    },
+    "robot": {
+      "type": "script\\RobotScript",
+      "x": 16,
+      "y": 16,
+      "props": {}
+    }
+  }
+}

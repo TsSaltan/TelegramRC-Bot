@@ -1,0 +1,6 @@
+/* JavaFX CSS Style with -fx- prefix */
+
+.titled-pane .content {
+    -fx-background-color: #fefefe;
+    -fx-font-smoothing-type: gray; 
+}
