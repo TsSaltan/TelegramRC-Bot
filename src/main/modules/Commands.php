@@ -215,7 +215,7 @@ class Commands extends AbstractModule {
      */
     public function __cd($path = null){
         if(!is_null($path)){
-            if($path == '/' ||$path == '\\'){
+            if($path == '/' || $path == '\\' || substr($path, 1, 1) == ':'){
                $this->dir = $path;
             }
             else $this->dir = realpath($this->dir . '/' . $path);

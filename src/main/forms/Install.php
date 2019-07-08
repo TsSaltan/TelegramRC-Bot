@@ -93,6 +93,7 @@ class Install extends AbstractForm
                         alert('Связь с ботом "'. $test->first_name .'" (@'. $test->username .') установлена!');
                         Config::set('token', $token);
                         Config::set('users', [$user]);
+                        $this->free();
                         app()->appModule()->сonstruct();
                     } else {
                         alert('Произошла ошибка. Возможно указан неверный token.');

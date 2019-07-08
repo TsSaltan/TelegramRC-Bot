@@ -33,8 +33,8 @@ class AppModule extends AbstractModule
         }
         
         // Путь к конфигам и логам
-        Config::$cfgFile = $app_dir . Config::$cfgFile;
-        Debug::$logFile = $app_dir . Debug::$logFile;
+        Config::$cfgFile = $app_dir . basename(Config::$cfgFile);
+        Debug::$logFile = $app_dir . basename(Debug::$logFile);
         
         // Загрузка настроек из файла    
         Config::load();
@@ -113,7 +113,7 @@ class AppModule extends AbstractModule
      */
     function getAppDir(){
         $ds = System::getProperty('file.separator');
-        return System::getProperty('user.home') . $ds . 'TelegramRCBot'. $ds;
+        return System::getProperty('user.home') . $ds . 'TelegramRC-Bot'. $ds;
     }
 
     /**

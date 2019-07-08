@@ -58,6 +58,7 @@ class Debug extends AbstractModule {
             
             
         });
+        
         file_put_contents(self::$logFile, $fulldate . '['.$prefix.'] ' . $message . "\n", FILE_APPEND);
         
     }
