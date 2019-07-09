@@ -4,7 +4,7 @@
 ![Screenshot v1.0](https://tssaltan.top/files/2019/07/telegram-rc-bot.jpg)
 
 * [**Описание программы**](https://tssaltan.top/1928.telegramrc-bot-удалённое-управление-пк-через-telegram/)
-* [**Скачать программу**](https://github.com/TsSaltan/TelegramRC-Bot/releases/latest)
+* [**Скачать программу**](https://tssaltan.top/download/1931/)
 
 
 ## Build
