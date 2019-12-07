@@ -154,18 +154,6 @@ class Commands extends AbstractModule {
      * Сообщение при получении файла
      */    
     public function inputFile(array $doc){
-        /*$kb = [
-            ['/inputfile_open' => '📄 Открыть файл']
-        ];
-        
-        if(Windows::isWin()){
-            $kb[] = ['/inputfile_print' => '🖨 Распечатать файл'];
-        }
-        
-        $kb[] = ['/inputfile_delete' => '🗑 Удалить файл'];
-        
-        $this->send('Получен файл "' . $doc['file_name'] . '". Выберите действие:', $this->keyboardInline($kb));
-        //var_dump($this->bot->getLastFile());*/
         $this->__file('input://');
     }
  
@@ -347,7 +335,7 @@ class Commands extends AbstractModule {
             }
         }
         
-        $items = $dirs + $files;
+        $items = array_merge($dirs, $files);
         $list = "Содержимое директории \"" . $this->dir . "\":";
         
         $rows = [];
