@@ -7,13 +7,10 @@ use std, gui, framework, main;
 
 /**
  * Главная форма с настройками
- * 
- * !!! Осторожно обращайтесь со спойлерами в визуальном редакторе, одно неловкое движениее и вся разметка может полететь к чертям !!!
  */
 class Params extends AbstractForm {
     
     /**
-     * Отображение формы
      * @event show 
      */
     function doShow(){    
@@ -25,6 +22,7 @@ class Params extends AbstractForm {
         
         // Загрузка списка пользователей
         $users = Config::get('users');
+        $this->list_users->items->clear();
         $this->list_users->items->addAll($users);
         
         // Отображаем, запущен бот или нет
@@ -37,12 +35,18 @@ class Params extends AbstractForm {
         // Подгружаем логи    
         $this->text_debug->text = Debug::getLogs();
         $this->text_debug->end();
-        $this->spoiler_debug->minHeight = 300; // По-другому этот дибильный спойлер не меняет размеры
         
         // Подгружаем настройки
         $this->checkbox_tray->selected = Config::get('use_tray');
         $this->checkbox_autorun->selected = Config::get('autorun');
         $this->checkbox_iconified->selected = Config::get('iconified');
+        
+        // Иконки у табов
+        $this->tabPane->tabs->offsetGet(0)->graphic = new UXImageView(new UXImage('res://.data/img/console.png'));
+        $this->tabPane->tabs->offsetGet(1)->graphic = new UXImageView(new UXImage('res://.data/img/key.png'));
+        $this->tabPane->tabs->offsetGet(2)->graphic = new UXImageView(new UXImage('res://.data/img/users.png'));
+        $this->tabPane->tabs->offsetGet(3)->graphic = new UXImageView(new UXImage('res://.data/img/bug.png'));
+        
     }
     
     /**
@@ -50,7 +54,7 @@ class Params extends AbstractForm {
      * Exit нужен, чтоб закрыть программу, когда активен трей.
      * @event close 
      */
-    function doClose(){    
+    function doClose(){     
         if($this->getBotState() == 'off'){
             exit(0);
         }
@@ -77,13 +81,12 @@ class Params extends AbstractForm {
     function getBot(){
         return app()->appModule()->tgBot;
     }
-    
 
     /**
      * Добавление пользователя
      * @event button_add_user.action 
      */
-    function addUser(){    
+    function addUser(){  
         $user = $this->edit_username->text;
         if(strlen($user) == 0) return alert('Ошибка: введите имя пользователя!');
         
@@ -95,14 +98,13 @@ class Params extends AbstractForm {
         $users[] = $user;
         Config::set('users', $users);
         $this->getBot()->setUsers($users);
-    }
+    }    
     
-
     /**
      * Удаление пользователя
      * @event button_delete_user.action 
      */
-    function deleteUser(){    
+    function deleteUser(){   
         $this->button_delete_user->enabled = false;
         $selected = $this->list_users->selectedIndex;
         $this->list_users->items->removeByIndex($selected);
@@ -114,7 +116,7 @@ class Params extends AbstractForm {
      * Выбор из списка пользователей
      * @event list_users.action 
      */
-    function doListUsers(){    
+    function doListUsers(){ 
         $this->button_delete_user->enabled = true;
     }
 
@@ -138,7 +140,7 @@ class Params extends AbstractForm {
         $newState = ($state == 'on' ? 'off' : 'on');
         $this->runBot($newState);
     }
-    
+
     /**
      * Запустить или остановить бота 
      * @param string $value "on | off"
@@ -151,7 +153,7 @@ class Params extends AbstractForm {
                     $this->getBot()->startListener();
                     $this->setStartButton('on');
                 } else {
-                    alert('Произошла ошибка! Проверьте, корректный ли token и есть ли интернет-подключение.');
+                    alert('Произошла ошибка! Проверьте интернет-подключение.');
                     // $this->runBot('off');
                 }
                 break;
@@ -180,8 +182,6 @@ class Params extends AbstractForm {
                 $this->button_run->text = 'Бот деактивирован';
                 $this->button_run->graphic = new UXImageView(new UXImage('res://.data/img/offline.png'));
                 $this->button_run->selected = false;
-                $this->label_botname->text = 
-                $this->link_botnick->text = 'N/A';
         }
     }
     
@@ -214,11 +214,11 @@ class Params extends AbstractForm {
         
         return false;
     }
-    
+
     /**
      * @event button_clear_logs.action 
      */
-    function clearLogs(){    
+    function clearLogs(){
         Debug::clearLogs();
         $this->text_debug->clear();
     }
@@ -226,7 +226,7 @@ class Params extends AbstractForm {
     /**
      * @event checkbox_tray.click 
      */
-    function configTray(){    
+    function configTray(){
         $value = $this->checkbox_tray->selected;
         Config::set('use_tray', $value);
         
@@ -236,7 +236,7 @@ class Params extends AbstractForm {
     /**
      * @event checkbox_autorun.click 
      */
-    function configAutorun(){    
+    function configAutorun(){   
         $value = $this->checkbox_autorun->selected;
         Config::set('autorun', $value);
     }
@@ -244,7 +244,7 @@ class Params extends AbstractForm {
     /**
      * @event checkbox_iconified.click 
      */
-    function configIconified(){    
+    function configIconified(){  
         $value = $this->checkbox_iconified->selected;
         Config::set('iconified', $value);
     }

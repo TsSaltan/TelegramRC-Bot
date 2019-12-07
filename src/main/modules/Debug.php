@@ -3,9 +3,7 @@ namespace main\modules;
 
 use std, gui, framework, main;
 
-/**
- * Вывод и сохранение в файл отладочной информации 
- */
+
 class Debug extends AbstractModule {
     
     public static $logFile = 'log.txt';
@@ -58,7 +56,6 @@ class Debug extends AbstractModule {
             
             
         });
-        
         file_put_contents(self::$logFile, $fulldate . '['.$prefix.'] ' . $message . "\n", FILE_APPEND);
         
     }

@@ -4,12 +4,15 @@ namespace main\modules;
 use std, gui, framework, main;
 
 /**
- * Класс отвечает за чтение/запись настроек в json файл
- * При запуске программы нужно вызвать метод load, чтоб загрузить всё из файла
+ * Здесь будут храниться настройки 
  */
 class Config extends AbstractModule {
     
     public static $cfgFile = 'config.json';
+    
+    /**
+     * @var array 
+     */
     protected static $data = [];
     
     /**

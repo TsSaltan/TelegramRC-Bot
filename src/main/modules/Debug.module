@@ -1,6 +1,4 @@
 {
-  "props": {
-    "singleton": true
-  },
+  "props": [],
   "components": []
 }

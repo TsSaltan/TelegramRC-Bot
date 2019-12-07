@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?import javafx.scene.*?><?import javafx.collections.*?><?import javafx.scene.layout.*?><?import javafx.scene.control.*?><?import javafx.scene.text.*?><?import javafx.scene.image.*?><?import javafx.scene.shape.*?><?import javafx.scene.paint.*?><?import javafx.scene.web.*?><?import javafx.geometry.*?><?import java.lang.*?><?import org.develnext.jphp.ext.javafx.classes.data.*?><?import org.develnext.jphp.ext.javafx.support.*?><?import org.develnext.jphp.ext.javafx.support.control.*?><?import org.develnext.jphp.ext.game.support.*?><AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" focusTraversable="false" id="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360" prefWidth="640" styleClass="">
+  <children>
+    <ImageViewEx AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="24" autoSize="false" centered="true" focusTraversable="false" height="336" id="image" layoutX="0" layoutY="24" mosaic="false" mosaicGap="0" proportional="false" stretch="true" styleClass="" textFill="#000000" width="640">
+      <font>
+        <Font name="System Regular" size="12"/>
+      </font>
+    </ImageViewEx>
+    <Data cursor="DEFAULT" enabled="1" id="data-image" image=".data/img/telegram-app.jpg" visible="1"/>
+    <TabPaneEx AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" focusTraversable="false" id="tabPane" layoutX="0" layoutY="0" prefHeight="360" prefWidth="640" styleClass="tab-pane " tabClosingPolicy="UNAVAILABLE">
+      <tabs>
+        <Tab text="Приветствие">
+          <content>
+            <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="338" prefWidth="640" styleClass="">
+              <children>
+                <LabelEx AnchorPane.leftAnchor="56" AnchorPane.rightAnchor="37" AnchorPane.topAnchor="56" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label" layoutX="56" layoutY="56" prefHeight="72" prefWidth="544" styleClass="label " text="Данная программа поможет дистанционно управлять вашим ПК через мессенджер Telegram." textAlignment="LEFT" textFill="#ffffff" underline="false" wrapText="true">
+                  <font>
+                    <Font name="System Regular" size="14"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label" visible="1"/>
+                <LabelEx AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="16" alignment="CENTER" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="labelAlt" layoutX="8" layoutY="16" prefHeight="48" prefWidth="624" styleClass="label " text="Добро пожаловать! " textAlignment="CENTER" textFill="#ffffff" underline="false" wrapText="true">
+                  <font>
+                    <Font name="System Bold" size="16"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-labelAlt" visible="1"/>
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+        <Tab text="Шаг 1: Настройка прокси">
+          <content>
+            <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="338" prefWidth="640" styleClass="">
+              <children>
+                <LabelEx AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="16" AnchorPane.topAnchor="16" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label3" layoutX="16" layoutY="16" prefHeight="48" prefWidth="608" styleClass="label " text="Программа может работать через прокси-сервер. &#10;Укажите адрес прокси либо пропустите этот шаг" textAlignment="LEFT" textFill="#ffffff" underline="false" wrapText="true">
+                  <font>
+                    <Font name="System Regular" size="13"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label3" visible="1"/>
+                <TextField AnchorPane.leftAnchor="168" AnchorPane.topAnchor="72" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_proxy_host" layoutX="168" layoutY="72" prefColumnCount="12" prefHeight="25" prefWidth="168" promptText="Proxy Host" styleClass="text-input text-field " text="">
+                  <font>
+                    <Font name="System Regular" size="12"/>
+                  </font>
+                </TextField>
+                <Data cursor="DEFAULT" enabled="1" id="data-edit_proxy_host" visible="1"/>
+                <TextField AnchorPane.leftAnchor="344" AnchorPane.topAnchor="72" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_proxy_port" layoutX="344" layoutY="72" prefColumnCount="12" prefHeight="25" prefWidth="168" promptText="Port" styleClass="text-input text-field " text="">
+                  <font>
+                    <Font name="System Regular" size="12"/>
+                  </font>
+                </TextField>
+                <Data cursor="DEFAULT" enabled="1" id="data-edit_proxy_port" visible="1"/>
+                <ComboBox AnchorPane.leftAnchor="16" AnchorPane.topAnchor="72" editable="false" focusTraversable="true" id="combobox_proxy_type" layoutX="16" layoutY="72" prefHeight="16" prefWidth="144" promptText="" styleClass="combo-box-base combo-box " value="HTTP" visibleRowCount="10">
+                  <items xmlns:fx="http://javafx.com/fxml">
+                    <FXCollections fx:factory="observableArrayList">
+                      <String fx:value="DIRECT"/>
+                      <String fx:value="HTTP"/>
+                      <String fx:value="SOCKS"/>
+                    </FXCollections>
+                  </items>
+                </ComboBox>
+                <Data cursor="DEFAULT" enabled="1" id="data-combobox_proxy_type" visible="1"/>
+                <LabelEx AnchorPane.bottomAnchor="19" AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="168" alignment="CENTER_RIGHT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label_proxy_check" layoutX="8" layoutY="295" prefHeight="24" prefWidth="464" styleClass="label " text="" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="true">
+                  <font>
+                    <Font name="System Bold" size="12"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label_proxy_check" visible="1"/>
+                <LabelEx AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="16" AnchorPane.topAnchor="96" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label4" layoutX="16" layoutY="96" prefHeight="32" prefWidth="608" styleClass="label " text="(прокси с авторизацией временно не поддерживается)" textAlignment="LEFT" textFill="#ffffff" underline="false" wrapText="true">
+                  <font>
+                    <Font name="System Italic" size="12"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label4" visible="1"/>
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+        <Tab text="Шаг 2: Получение токена">
+          <content>
+            <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="338" prefWidth="640" styleClass="">
+              <children>
+                <Panel backgroundColor="#1a1a1a" borderColor="#c0c0c0" borderRadius="0" borderStyle="NONE" borderWidth="1" focusTraversable="false" id="panel" layoutX="8" layoutY="8" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" opacity="0.49350649350649" prefHeight="200" prefWidth="624" styleClass="" titleColor="#333333" titleOffset="15" titlePosition="TOP_LEFT">
+                  <children/>
+                  <titleFont>
+                    <Font name="System Regular" size="12"/>
+                  </titleFont>
+                </Panel>
+                <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label5" layoutX="16" layoutY="16" prefHeight="19" prefWidth="528" styleClass="label " text="Необходимо создать или ввести уже готовый token для бота Telegram." textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="13"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label5" visible="1"/>
+                <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label6" layoutX="16" layoutY="40" prefHeight="19" prefWidth="528" styleClass="label " text="Как создать нового бота:" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Bold" size="13"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label6" visible="1"/>
+                <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label7" layoutX="16" layoutY="64" prefHeight="24" prefWidth="304" styleClass="label " text="1. Через свой аккаунт Telegram обратитесь к боту" textAlignment="LEFT" textFill="#ffffff" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="13"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label7" visible="1"/>
+                <Hyperlink alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="botfather_link" layoutX="320" layoutY="64" prefHeight="24" prefWidth="88" style="-fx-text-fill: #99CCFF;" styleClass="hyperlink " text="\@BotFather" textAlignment="LEFT" wrapText="false">
+                  <font>
+                    <Font name="System Bold" size="14"/>
+                  </font>
+                </Hyperlink>
+                <Data cursor="DEFAULT" enabled="1" id="data-botfather_link" visible="1"/>
+                <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label8" layoutX="16" layoutY="88" prefHeight="24" prefWidth="528" styleClass="label " text="2. Отправьте боту команду" textAlignment="LEFT" textFill="#ffffff" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="13"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label8" visible="1"/>
+                <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label9" layoutX="184" layoutY="88" prefHeight="24" prefWidth="96" styleClass="label " text="/newbot" textAlignment="LEFT" textFill="#b3b3b3" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Bold" size="14"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label9" visible="1"/>
+                <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label10" layoutX="16" layoutY="112" prefHeight="24" prefWidth="528" styleClass="label " text="3. Придумайте и введите имя для бота" textAlignment="LEFT" textFill="#ffffff" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="13"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label10" visible="1"/>
+                <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label11" layoutX="16" layoutY="136" prefHeight="40" prefWidth="528" styleClass="label " text="4. Придумайте и введите имя пользователя для бота (username). Оно должно быть уникальным и заканчиваться на `bot`. Например TetrisBot или tetris_bot." textAlignment="LEFT" textFill="#ffffff" underline="false" wrapText="true">
+                  <font>
+                    <Font name="System Regular" size="13"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label11" visible="1"/>
+                <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label12" layoutX="16" layoutY="176" prefHeight="24" prefWidth="528" styleClass="label " text="5. Скопируйте полученный token для своего нового бота" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="13"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label12" visible="1"/>
+                <Data cursor="DEFAULT" enabled="1" id="data-panel" visible="1"/>
+                <TextField AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_token" layoutX="8" layoutY="216" prefColumnCount="12" prefHeight="32" prefWidth="624" promptText="Token" styleClass="text-input text-field " text="">
+                  <font>
+                    <Font name="System Regular" size="12"/>
+                  </font>
+                </TextField>
+                <Data cursor="DEFAULT" enabled="1" id="data-edit_token" visible="1"/>
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+        <Tab text="Шаг 3: Пользователи">
+          <content>
+            <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="338" prefWidth="640" styleClass="">
+              <children>
+                <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label13" layoutX="8" layoutY="8" prefHeight="24" prefWidth="528" styleClass="label " text="Введите имя пользователя, который сможет управлять ботом" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="13"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label13" visible="1"/>
+                <TextField AnchorPane.bottomAnchor="274" AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="32" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_user" layoutX="8" layoutY="39" prefColumnCount="12" prefHeight="25" prefWidth="600" promptText="Введите имя пользователя, без знака @" styleClass="text-input text-field " text="">
+                  <font>
+                    <Font name="System Regular" size="12"/>
+                  </font>
+                </TextField>
+                <Data cursor="DEFAULT" enabled="1" id="data-edit_user" visible="1"/>
+              </children>
+            </AnchorPane>
+          </content>
+        </Tab>
+      </tabs>
+    </TabPaneEx>
+    <Data cursor="DEFAULT" draggable="NONE" enabled="1" id="data-tabPane" visible="1"/>
+    <Button AnchorPane.bottomAnchor="16" AnchorPane.rightAnchor="16" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_next" layoutX="480" layoutY="312" prefHeight="32" prefWidth="144" styleClass="button " text="Далее" textAlignment="CENTER" underline="false" wrapText="false">
+      <font>
+        <Font name="System Regular" size="12"/>
+      </font>
+    </Button>
+    <Data cursor="DEFAULT" enabled="1" id="data-button_next" visible="1"/>
+    <ProgressBar AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" focusTraversable="false" id="progressBar" layoutX="0" layoutY="0" opacity="0.2962962962963" prefHeight="32" prefWidth="640" progress="0" styleClass="progress-bar "/>
+    <Data cursor="DEFAULT" enabled="1" id="data-progressBar" visible="1"/>
+  </children>
+</AnchorPane>

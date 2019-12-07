@@ -17,17 +17,9 @@ use std, gui, framework, main;
  * т.е. test 123 "456 789"
  * будут переданы как 
  * Commands->test('123', '456 789');
- * 
- * Чтоб послать ответ, можно воспользоваться двумя путями:
- * 1. Функция должна вернуть массив вида
- * ['text' => 'текст для ответа'] или
- * ['photo' => 'path/to/file.jpeg'] или
- * ['doc' => 'path/to/file.doc']
- * 
- * 2. Можно  самому вызвать метод $this->send($text) или $this->sendPhoto($file) и т.д.
  */
 class Commands extends AbstractModule {
-   
+
     /**
      * @var int 
      */
@@ -55,10 +47,79 @@ class Commands extends AbstractModule {
     }
     
     /**
+     * Клавиатура над полем ввода 
+     */
+    protected function keyboard(array $lines){
+        return $this->makeKeyboard('keyboard', $lines);
+    }    
+    
+    /**
+     * Клавиатура под сообщением
+     */
+    protected function keyboardInline(array $lines){
+        return $this->makeKeyboard('inline_keyboard', $lines);
+    }
+    
+    /**
+     * Создать текстовую клавиатуру
+     * @param string $type keyboard|inline_keyboard
+     * @param array $lines [[command => title]]
+     * @param array $params [one_time_keyboard, resize_keyboard]
+     * ...
+     */
+    protected function makeKeyboard($type, array $lines, array $params = []): array {
+        $keyboard = array_merge([
+            'one_time_keyboard' => true,
+            'resize_keyboard' => false
+        ], $params);
+        
+        $keyboard = $params;
+  
+        foreach ($lines as $line){
+            $current_line = [];
+            foreach ($line as $cmd => $text){
+                if(strpos($cmd, 'http:') !== false || strpos($cmd, 'https:') !== false){
+                    $current_line[] = [
+                        "text" => $text,
+                        "url" => $cmd
+                    ];
+                } else {
+                    $current_line[] = [
+                        "text" => $text,
+                        "callback_data" => $cmd
+                    ];
+                }
+            }
+            
+            $keyboard[$type][] = $current_line;
+        }
+        
+        return $keyboard;
+    }
+    
+    /**
+     * Клавиатура по умолчанию (над полем ввода) 
+     */
+    protected function getMainKeyboard(){
+        $isWin = Windows::isWin();
+        $kb = [
+            ['/help' => 'Help 🆘', '/osinfo' => 'OSInfo 💻', '/ip' => 'IP info 🌐'],
+            ['/screens' => 'Screens 🖥', '/cameras' => 'Cameras 📷', '/ls' => 'ls / 🗂'],
+        ];
+        
+        if($isWin){
+            $kb[] = ['/media' => 'Media RC 🎛 ', '/volume' => 'Volume 🔉', '/brightness' => 'Brightness 🔅']; //  🔆
+            $kb[] = ['/battery' => 'Battery 🔋', '/reboot' => 'Reboot 🔄', '/shutdown' => 'Shutdown 🛑'];
+        }
+        
+        return $this->keyboard($kb);       
+    }
+    
+    /**
      * Отправить сообщение 
      */
-    public function send($text){
-        $this->bot->sendAnswer($this->chat_id, ['text' => $text]);
+    public function send($text, ?array $keyboard = null){
+        $this->bot->sendAnswer($this->chat_id, ['text' => $text, 'keyboard' => $keyboard]);
     }    
     
     /**
@@ -88,6 +149,26 @@ class Commands extends AbstractModule {
     public function errorMsg($e){
         return ['text' => 'Произошла ошибка во время выполнения команды: ' . $e];        
     }
+            
+    /**
+     * Сообщение при получении файла
+     */    
+    public function inputFile(array $doc){
+        /*$kb = [
+            ['/inputfile_open' => '📄 Открыть файл']
+        ];
+        
+        if(Windows::isWin()){
+            $kb[] = ['/inputfile_print' => '🖨 Распечатать файл'];
+        }
+        
+        $kb[] = ['/inputfile_delete' => '🗑 Удалить файл'];
+        
+        $this->send('Получен файл "' . $doc['file_name'] . '". Выберите действие:', $this->keyboardInline($kb));
+        //var_dump($this->bot->getLastFile());*/
+        $this->__file('input://');
+    }
+ 
     
     /**
      * Сообщение доступ запрещён 
@@ -98,15 +179,15 @@ class Commands extends AbstractModule {
     
     public function checkWin(){
         if(!Windows::isWin()) throw new \Exception('Required Windows OS');
-    }   
+    }  
 
     
     /**
      * Команда /start 
      * Приветствие при запуске бота
      */
-    public function __start(){
-        return ['text' => 'Вас приветствует бот для удалённого управления компьютером. Введите /help для получения справки.'];        
+    public function __start(){  
+        return ['text' => 'Вас приветствует бот для удалённого управления компьютером. Введите /help для получения справки.', 'keyboard' => $this->getMainKeyboard()];        
     }
     
     /**
@@ -122,7 +203,7 @@ class Commands extends AbstractModule {
         $text .= "Команда необязательно должна начинаться со слеша /\n";
         $text .= "т.е. разницы между командами /cd и cd - нет.\n";
         $text .= "Аргумены передаются через знак пробел. Если аргумент содержит пробел, его нужно обрамить в двойные кавычки \".\n";
-        $text .= "Также аргумент можно передать через __.\n";
+        $text .= "Также аргумент можно передать через __\n";
         $text .= "Примеры:\n";
         $text .= "/command \"argument 1\" arg2\n";
         $text .= "/command__0__1__2\n";
@@ -142,8 +223,12 @@ class Commands extends AbstractModule {
         $text .= "/cd - Получить текущую директорию\n";
         $text .= "/cd [path] - Указать текущую директорию\n";
         $text .= "/ls - Показать содержимое текущей директории\n";
-        $text .= "/cat [file] - Напечатать содержимое файла\n";
-        $text .= "/get_file [file] - Скачать файл\n";
+        $text .= "/file [file] - Отобразить информацию о файле\n";
+        if($isWin){
+            $text .= "/print [file] - Отправить файл на печать \n";
+        }
+        $text .= "/download [file] - Скачать файл\n";
+        $text .= "/delete [file] - Удалить файл\n";
 
         $text .= "\n-- Медиа --\n";
         $text .= "/screens - Информация об экранах\n";
@@ -152,20 +237,17 @@ class Commands extends AbstractModule {
         $text .= "/cameras - Вывести список web-камер\n";
         $text .= "/photo - Сделать фото с web-камеры по умолчанию\n";
         $text .= "/photo [n] - Сделать фото с выбравнной из списка (/cameras) web-камеры\n";
-            
-        // Некоторые функции будут работать только на Windows       
+               
         if($isWin){
             $text .= "\n-- Кнопки --\n";     
             $text .= "/media - Список доступных медиа кнопок\n";
-            $text .= "/play - Воспроизведение / пауза\n";
-            $text .= "/stop - Остановить воспроизведение\n";
-            $text .= "/next - Следующий трек\n";
-            $text .= "/prev - Предыдущий трек\n";
-            $text .= "/volu - Громкость+\n";
-            $text .= "/vold - Громкость-\n";
+            $text .= "/key__play - Воспроизведение / пауза\n";
+            $text .= "/key__stop - Остановить воспроизведение\n";
+            $text .= "/key__next - Следующий трек\n";
+            $text .= "/key__prev - Предыдущий трек\n";
             
             $text .= "\n-- Железо --\n";
-            // $text .= "/hardware - Железо компьютера\n"; // @todo
+            //$text .= "/hardware - Железо компьютера\n";
             $text .= "/ram - Оперативная память\n";
             $text .= "/battery - Информация об аккумуляторе\n";
             $text .= "/temperature - Датчики температуры\n";
@@ -177,29 +259,28 @@ class Commands extends AbstractModule {
             $text .= "\n-- Дополнительно --\n";
             $text .= "/uptime - Время работы ПК\n";
             $text .= "/volume - Получить уровень громкости\n";
-            $text .= "/volume [0-100] - Установить уровень громкости\n";
+            $text .= "/volume [0-100|up|+|down|-] - Установить уровень громкости\n";
             $text .= "/brightness - Получить уровень яркости\n";
             $text .= "/brightness [0-100] - Установить уровень яркости\n";
         }
         
-        return ['text' => $text];        
+        return ['text' => $text, 'keyboard' => $this->getMainKeyboard()];        
     }    
     
     /**
-     * Команда /cd
+     * Команда /ip
      * Смена/отображение текущей директории 
      */
     public function __ip(){
-        $this->send("IP info: " . file_get_contents('http://ipinfo.io/json'));
+        $data = json_decode(file_get_contents('http://ipinfo.io/json'), true);
+        unset($data['readme']);
+        
+        $this->send("🌐 IP info: " . json_encode($data, JSON_PRETTY_PRINT));
     }  
     
-    /**
-     * Команда /osinfo
-     * Информация об операционной системе
-     */
     public function __osinfo(){
         $info = "Название ОС: " . System::getProperty('os.name') . "\n";
-        $info.= "Архитектура: " . System::getProperty('os.arch') . "\n";
+        $info.= "Архитектура JVM:  " . System::getProperty('os.arch') . "\n";
         $info.= "Версия: " . System::getProperty('os.version') . "\n";
         $info.= "Имя пользователя: " . System::getProperty('user.name') . "\n";
         $info.= "Предпочитаемый язык: " . System::getProperty('user.language') . "\n";
@@ -213,14 +294,22 @@ class Commands extends AbstractModule {
      * Команда /cd
      * Смена/отображение текущей директории 
      */
-    public function __cd($path = null){
+    public function __cd($path = null, $noecho = null){
         if(!is_null($path)){
-            if($path == '/' || $path == '\\' || substr($path, 1, 1) == ':'){
+            if($path == '/' || $path == '\\'){
                $this->dir = $path;
             }
-            else $this->dir = realpath($this->dir . '/' . $path);
+            else {
+                $cd = realpath($this->dir . '/' . $path);
+                if(strlen($cd) > 0) $this->dir = $cd;
+                else {
+                    $cd = realpath($path);
+                    if(strlen($cd) > 0) $this->dir = $cd;
+                }
+            }
         }
         
+        if($noecho == 1) return;
         return ['text' => 'Текущая директория: ' . $this->dir];
     }
     
@@ -228,67 +317,193 @@ class Commands extends AbstractModule {
      * Команда /ls
      * Отображение содержимого текущей директории 
      */
-    public function __ls(){
+    public function __ls($path = null){
+        if($path !== null){
+            $this->__cd($path, 1);
+        }
+        
+        $dirs = [];
+        $files = [];
+        
         if(is_null($this->dir) || $this->dir == "/" || $this->dir == "\\"){
             $roots = array_map(function($e){ return $e->getAbsolutePath(); }, File::listRoots());
         } else {
+            $dirs[] = ['/ls /' => ' 🔙 [/]'];
+            $dirs[] = ['/ls ../' => ' 🔙 [../]'];
             $roots = File::of($this->dir)->find();
         }
         
-        $list = "Содержимое директории " . $this->dir . ' :';
-        foreach($roots as $root){
-            $list .= "\n- $root";
+        foreach($roots as $root) {
+            $path = realpath($this->dir . '/' . $root);
+            $isFile = is_file($path);
+            if($isFile){
+                $key = "/file \"$root\"";
+                $text = "📄 ". $root;
+                $files[] = [$key => $text];
+            } else {
+                $key = "/ls \"$root\"";
+                $text = "🗂 ". $root;
+                $dirs[] = [$key => $text];
+            }
         }
         
-        return ['text' => $list];
+        $items = $dirs + $files;
+        $list = "Содержимое директории \"" . $this->dir . "\":";
+        
+        $rows = [];
+        $rowMax = 8;
+        
+        $cols = [];
+        $colMax = 2;
+        
+        $part = 1;
+        
+        foreach($items as $k => $item){         
+            $cols += $item;
+            
+            if(sizeof($cols) >= $colMax){
+                $rows[] = $cols;
+                $cols = [];
+            }
+                     
+            if(sizeof($rows) >= $rowMax){
+                $this->send($list, $this->keyboardInline($rows));  
+           
+                $rows = [];
+                $part++;
+                $list = "Содержимое директории \"" . $this->dir . "\" [" . $part . "]: ";
+                sleep(1 /** $part * 100*/);
+            }
+        }
+    
+        if(sizeof($cols) > 0){
+            $rows[] = $cols;
+        }
+        
+        if(sizeof($rows) > 0){
+            $this->send($list, $this->keyboardInline($rows));        
+        }
     }    
     
-    /**
-     * Команда /cat
-     * Выводит содержимое (текстового) файла 
-     */
-    public function __cat($file = null){
-        $path = null;
-        if(!is_null($file)){
-            $path = realpath($this->dir . '/' . $file);
+    protected function getFilePath($file){
+        if(file_exists($file)){
+            $this->__cd(dirname($file), 1);
+            return $file;
         }
         
-        if(file_exists($path)){
-            return ['text' => file_get_contents($path)];
-        } else {
-            return ['text' => 'Неверный путь: ' . $path];
-        }
+        $file2 = $this->dir . '/' . $file;
+        if(file_exists($file2)) return $file2;
+        
+        throw new \Exception('Файл "' . $file . '" не найден! [Dir: ' . $this->dir . ']');       
     }
+    
+    protected function formatBytes(int $bytes){
+        if($bytes > 1024 * 1024 * 1024 * 0.9){
+            return round($bytes / (1024 * 1024 * 1024), 2) . ' GiB';
+        }
+        elseif($bytes > 1024 * 1024 * 0.9){
+            return round($bytes / (1024 * 1024), 2) . ' MiB';
+        }
+        elseif($bytes >1024 * 0.9){
+            return round($bytes / (1024), 2) . ' KiB';
+        }
         
+        return $bytes . ' B';
+    }
+    
     /**
-     * Команда /get_file
+     * Информация о файле
+     */    
+    public function __file($file = null){
+        if($file == 'input://'){
+             $this->send('Загружаю файл ... ');
+             $file = $this->bot->getLastFile();
+             return $this->__file($file->getAbsolutePath());
+        }
+        
+        $file = $this->getFilePath($file);      
+             
+        $name = basename($file);
+        $kb = [];
+        
+        $key = "/open \"$name\"";
+        $kb[] = [$key => '📄 Открыть файл'];
+                
+        $key = "/download \"$name\"";
+        $kb[] = [$key => '🔰 Скачать файл'];
+        
+        if(Windows::isWin()){
+            $key = "/print \"$name\"";
+            $kb[] = [$key => '🖨 Распечатать файл'];
+        }
+        
+        $key = "/delete \"$name\"";
+        $kb[] = [$key => '🗑 Удалить файл'];
+        
+        $info = "Файл: $name \n" . 
+                "Расположение: " . ( $this->dir ) . "\n" .
+                "Размер: " . ( $this->formatBytes(filesize($file)) ) . "\n" /*.
+                "Тип: " . filetype($file)*/;
+            
+        $this->send($info, $this->keyboardInline($kb));
+    }
+    
+    /**
+     * Команда /download
      * Отдаёт файл на сксчивание пользователю 
      */    
-    public function __get_file($file = null){
-        $path = null;
-        if(!is_null($file)){
-            $path = realpath($this->dir . '/' . $file);
-        }
-        
-        if(file_exists($path)){
-            return ['doc' => $path];
-        } else {
-            return ['text' => 'Неверный путь: ' . $path];
-        }
+    public function __download($file = null){  
+        $file = $this->getFilePath($file);            
+        $this->sendDoc($file);
     }
-        
+    
     /**
-     * Команда /screens 
-     */
+     * Открыть последний загруженный файл 
+     */    
+    public function __open($file = null){
+        $file = $this->getFilePath($file); 
+        $this->send('📄 Открываю файл "' . $file . '".');
+        open($file);       
+    }     
+    
+    /**
+     * Удалить последний загруженный файл 
+     */    
+    public function __delete($file = null){
+        $file = $this->getFilePath($file);
+        $this->send('🗑 Удаляю файл "' . $file . '".');
+        unlink($file);       
+    }     
+    
+    /**
+     * Распечатать последний загруженный файл 
+     */    
+    public function __print($file = null){
+        $this->checkWin();
+        $file = $this->getFilePath($file);
+        $res = WindowsScriptHost::PowerShell('
+            $word = New-Object -ComObject Word.Application
+            $word.visible = $false
+            $word.Documents.Open(":file") > $null
+            $word.Application.ActiveDocument.printout()
+            $word.Application.ActiveDocument.Close()
+            $word.quit()
+        ', ['file' => $file]);
+        $this->send('🖨 Файл "' . $file . '" отправлен на печать. ' . "\n" . $res);
+    }
+    
     public function __screens(){
         $screens = UXScreen::getScreens();
-        $info = "Количество экранов': " . sizeof($screens) . ".\n";
+        $info = "🖥 Список экранов (" . sizeof($screens) . "):\n";
+        $keyboard = [];
         
         foreach($screens as $i => $screen){
-            $info .= " $i. " . $screen->bounds['width'] . "x" . $screen->bounds['height'] . ", позиция: " . $screen->bounds['x'] . "x" . $screen->bounds['y'] . ", DPI: " . $screen->dpi . ". [📷 /screenshot__$i]\n";
+            $n = $i+1;
+            $info .= " #$i. " . $screen->bounds['width'] . "x" . $screen->bounds['height'] . ", позиция: " . $screen->bounds['x'] . "x" . $screen->bounds['y'] . ", DPI: " . $screen->dpi . ".\n";
+            $keyboard[] = ["/screenshot__$i" => "🖥 Скриншот экрана №$i (" . $screen->bounds['width'] . "x" . $screen->bounds['height'] . ")"];
         }
         
-        $this->send($info);
+        $this->send($info, $this->keyboardInline($keyboard));
     }  
     
     /**
@@ -301,7 +516,7 @@ class Commands extends AbstractModule {
         
         $screen = $screens[$screenN];
                 
-        $this->send('Делаю снимок экрана...');
+        $this->send("Делаю снимок экрана №$screenN ...");
         $file = File::createTemp('screenshot', '.png');
         Debug::info('Make screenshot to ' . $file->getAbsolutePath());
         
@@ -312,20 +527,23 @@ class Commands extends AbstractModule {
         
     /**
      * Команда /cameras
+     * Могут вываливаться ошибки, но вроде работает нормально 
+     * @param int $camN - Номер камеры в списке камер
      */
     public function __cameras(){
-    
         $cameras = Webcam::getWebcams();
+        $keyboard = [];
         if(sizeof($cameras) == 0){
-            $list = "Web-камеры не обнаружены";
+            $list = "📷 Web-камеры не обнаружены";
         } else {
-            $list = "Список установленных камер:";
-            foreach($cameras as $n => $camera){
-                $list .= "\n $n. " . $camera->name . " [📷 /photo__$n]";
+            $list = "📷 Список web-камер (" . sizeof($cameras). "):\n";
+            foreach($cameras as $i => $camera){
+                $list .= " #$i. " . $camera->name;
+                $keyboard[] = ["/photo__$i" => "📷 Снимок с камеры №$i (" . $camera->name . ")"];
             }
         }
           
-        $this->send($list);
+        $this->send($list, $this->keyboardInline($keyboard));
     }   
            
     /**
@@ -339,7 +557,7 @@ class Commands extends AbstractModule {
         $camera = $cameras[$camN];
         
         $file = File::createTemp('shot', '.png');
-        $this->send('Делаю снимок c камеры ' . $camera->name . '...');
+        $this->send('Делаю снимок c камеры №' . $camN . ' (' . $camera->name . ') ...');
         $camera->open();
         $camera->getImage()->save($file);
         $camera->close();
@@ -355,7 +573,7 @@ class Commands extends AbstractModule {
         $this->checkWin();
         $this->send('Получаю данные с датчиков...');
         $t = Windows::getTemperature();
-        $res = "Температурные датчики: ";
+        $res = "🌡 Температурные датчики: ";
         if(sizeof($t) == 0) $res.='недоступны.';
         foreach($t as $s){
             $name = strlen($s['name']) < 15 ? $s['name'] : (substr($s['name'], 0, 13) . '...');
@@ -384,17 +602,58 @@ class Commands extends AbstractModule {
      * Получить или изменить уровень громкости
      * Только для Windows
      */
-    public function __volume(?int $level = null){
+    public function __volume($level = null, $noecho = null){
         $this->checkWin();
+        
+        $kb = $this->keyboardInline([
+            [
+                '/volume__0__1' => '🔇 0%',
+                '/volume__5__1' => '🔈 5%',
+                '/volume__10__1' => '🔈 10%',
+                '/volume__20__1' => '🔉 20%',
+            ],
+            [
+                '/volume__30__1' => '🔉 30%',
+                '/volume__40__1' => '🔉 40%',
+                '/volume__50__1' => '🔉 50%',
+                '/volume__60__1' => '🔉 60%',
+            ],            
+            [
+                '/volume__70__1' => '🔉 70%',
+                '/volume__80__1' => '🔊 80%',
+                '/volume__90__1' => '🔊 90%',
+                '/volume__100__1' => '🔊 100%',
+            ], 
+            [
+                '/volume__down__1' => '🔈 Volume -',
+                '/media' => ' 🎛 Media RC',
+                '/volume__up__1' => '🔊 Volume +',
+            ],
+        ]);
+        
         try{
-            if(is_int($level) && $level >= 0 && $level <= 100){
-                Windows::setVolumeLevel($level);
-                $this->send('Установлен уровень громкости: ' . $level);
+            $ilevel = intval($level);
+            
+            if($level == 'up' || $level == '+'){
+                Windows::pressKey(Windows::VK_VOLUME_UP);
+                $answer = "Громкость увеличена";
+            } 
+            elseif($level == 'down' || $level == '-'){
+                Windows::pressKey(Windows::VK_VOLUME_DOWN);
+                $answer = "Громкость уменьшена";
+            } 
+            elseif(is_numeric($level) && $ilevel >= 0 && $ilevel <= 100){
+                Windows::setVolumeLevel($ilevel);
+                $answer = 'Установлен уровень громкости: ' . $ilevel . '%';
             } else {
-                $this->send('Текущий уровень громкости: ' . Windows::getVolumeLevel());
+                $answer = 'Текущий уровень громкости: ' . Windows::getVolumeLevel() . '%';
             }
         } catch (WindowsException $e){
             $this->send('Ошибка: Управление громкостью недоступно на данном устройстве');
+        }
+        
+        if(strlen($answer) > 0 && $noecho != 1){
+            $this->send($answer, $kb);
         }
     }
    
@@ -491,53 +750,68 @@ class Commands extends AbstractModule {
         $this->send($result);
     }
      
-    public function __media(){
+    public function __media($noecho = null){
+        if($noecho == 1) return;
         $this->checkWin();
+        
+        $kb = [
+            [
+                '/key__prev__1' => '⏪ Prev',
+                '/key__stop__1' => '⏹ Stop',
+                '/key__play__1' => '⏯ Play/Pause',
+                '/key__next__1' => '⏩ Next',
+            ]
+        ];
+        
         try {
             $level = Windows::getVolumeLevel();
-            $media = "/vold 🔽 🔉 $level% 🔼 /volu";
+            $kb[] = [
+                '/volume__down__1' => '🔽 Volume -',
+                '/volume' => "🔉 $level%",
+                '/volume__up__1' => '🔼 Volume +',
+            ];
         } catch (WindowsException $e){
-            $media = "/vold 🔽 🔼 /volu";
+             $kb[] = [
+                '/volume__down__1' => '🔽 Volume -',
+                '/volume' => "🔉 Volume",
+                '/volume__up__1' => '🔼 Volume +',
+            ];
         }
-        $this->send($media . "\n/prev ⏪ ⏩ /next \n/stop ⏹ ⏯ /play");
+        
+        $this->send("🎛 Media remote control", $this->keyboardInline($kb));
     }   
-     
-    public function __play(){
-        $this->checkWin();
-        Windows::pressKey(Windows::VK_MEDIA_PLAY_PAUSE);
-        $this->__media();
-    } 
-    
-    public function __stop(){
-        $this->checkWin();
-        Windows::pressKey(178);
-        $this->__media();
-    } 
         
-    public function __prev(){
-        $this->checkWin();
-        Windows::pressKey(Windows::VK_MEDIA_PREV_TRACK);
-        $this->__media();
-    }         
-    
-    public function __next(){
-        $this->checkWin();
-        Windows::pressKey(Windows::VK_MEDIA_NEXT_TRACK);
-        $this->__media();
-    } 
+    public function __key($key = null, $noecho = null){
+        switch($key){
+            case 'next':
+                $this->checkWin();
+                Windows::pressKey(Windows::VK_MEDIA_NEXT_TRACK);
+                break;
+                
+            case 'prev':
+                $this->checkWin();
+                Windows::pressKey(Windows::VK_MEDIA_PREV_TRACK);
+                break;  
+                              
+            case 'stop':
+                $this->checkWin();
+                Windows::pressKey(178);
+                break;             
+                                 
+            case 'play':
+                $this->checkWin();
+                Windows::pressKey(Windows::VK_MEDIA_PLAY_PAUSE);
+                break;
+                
+            default:
+                app()->appModule()->robot->keyPress($key);
+        }
         
-    public function __volu(){
-        $this->checkWin();
-        Windows::pressKey(Windows::VK_VOLUME_UP);
-        $this->__media();
-    }      
-      
-    public function __vold(){
-        $this->checkWin();
-        Windows::pressKey(Windows::VK_VOLUME_DOWN);
-        $this->__media();
+        if($noecho != 1){
+            $this->send('Нажата клавиша "' . $key . '"');
+        }
     }
-          
+
     public function __uptime(){
         $this->checkWin();
         $bootTime = Windows::getUptime(); 
@@ -548,7 +822,7 @@ class Commands extends AbstractModule {
         
         $this->send(
             'Компьютер работает: ' . ($btime->day() - 1) . ' дней ' . $btime->hourOfDay() . ' часов ' . $btime->minute() . ' минут ' . $btime->second() . " секунд.\n" .
-            'Проргамма работает: ' . ($ptime->day() - 1) . ' дней ' . $ptime->hourOfDay() . ' часов ' . $ptime->minute() . ' минут ' . $ptime->second() . " секунд." 
+            'Программа работает: ' . ($ptime->day() - 1) . ' дней ' . $ptime->hourOfDay() . ' часов ' . $ptime->minute() . ' минут ' . $ptime->second() . " секунд." 
         );
     }         
       
@@ -562,6 +836,7 @@ class Commands extends AbstractModule {
             $time = new Time($rtime, TimeZone::UTC()); 
             
             $this->send(
+                "🔋 Состояние аккумулятора: \n" . 
                 "Текущий заряд: " . $perc . "%\n" .
                 "Напряжение: " . $voltage . "mV\n" .
                 "Заряжается: " . ($isCharge ? 'Да': 'Нет') . "\n" .
@@ -569,7 +844,7 @@ class Commands extends AbstractModule {
             );
             
         } catch (WindowsException $e){
-            $this->send('Аккумулятор не установлен');
+            $this->send('🔋 Аккумулятор не установлен');
         }
     } 
 }

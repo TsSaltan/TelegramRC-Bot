@@ -6,7 +6,7 @@ use std, gui, framework, main;
 
 class AppModule extends AbstractModule
 {
-    const APP_VERSION = '1.0';
+    const APP_VERSION = '2.0';
     
     /**
      * Время запуска программы 
@@ -27,39 +27,47 @@ class AppModule extends AbstractModule
         $this->systemTray->tooltip = "TelegramRC v " . self::APP_VERSION;
         
         // Создаём папку для прорграммы в домашней директории текущего пользователя (туда всегда разрешена запись)
-        $app_dir = $this->getAppDir();
+        $app_dir = $this->getAppDir();       
         if(!fs::exists($app_dir)){
             fs::makeDir($app_dir);
-        }
+        }  
+              
+        // Директория для скачивания файлов
+        $dwn_dir = $this->getAppDownloadDir();
+        if(!fs::exists($dwn_dir)){
+            fs::makeDir($dwn_dir);
+        }     
         
         // Путь к конфигам и логам
-        Config::$cfgFile = $app_dir . basename(Config::$cfgFile);
-        Debug::$logFile = $app_dir . basename(Debug::$logFile);
+        Config::$cfgFile = $app_dir . Config::$cfgFile;
+        Debug::$logFile = $app_dir . Debug::$logFile;
         
         // Загрузка настроек из файла    
         Config::load();
         if(Config::isInstallRequired()){
             // Если в конфиге нет токена, открываем форму установки 
-            return $this->loadForm('Install');
+            return $this->loadForm('Setup');
         }
         
         Debug::info('Application started. Version ' . self::APP_VERSION);
         
-        // Настройка: закрывать в трей
         if(Config::get('use_tray')){
             $this->systemTray->visible = true;
         }
                   
-        // Инициализация бота          
         $this->tgBot = new TelegramBot;
         $this->tgBot->initBot(Config::get('token'));
         $this->tgBot->setUsers(Config::get('users'));
-
         
+        $proxy = Config::get('proxy');
+        if(is_array($proxy)){
+            $pr = new Proxy($proxy['type'], $proxy['host'], $proxy['port']);
+            $this->tgBot->setProxy($pr);
+        }
+
         /** @var Params $form */
         $form = $this->form('Params'); 
    
-        // Обработчик ошибок, возникших при работе проргаммы
         $this->tgBot->setErrorCallback(function($e) use ($form){
             $this->notify('Произошла ошибка: [' . get_class($e) . '] ' . $e->getMessage(), 'ERROR');
             
@@ -67,7 +75,7 @@ class AppModule extends AbstractModule
                $form->setStartButton('off'); 
             }
             
-            // Если программа скрыта, автоматически попробуем переподключиться
+            // Переподключение, если программа скрыта
             if(!$form->visible){
             waitAsync(5000, function() use ($form){
                 if(!$form->visible){
@@ -78,14 +86,12 @@ class AppModule extends AbstractModule
             }
         });     
                   
-        // Настройка: автоматически активировать бота при запуске
         if(Config::get('autorun', $value)){
             $this->tgBot->startListener();    
         }
         
-        // Настройка: запускать свёрнутым
         if(!Config::get('iconified')){
-            // Если опция выключена, то показываем окно
+            // Если выключена опция "запускать свёрнутым", то показываем окно
             $form->show();
         } elseif(!Config::get('use_tray')){
             // Если нет трея, но нужно запустить свернутым, то показываем окно и сворачиваем его
@@ -96,7 +102,6 @@ class AppModule extends AbstractModule
 
     
     /**
-     * При клике по иконке в трее показываем или скрываем окно
      * @event systemTray.click 
      */
     function doSystemTrayClick(){    
@@ -108,17 +113,23 @@ class AppModule extends AbstractModule
         }
     }
     
-    /**
-     * Путь к директории с конфигами и логами
-     */
     function getAppDir(){
         $ds = System::getProperty('file.separator');
-        return System::getProperty('user.home') . $ds . 'TelegramRC-Bot'. $ds;
+        return System::getProperty('user.home') . $ds . 'TelegramRemoteBot'. $ds;
+    }    
+    
+    function getAppDownloadDir(){
+        $ds = System::getProperty('file.separator');
+        return $this->getAppDir(). $ds . 'download';
     }
-
-    /**
-     * Показать уведомление в трее 
-     */
+    
+    function getCurrentDir() : string {
+        $ds = System::getProperty('file.separator');
+        $path = System::getProperty("java.class.path");
+        $sep = System::getProperty("path.separator");
+        return dirname(realpath(str::split($path, $sep)[0])) . $ds;
+    } 
+    
     public function notify($text, $type = "NOTICE"){
         $notify = new UXTrayNotification;    
         $notify->title = "TelegramRC Bot";
