@@ -6,6 +6,7 @@ use Exception;
 use windows;
 use std, gui, framework, main;
 
+
 /**
  * Здесь хранятся все доступные команды
  * Каждому пользователю создаётся экземпляр данного класса
@@ -36,21 +37,35 @@ class Commands extends AbstractModule {
     public $bot;
     
     /**
-     * Текущая директория используется в командах cd, ls, cat, get-file
+     * Текущая директория, используется в командах cd, ls, cat, get-file
+     * @var FSO 
      */
-    public $dir = '/';
+    public $fso;
     
     public function __construct($chat_id = -1, $username = null, ?TelegramBot $bot = null){
         $this->chat_id = $chat_id;
         $this->username = $username;
         $this->bot = $bot;
+        $this->fso = new FSO;
+    }
+    
+    public function alias(string $cmd){
+        $cmd = Regex::of('[^\\p{L}\\p{N}\\p{P}\\p{Z}]', Regex::UNICODE_CASE)->with($cmd)->replace('');
+        $replace = [
+            'Запустить файл' => '/run',
+            'Скачать файл' => '/download',
+            'Распечатать файл' => '/print',
+            'Удалить файл' => '/delete'
+        ];
+        
+        return str_replace(array_keys($replace), array_values($replace), $cmd);
     }
     
     /**
      * Клавиатура над полем ввода 
      */
     protected function keyboard(array $lines){
-        return $this->makeKeyboard('keyboard', $lines);
+        return $this->makeKeyboard('keyboard', $lines, ['one_time_keyboard' => false, 'resize_keyboard' => true]);
     }    
     
     /**
@@ -149,15 +164,8 @@ class Commands extends AbstractModule {
     public function errorMsg($e){
         return ['text' => 'Произошла ошибка во время выполнения команды: ' . $e];        
     }
-            
-    /**
-     * Сообщение при получении файла
-     */    
-    public function inputFile(array $doc){
-        $this->__file('input://');
-    }
- 
-    
+
+     
     /**
      * Сообщение доступ запрещён 
      */
@@ -168,7 +176,20 @@ class Commands extends AbstractModule {
     public function checkWin(){
         if(!Windows::isWin()) throw new \Exception('Required Windows OS');
     }  
-
+            
+    /**
+     * Команда при получении файла. После его загрузки.
+     * @param array $input                 
+     *    'type' => 'photo|document',
+     *    'file_name' => 'photo',
+     *    'mime_type' => 'image/jpeg',
+     *    'file_id' =>
+     *    'file_size' =>  
+     */      
+    public function inputFileMsg(File $file, array $input){
+        $this->send(SMILE_DOWNLOAD . ' Получен файл: ' . $input['file_name']);
+        $this->__file($file->getAbsolutePath());
+    }
     
     /**
      * Команда /start 
@@ -263,7 +284,7 @@ class Commands extends AbstractModule {
         $data = json_decode(file_get_contents('http://ipinfo.io/json'), true);
         unset($data['readme']);
         
-        $this->send("🌐 IP info: " . json_encode($data, JSON_PRETTY_PRINT));
+        $this->send(SMILE_NETWORK . " IP info: " . json_encode($data, JSON_PRETTY_PRINT));
     }  
     
     public function __osinfo(){
@@ -282,193 +303,128 @@ class Commands extends AbstractModule {
      * Команда /cd
      * Смена/отображение текущей директории 
      */
-    public function __cd($path = null, $noecho = null){
-        if(!is_null($path)){
-            if($path == '/' || $path == '\\'){
-               $this->dir = $path;
-            }
-            else {
-                $cd = realpath($this->dir . '/' . $path);
-                if(strlen($cd) > 0) $this->dir = $cd;
-                else {
-                    $cd = realpath($path);
-                    if(strlen($cd) > 0) $this->dir = $cd;
-                }
-            }
-        }
-        
-        if($noecho == 1) return;
-        return ['text' => 'Текущая директория: ' . $this->dir];
+    public function __cd($path = null){                
+        return ['text' => 'Текущая директория: ' . $this->fso->changeDir($path)];
     }
     
     /**
      * Команда /ls
      * Отображение содержимого текущей директории 
+     * @param string $path Путь. / - корень, для отображения дисков
+     * @param string $selectBy name|num Ищет файл или по его имени (если name) или по порядковому номеру (если num - используется, когда есть лимит на длину сообщения в telegram)
      */
-    public function __ls($path = null){
-        if($path !== null){
-            $this->__cd($path, 1);
+    public function __ls($path = null, string $selectBy = 'name'){
+        if(strlen($path) > 0){
+            $this->fso->changeDir($path, $selectBy);
         }
         
-        $dirs = [];
-        $files = [];
+        $list = "Содержимое директории \"" . $this->fso->getCurrentDir() . "\"";
+        $btn[] = ['ls / ' . SMILE_ARROW_UP, '/ls ../ ' . SMILE_UP];
+        $this->send($list, $this->keyboard($btn)); 
         
-        if(is_null($this->dir) || $this->dir == "/" || $this->dir == "\\"){
-            $roots = array_map(function($e){ return $e->getAbsolutePath(); }, File::listRoots());
-        } else {
-            $dirs[] = ['/ls /' => ' 🔙 [/]'];
-            $dirs[] = ['/ls ../' => ' 🔙 [../]'];
-            $roots = File::of($this->dir)->find();
-        }
+        $items = $this->fso->getFileList();
         
-        foreach($roots as $root) {
-            $path = realpath($this->dir . '/' . $root);
-            $isFile = is_file($path);
-            if($isFile){
-                $key = "/file \"$root\"";
-                $text = "📄 ". $root;
-                $files[] = [$key => $text];
+        $message = "";
+        foreach($items as $item){    
+            if(strlen($item['name']) > 30){
+                $name = substr($item['name'], 0, 13) . ' ... ' . substr($item['name'], -12);
             } else {
-                $key = "/ls \"$root\"";
-                $text = "🗂 ". $root;
-                $dirs[] = [$key => $text];
+                $name = $item['name'];
             }
-        }
-        
-        $items = array_merge($dirs, $files);
-        $list = "Содержимое директории \"" . $this->dir . "\":";
-        
-        $rows = [];
-        $rowMax = 8;
-        
-        $cols = [];
-        $colMax = 2;
-        
-        $part = 1;
-        
-        foreach($items as $k => $item){         
-            $cols += $item;
             
-            if(sizeof($cols) >= $colMax){
-                $rows[] = $cols;
-                $cols = [];
+            switch($item['type']){
+                case 'drive':
+                    $line = SMILE_DISC . ' ' . $name . " | /ls__" . $item['num'] . "__num \n";
+                    break;
+                    
+                case 'dir':
+                    $line = SMILE_FOLDER . ' ' . $name . " | /ls__" . $item['num'] . "__num \n";
+                    break;
+                    
+                case 'file':
+                    $line = SMILE_FILE . ' ' . $name . " | /file__" . $item['num'] . "__num \n";
+                    break;
             }
-                     
-            if(sizeof($rows) >= $rowMax){
-                $this->send($list, $this->keyboardInline($rows));  
-           
-                $rows = [];
-                $part++;
-                $list = "Содержимое директории \"" . $this->dir . "\" [" . $part . "]: ";
-                sleep(1 /** $part * 100*/);
+            
+            if(strlen($message . $line) > TelegramBot::MAX_MESSAGE_LENGTH){
+                $this->send($message); 
+                $message = '';
             }
-        }
-    
-        if(sizeof($cols) > 0){
-            $rows[] = $cols;
+            $message .= $line;
         }
         
-        if(sizeof($rows) > 0){
-            $this->send($list, $this->keyboardInline($rows));        
+        if(strlen($message) > 0){
+            $this->send($message/*, $this->keyboardInline($btn)*/);
         }
     }    
     
-    protected function getFilePath($file){
-        if(file_exists($file)){
-            $this->__cd(dirname($file), 1);
-            return $file;
-        }
-        
-        $file2 = $this->dir . '/' . $file;
-        if(file_exists($file2)) return $file2;
-        
-        throw new \Exception('Файл "' . $file . '" не найден! [Dir: ' . $this->dir . ']');       
-    }
-    
-    protected function formatBytes(int $bytes){
-        if($bytes > 1024 * 1024 * 1024 * 0.9){
-            return round($bytes / (1024 * 1024 * 1024), 2) . ' GiB';
-        }
-        elseif($bytes > 1024 * 1024 * 0.9){
-            return round($bytes / (1024 * 1024), 2) . ' MiB';
-        }
-        elseif($bytes >1024 * 0.9){
-            return round($bytes / (1024), 2) . ' KiB';
-        }
-        
-        return $bytes . ' B';
-    }
-    
+   
     /**
      * Информация о файле
      */    
-    public function __file($file = null){
-        if($file == 'input://'){
-             $this->send('Загружаю файл ... ');
-             $file = $this->bot->getLastFile();
-             return $this->__file($file->getAbsolutePath());
+    public function __file($file = null, string $selectBy = 'name'){
+        $file = $this->fso->getFile($file, $selectBy);      
+             
+        $name = $file['name'];
+        if(strlen($name) > 20){
+            $cmd = $file['num'] . " num";
+        }
+        else {
+            $cmd = $file['name'];
         }
         
-        $file = $this->getFilePath($file);      
-             
-        $name = basename($file);
         $kb = [];
         
-        $key = "/open \"$name\"";
-        $kb[] = [$key => '📄 Открыть файл'];
-                
-        $key = "/download \"$name\"";
-        $kb[] = [$key => '🔰 Скачать файл'];
+        $kb[0][] = SMILE_PC . ' Запустить файл ' . $cmd;
+        $kb[0][] = SMILE_DOWNLOAD . ' Скачать файл ' . $cmd;
         
         if(Windows::isWin()){
-            $key = "/print \"$name\"";
-            $kb[] = [$key => '🖨 Распечатать файл'];
+            $kb[1][] = SMILE_PRINT . ' Распечатать файл ' . $cmd;
         }
         
-        $key = "/delete \"$name\"";
-        $kb[] = [$key => '🗑 Удалить файл'];
+        $kb[1][] = SMILE_TRASH . ' Удалить файл ' . $cmd;
         
-        $info = "Файл: $name \n" . 
-                "Расположение: " . ( $this->dir ) . "\n" .
-                "Размер: " . ( $this->formatBytes(filesize($file)) ) . "\n" /*.
-                "Тип: " . filetype($file)*/;
+        $info = SMILE_FILE . " Имя файла: $name \n" . 
+                "Путь: " . dirname($file['path']) . "\n" .
+                "Размер: " . $file['size'] . "\n";
             
-        $this->send($info, $this->keyboardInline($kb));
+//        $this->send($info, $this->keyboardInline($kb));
+        $this->send($info, $this->keyboard($kb));
     }
     
     /**
      * Команда /download
      * Отдаёт файл на сксчивание пользователю 
      */    
-    public function __download($file = null){  
-        $file = $this->getFilePath($file);            
-        $this->sendDoc($file);
+    public function __download($file = null, string $selectBy = 'name'){  
+        $file = $this->fso->getFile($file, $selectBy);          
+        $this->sendDoc($file['path']);
     }
     
     /**
-     * Открыть последний загруженный файл 
+     * Запустить файл 
      */    
-    public function __open($file = null){
-        $file = $this->getFilePath($file); 
-        $this->send('📄 Открываю файл "' . $file . '".');
-        open($file);       
+    public function __run($file = null, string $selectBy = 'name'){
+        $file = $this->fso->getFile($file, $selectBy); 
+        $this->send(SMILE_PC . ' Запускаю файл "' . $file['name'] . '".');
+        open($file['path']);       
     }     
     
     /**
-     * Удалить последний загруженный файл 
+     * Удалить файл 
      */    
-    public function __delete($file = null){
-        $file = $this->getFilePath($file);
-        $this->send('🗑 Удаляю файл "' . $file . '".');
+    public function __delete($file = null, string $selectBy = 'name'){
+        $file = $this->getFilePath($file, $selectBy);
+        $this->send(SMILE_TRASH . ' Удаляю файл "' . $file . '".');
         unlink($file);       
     }     
     
     /**
      * Распечатать последний загруженный файл 
      */    
-    public function __print($file = null){
+    public function __print($file = null, string $selectBy = 'name'){
         $this->checkWin();
-        $file = $this->getFilePath($file);
+        $file = $this->getFilePath($file, $selectBy);
         $res = WindowsScriptHost::PowerShell('
             $word = New-Object -ComObject Word.Application
             $word.visible = $false
@@ -476,19 +432,19 @@ class Commands extends AbstractModule {
             $word.Application.ActiveDocument.printout()
             $word.Application.ActiveDocument.Close()
             $word.quit()
-        ', ['file' => $file]);
-        $this->send('🖨 Файл "' . $file . '" отправлен на печать. ' . "\n" . $res);
+        ', ['file' => $file['path']]);
+        $this->send(SMILE_PRINT . ' Файл "' . $file['name'] . '" отправлен на печать. ' . "\n" . $res);
     }
     
     public function __screens(){
         $screens = UXScreen::getScreens();
-        $info = "🖥 Список экранов (" . sizeof($screens) . "):\n";
+        $info = SMILE_DISPLAY . " Список экранов (" . sizeof($screens) . "):\n";
         $keyboard = [];
         
         foreach($screens as $i => $screen){
             $n = $i+1;
             $info .= " #$i. " . $screen->bounds['width'] . "x" . $screen->bounds['height'] . ", позиция: " . $screen->bounds['x'] . "x" . $screen->bounds['y'] . ", DPI: " . $screen->dpi . ".\n";
-            $keyboard[] = ["/screenshot__$i" => "🖥 Скриншот экрана №$i (" . $screen->bounds['width'] . "x" . $screen->bounds['height'] . ")"];
+            $keyboard[] = ["/screenshot__$i" => SMILE_DISPLAY . " Скриншот экрана №$i (" . $screen->bounds['width'] . "x" . $screen->bounds['height'] . ")"];
         }
         
         $this->send($info, $this->keyboardInline($keyboard));

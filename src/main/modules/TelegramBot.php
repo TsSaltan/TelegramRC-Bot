@@ -6,10 +6,38 @@ use telegram\tools\TUpdateListener;
 use telegram\TelegramBotApi;
 use std, gui, framework, main;
 
+define("SMILE_DISC", "💾");
+define("SMILE_FILE", "📄");
+define("SMILE_FOLDER", "🗂");
+define("SMILE_NETWORK", "🌐");
+define("SMILE_BACK", "🔙");
+
+define("SMILE_ARROW_UP", "⤴️");
+define("SMILE_UP", "🆙");
+define("SMILE_TRASH", "🗑");
+define("SMILE_PRINT", "🖨");
+define("SMILE_DOWNLOAD", "🔰");
+define("SMILE_PC", "🖥");
+define("SMILE_DISPLAY", "🖥");
+
+
+
+
+/*
+define("SMILE_", "");
+define("SMILE_", "");
+define("SMILE_", "");
+*/
+
 /**
  * Собственно здесь происходит "общение" с API Telegram
  */
 class TelegramBot extends AbstractModule {
+
+    const MAX_MESSAGE_LENGTH = 4096;
+    
+    const MAX_CALLBACK_DATA = 64;
+
     /**
      * @var TelegramBotApi 
      */
@@ -39,18 +67,6 @@ class TelegramBot extends AbstractModule {
      * Чтоб не обрабатывать события дважды
      */
     public $last_update = 0;
-        
-    /**
-     * Последний полученный документ или фото
-     * @var array | null
-     *    'type' => 'photo|document',
-     *    'file_name' => 'photo',
-     *    'mime_type' => 'image/jpeg',
-     *    'file_id' =>
-     *    'file_size' =>
-     * 
-     */
-    public $last_doc = null;   
     
     /**
      * Состояние, запущен бот или нет
@@ -135,29 +151,12 @@ class TelegramBot extends AbstractModule {
     }
     
     /**
-     * Скачивает и сохраняет последний отправленный пользователем файл 
-     */
-    public function getLastFile(): File {
-        if(!isset($this->last_doc['file_id'])){
-            throw new \Exception('Input file not found!');
-        }
-        
-        $file = $this->api->getFile()->file_id($this->last_doc['file_id'])->query();
-        $durl = $file->download_url;
-        $savePath = app()->appModule()->getAppDownloadDir() . '/' . time() . '_' . basename($durl);
-        $save = FileStream::of($savePath, 'w');
-        $save->write(Stream::getContents($durl));
-        $save->close();
-        
-        return File::of($savePath);
-    }
-    
-    /**
      * Обработка событий от long-poll 
      */
     public function onUpdate($update){
         Debug::info('[Update] ' . var_export($update, true));
         try{ 
+            $last_doc = null;
             // Сравниваем числовую метку события
             if($update->update_id > $this->last_update){
                 $this->last_update = $update->update_id;
@@ -176,7 +175,7 @@ class TelegramBot extends AbstractModule {
                 }
                 
                 if(isset($update->message->document)){
-                    $this->last_doc = [
+                    $last_doc = [
                         'type' => 'document',
                         'file_name' => $update->message->document->file_name,
                         'mime_type' => $update->message->document->mime_type,
@@ -188,7 +187,7 @@ class TelegramBot extends AbstractModule {
                                 
                 if(isset($update->message->photo) && sizeof($update->message->photo) > 0){
                     $last_photo = end($update->message->photo);
-                    $this->last_doc = [
+                    $last_doc = [
                         'type' => 'photo',
                         'file_name' => 'photo.jpg',
                         'mime_type' => 'image/jpeg',
@@ -199,31 +198,32 @@ class TelegramBot extends AbstractModule {
                 }
                 
                 if($hasDoc){
-                    $text .= ' [attach: '. $this->last_doc['type'] . '; ' . $this->last_doc['file_name'] . '; ' . $this->last_doc['mime_type'] . '; #' . $this->last_doc['file_id']. '; #' . $this->last_doc['file_size'] . ' bytes]';
+                    $text .= ' [attach: '. $last_doc['type'] . '; ' . $last_doc['file_name'] . '; ' . $last_doc['mime_type'] . '; #' . $last_doc['file_id']. '; ' . $last_doc['file_size'] . ' bytes]';
                 }
-                Debug::info('[INPUT] ' . $username . ': ' . $text);
+                Debug::info('[INPUT] ' . $username . ':' . $text);
                 
                 // Проверка, есть ли такой пользователь в списке разрешённых
                 if($this->checkUser($username)){
-                
                     // Если ранее пользователь не обращался к боту, создадим ему экземпляр Commands
                     if(!isset($this->commands[$chat_id])){
                         $this->commands[$chat_id] = new Commands($chat_id, $username, $this);
                     }
-                    $commands = $this->commands[$chat_id];
                     
+                    $commands = $this->commands[$chat_id];       
                     $answer = $commands->undefinedMsg(($cmd['command'] ?? $text));
-                    $cmd = $this->parseCommand($text);
+                    
+                    $cmd = $this->parseCommand($commands->alias($text));
                     
                     try {
                         // Если удалось распасрсить команду
-                        if($cmd !== false && method_exists($commands, '__' . $cmd['command'])){                                               
+                        if(!$hasDoc && $cmd !== false && method_exists($commands, '__' . $cmd['command'])){                                               
                             $answer = call_user_func_array([$commands, '__' . $cmd['command']], $cmd['args']);
                         }
                         
                         // Если неизвестная команда, но есть документ
-                        elseif($hasDoc) {              
-                            $answer = call_user_func_array([$commands, 'inputFile'], [$this->last_doc]);
+                        elseif($hasDoc) {             
+                            $file = $this->getFile($last_doc);
+                            $answer = call_user_func_array([$commands, 'inputFileMsg'], [$file, $last_doc]);
                         }
                     }
                     catch (\Exception $e){
@@ -253,6 +253,8 @@ class TelegramBot extends AbstractModule {
      * Отправка ответа 
      */
     public function sendAnswer($chat_id, $data){
+        if(!is_array($data) || sizeof($data) == 0) return;
+        
         Debug::info('[OUTPUT] Chat #' . $chat_id . ': ' . var_export($data, true));
         if(isset($data['text'])){
            $query = $this->api->sendMessage()->chat_id($chat_id)->text($data['text']);
@@ -269,7 +271,26 @@ class TelegramBot extends AbstractModule {
         if(isset($data['doc'])){
             $this->api->sendDocument()->chat_id($chat_id)->document(new File($data['doc']))->query();
         }
-   
+        
+        // $this->api->query();
+    }
+     
+    /**
+     * Скачивает и сохраняет последний отправленный пользователем файл 
+     */
+    public function getFile(array $fileData): File {
+        if(!isset($fileData['file_id'])){
+            throw new \Exception('Input file not found!');
+        }
+        
+        $file = $this->api->getFile()->file_id($fileData['file_id'])->query();
+        $durl = $file->download_url;
+        $savePath = app()->appModule()->getAppDownloadDir() . '/' . time() . '_' . basename($durl);
+        $save = FileStream::of($savePath, 'w');
+        $save->write(Stream::getContents($durl));
+        $save->close();
+        
+        return File::of($savePath);
     }
     
     public function parseCommand($input){
