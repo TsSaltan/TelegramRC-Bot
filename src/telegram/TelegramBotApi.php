@@ -4,6 +4,7 @@
 namespace telegram;
 
 
+use main;
 use php\format\JsonProcessor;
 use php\format\ProcessorException;
 use php\io\File;
@@ -196,12 +197,17 @@ class TelegramBotApi{
             else{
                 $connection->getOutputStream()->write($this->json->format($args));
             }
+            
             if($connection->responseCode != 200){
-                throw new TelegramException("Server response invalid status code {$connection->responseCode}");
+               // throw new TelegramException("Server response invalid status code {$connection->responseCode}");
+                $rawResponse = $connection->getErrorStream()->readFully();
+            } else {
+                $rawResponse = $connection->getInputStream()->readFully();
             }
-            $rawResponse = $connection->getInputStream()->readFully();
             $connection->disconnect();
             $response = $this->json->parse($rawResponse);
+
+                
             if(!$response->ok){
                 throw new TelegramError($response->error_code, $response->description);
             }
@@ -257,7 +263,7 @@ class TelegramBotApi{
         $connection->doOutput = true;
         $connection->requestMethod = 'POST';
         $connection->setRequestProperty('Content-Type', $multipart ? "multipart/form-data; boundary=\"{$boundary}\"" : 'application/json');
-
+            
         return $connection;
     }
 }

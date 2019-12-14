@@ -174,9 +174,11 @@ class TelegramBot extends AbstractModule {
      * Обработка событий от long-poll 
      */
     public function onUpdate($update){
-        Debug::info('[Update] ' . var_export($update, true));
+        Debug::info('[Update] ' . json_encode($update, JSON_PRETTY_PRINT));
         try{ 
             $last_doc = null;
+            $callbackId = -1;
+            
             // Сравниваем числовую метку события
             if($update->update_id > $this->last_update){
                 $this->last_update = $update->update_id;
@@ -192,6 +194,11 @@ class TelegramBot extends AbstractModule {
                     $chat_id = $update->callback_query->message->chat->id;
                     $username = $update->callback_query->from->username;
                     $text = $update->callback_query->data;
+                    
+                    if(isset($update->callback_query->id)){
+                        $callbackId = $update->callback_query->id;
+                    }
+                    
                 }
                 
                 if(isset($update->message->document)){
@@ -235,6 +242,8 @@ class TelegramBot extends AbstractModule {
                     $cmd = $this->parseCommand($commands->alias($text));
                     
                     try {
+                        $commands->setCallbackInstance($callbackId);
+                        
                         // Если удалось распасрсить команду
                         if(!$hasDoc && $cmd !== false && method_exists($commands, '__' . $cmd['command'])){                                               
                             $answer = call_user_func_array([$commands, '__' . $cmd['command']], $cmd['args']);
@@ -247,7 +256,7 @@ class TelegramBot extends AbstractModule {
                         }
                     }
                     catch (\Exception $e){
-                        Debug::error('Command error: ' . $e->getMessage());
+                        Debug::error('Command error [' . get_class($e) .'] : ' . $e->getMessage());
                         $answer = $commands->errorMsg($e->getMessage());
                     }
                 } else {
@@ -275,7 +284,15 @@ class TelegramBot extends AbstractModule {
     public function sendAnswer($chat_id, $data){
         if(!is_array($data) || sizeof($data) == 0) return;
         
-        Debug::info('[OUTPUT] Chat #' . $chat_id . ': ' . var_export($data, true));
+        Debug::info('[OUTPUT] Chat #' . $chat_id . ': ' . json_encode($data));
+        
+        if(isset($data['callback'])){
+            $text = $data['text'] ?? $data['alert'] ?? 'OK';
+            $alert = isset($data['alert']);
+            $this->api->query('answerCallbackQuery', ['callback_query_id' => $data['callback'], 'text' => $text, 'show_alert' => $alert]);
+            return;
+        }
+        
         if(isset($data['text'])){
            $query = $this->api->sendMessage()->chat_id($chat_id)->text($data['text']);
            if(isset($data['keyboard']) && is_array($data['keyboard'])){
@@ -292,8 +309,11 @@ class TelegramBot extends AbstractModule {
             $this->api->sendDocument()->chat_id($chat_id)->document(new File($data['doc']))->query();
         }
         
+
+        
         // $this->api->query();
     }
+    
      
     /**
      * Скачивает и сохраняет последний отправленный пользователем файл 

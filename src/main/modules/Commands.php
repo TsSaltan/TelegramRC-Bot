@@ -22,6 +22,12 @@ use std, gui, framework, main;
 class Commands extends AbstractModule {
 
     /**
+     * Callback instance
+     * @var int 
+     */
+    public $cb_instance = -1;
+    
+    /**
      * @var int 
      */
     public $chat_id;
@@ -47,6 +53,14 @@ class Commands extends AbstractModule {
         $this->username = $username;
         $this->bot = $bot;
         $this->fso = new FSO;
+    }
+    
+    public function setCallbackInstance(int $instance = -1){
+        $this->cb_instance = $instance;        
+    }
+    
+    public function isCallback(){
+        return $this->cb_instance > 0;
     }
     
     public function alias(string $cmd){
@@ -150,6 +164,13 @@ class Commands extends AbstractModule {
     public function sendDoc($doc){
         $this->bot->sendAnswer($this->chat_id, ['doc' => $doc]);
     }
+    
+    /**
+     * Отправить ответ на нажатие кнопки 
+     */
+    public function sendCallback($text){
+        $this->bot->sendAnswer($this->chat_id, ['text' => $text, 'callback' => $this->cb_instance]);
+    } 
     
     /**
      * Сообщение об неизвестной команде 
@@ -551,8 +572,9 @@ class Commands extends AbstractModule {
      * Получить или изменить уровень громкости
      * Только для Windows
      */
-    public function __volume($level = null, $noecho = null){
+    public function __volume($level = null){
         $this->checkWin();
+        $showKb = false;
         
         $kb = $this->keyboardInline([
             [
@@ -585,24 +607,29 @@ class Commands extends AbstractModule {
             
             if($level == 'up' || $level == '+'){
                 Windows::pressKey(Windows::VK_VOLUME_UP);
-                $answer = "Громкость увеличена";
+                $answer = "Volume up";
             } 
             elseif($level == 'down' || $level == '-'){
                 Windows::pressKey(Windows::VK_VOLUME_DOWN);
-                $answer = "Громкость уменьшена";
+                $answer = "Volume down";
             } 
             elseif(is_numeric($level) && $ilevel >= 0 && $ilevel <= 100){
                 Windows::setVolumeLevel($ilevel);
-                $answer = 'Установлен уровень громкости: ' . $ilevel . '%';
+                $answer = 'Volume level: ' . $ilevel . '%';
             } else {
-                $answer = 'Текущий уровень громкости: ' . Windows::getVolumeLevel() . '%';
+                $showKb = true;
+                $level = Windows::getVolumeLevel();
+                $answer = 'Volume level: ' . $level . '%';
             }
         } catch (WindowsException $e){
-            $this->send('Ошибка: Управление громкостью недоступно на данном устройстве');
+           $answer = 'Error: Cannot control volume level';
         }
         
-        if(strlen($answer) > 0 && $noecho != 1){
-            $this->send($answer, $kb);
+        if($this->isCallback() && !$showKb){
+            $this->sendCallback(SMILE_SOUND_50 . ' ' . $answer);
+        }
+        else {
+            $this->send(SMILE_SOUND_50 . ' ' . $answer, $kb);
         }
     }
    
@@ -699,8 +726,7 @@ class Commands extends AbstractModule {
         $this->send($result);
     }
      
-    public function __media($noecho = null){
-        if($noecho == 1) return;
+    public function __media(){       
         $this->checkWin();
         
         $kb = [
@@ -729,7 +755,7 @@ class Commands extends AbstractModule {
         $this->send(SMILE_MEDIA . " Media remote control", $this->keyboardInline($kb));
     }   
         
-    public function __key($key = null, $noecho = null){
+    public function __key($key = null){
         switch($key){
             case 'next':
                 $this->checkWin();
@@ -746,7 +772,8 @@ class Commands extends AbstractModule {
                 Windows::pressKey(178);
                 break;             
                                  
-            case 'play':
+            case 'play':         
+            case 'pause':
                 $this->checkWin();
                 Windows::pressKey(Windows::VK_MEDIA_PLAY_PAUSE);
                 break;
@@ -755,8 +782,10 @@ class Commands extends AbstractModule {
                 app()->appModule()->robot->keyPress($key);
         }
         
-        if($noecho != 1){
-            $this->send('Нажата клавиша "' . $key . '"');
+        if($this->isCallback()){
+            $this->sendCallback(SMILE_MEDIA . " Pressed: " . $key);
+        } else {
+            $this->send(SMILE_MEDIA . " Pressed: " . $key);
         }
     }
 
