@@ -69,7 +69,8 @@ class Commands extends AbstractModule {
             'Запустить файл' => '/run',
             'Скачать файл' => '/download',
             'Распечатать файл' => '/print',
-            'Удалить файл' => '/delete'
+            'Удалить файл' => '/delete',
+            'File Explorer' => '/ls',
         ];
         
         return str_replace(array_keys($replace), array_values($replace), $cmd);
@@ -133,7 +134,7 @@ class Commands extends AbstractModule {
         $isWin = Windows::isWin();
         $kb = [
             ['/help' => SMILE_HELP . ' Help', '/osinfo' => SMILE_PC . ' OSInfo', '/ip' => SMILE_NETWORK . ' IP info'],
-            ['/screens' => SMILE_DISPLAY . ' Screens', '/cameras' => SMILE_CAMERA . ' Cameras', '/ls' => SMILE_FOLDER . ' ls'],
+            ['/screens' => SMILE_DISPLAY . ' Screens', '/cameras' => SMILE_CAMERA . ' Cameras', '/ls' => SMILE_FOLDER . ' File Explorer'],
         ];
         
         if($isWin){
@@ -345,7 +346,7 @@ class Commands extends AbstractModule {
         }
         
         $list = "Содержимое директории \"" . $this->fso->getCurrentDir() . "\"";
-        $btn[] = ['ls / ' . SMILE_ARROW_UP, '/ls ../ ' . SMILE_UP];
+        $btn[] = [SMILE_ARROW_UP . ' ls / ', SMILE_UP . ' ls ../ '];
         $this->send($list, $this->keyboard($btn)); 
         
         $items = $this->fso->getFileList();
@@ -440,7 +441,7 @@ class Commands extends AbstractModule {
      * Удалить файл 
      */    
     public function __delete($file = null, string $selectBy = 'name'){
-        $file = $this->getFilePath($file, $selectBy);
+        $file = $this->fso->getFile($file, $selectBy); 
         $this->send(SMILE_TRASH . ' Удаляю файл "' . $file . '".');
         unlink($file);       
     }     
