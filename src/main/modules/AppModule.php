@@ -50,8 +50,7 @@ class AppModule extends AbstractModule
         }
         
         Debug::info('Application started. Version ' . self::APP_VERSION);
-        $this->systemTray->visible = true;
-                  
+                    
         $this->tgBot = new TelegramBot;
         $this->tgBot->initBot(Config::get('token'));
         $this->tgBot->setUsers(Config::get('users'));
