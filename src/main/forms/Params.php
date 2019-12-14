@@ -39,6 +39,8 @@ class Params extends AbstractForm {
         // Подгружаем настройки
         $this->checkbox_autorun->selected = Config::get('autorun');
         $this->checkbox_iconified->selected = Config::get('iconified');
+        $this->checkbox_logs->selected = Config::get('save_logs');
+        
         
         // Иконки у табов
         $this->tabPane->tabs->offsetGet(0)->graphic = new UXImageView(new UXImage('res://.data/img/console.png'));
@@ -230,6 +232,7 @@ class Params extends AbstractForm {
 
     /**
      * @event checkbox_autorun.click 
+     * @event checkbox_autorun.keyUp
      */
     function configAutorun(){   
         $value = $this->checkbox_autorun->selected;
@@ -238,9 +241,21 @@ class Params extends AbstractForm {
 
     /**
      * @event checkbox_iconified.click 
+     * @event checkbox_iconified.keyUp 
      */
     function configIconified(){  
         $value = $this->checkbox_iconified->selected;
         Config::set('iconified', $value);
     }
+
+    /**
+     * @event checkbox_logs.click 
+     * @event checkbox_logs.keyUp 
+     */
+    function configLogs(){    
+        $value = $this->checkbox_iconified->selected;
+        Debug::$saveLogs = $value;
+        Config::set('save_logs', $value);
+    }
+
 }

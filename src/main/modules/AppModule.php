@@ -49,6 +49,7 @@ class AppModule extends AbstractModule
             return $this->loadForm('Setup');
         }
         
+        Debug::$saveLogs = Config::get('save_logs');
         Debug::info('Application started. Version ' . self::APP_VERSION);
                     
         $this->tgBot = new TelegramBot;

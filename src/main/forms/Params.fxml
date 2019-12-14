@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?import javafx.scene.*?><?import javafx.collections.*?><?import javafx.scene.layout.*?><?import javafx.scene.control.*?><?import javafx.scene.text.*?><?import javafx.scene.image.*?><?import javafx.scene.shape.*?><?import javafx.scene.paint.*?><?import javafx.scene.web.*?><?import javafx.geometry.*?><?import java.lang.*?><?import org.develnext.jphp.ext.javafx.classes.data.*?><?import org.develnext.jphp.ext.javafx.support.*?><?import org.develnext.jphp.ext.javafx.support.control.*?><?import org.develnext.jphp.ext.game.support.*?><AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" focusTraversable="false" id="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="376" prefWidth="624" styleClass="">
+<?import javafx.scene.*?><?import javafx.collections.*?><?import javafx.scene.layout.*?><?import javafx.scene.control.*?><?import javafx.scene.text.*?><?import javafx.scene.image.*?><?import javafx.scene.shape.*?><?import javafx.scene.paint.*?><?import javafx.scene.web.*?><?import javafx.geometry.*?><?import java.lang.*?><?import org.develnext.jphp.ext.javafx.classes.data.*?><?import org.develnext.jphp.ext.javafx.support.*?><?import org.develnext.jphp.ext.javafx.support.control.*?><?import org.develnext.jphp.ext.game.support.*?><AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" focusTraversable="false" id="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="408" prefWidth="624" styleClass="">
   <children>
     <Data cursor="DEFAULT" enabled="1" id="data-statusbar" visible="1"/>
-    <Panel AnchorPane.bottomAnchor="-2" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" backgroundColor="#ffffff" borderColor="#c0c0c0" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="statusbar" layoutX="0" layoutY="352" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="26" prefWidth="624" styleClass="" titleColor="#333333" titleOffset="15" titlePosition="TOP_LEFT">
+    <Panel AnchorPane.bottomAnchor="-2" AnchorPane.leftAnchor="-8" AnchorPane.rightAnchor="-8" backgroundColor="#ffffff" borderColor="#c0c0c0" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="statusbar" layoutX="-8" layoutY="384" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="26" prefWidth="640" styleClass="" titleColor="#333333" titleOffset="15" titlePosition="TOP_LEFT">
       <children>
-        <LabelEx AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="7" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="0" id="label_debug" layoutX="9" layoutY="0" prefHeight="24" prefWidth="608" styleClass="label " text="[Debug]" textAlignment="LEFT" textFill="#000000" underline="false" wrapText="true">
+        <LabelEx AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="14" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="0" id="label_debug" layoutX="17" layoutY="0" prefHeight="24" prefWidth="608" styleClass="label " text="[Debug]" textAlignment="LEFT" textFill="#000000" underline="false" wrapText="true">
           <font>
             <Font name="System Regular" size="10"/>
           </font>
@@ -15,7 +15,7 @@
         <Font name="System Regular" size="12"/>
       </titleFont>
     </Panel>
-    <VBox AnchorPane.bottomAnchor="24" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" alignment="TOP_LEFT" focusTraversable="false" id="main_box" layoutX="0" layoutY="0" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="352" prefWidth="624" spacing="8" styleClass="">
+    <VBox AnchorPane.bottomAnchor="24" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" alignment="TOP_LEFT" focusTraversable="false" id="main_box" layoutX="0" layoutY="0" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="384" prefWidth="624" spacing="8" styleClass="">
       <padding>
         <Insets bottom="8" left="8" right="8" top="8"/>
       </padding>
@@ -58,11 +58,11 @@
           </titleFont>
         </Panel>
         <Data cursor="DEFAULT" enabled="1" id="data-panel" visible="1"/>
-        <TabPaneEx focusTraversable="true" id="tabPane" layoutX="8" layoutY="82" prefHeight="360" prefWidth="824" styleClass="tab-pane " tabClosingPolicy="UNAVAILABLE">
+        <TabPaneEx AnchorPane.bottomAnchor="8" AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="82" focusTraversable="true" id="tabPane" layoutX="8" layoutY="82" prefHeight="360" prefWidth="824" styleClass="tab-pane " tabClosingPolicy="UNAVAILABLE">
           <tabs>
             <Tab text="Параметры запуска">
               <content>
-                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="240" prefWidth="608" styleClass="">
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
                   <children>
                     <CheckBox AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="18" AnchorPane.topAnchor="16" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_iconified" layoutX="16" layoutY="16" prefHeight="16" prefWidth="662" styleClass="check-box " text="Запускать программу свёрнутой" textAlignment="LEFT" underline="false" wrapText="false">
                       <font>
@@ -82,7 +82,7 @@
             </Tab>
             <Tab text="Токен">
               <content>
-                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="240" prefWidth="608" styleClass="">
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
                   <children>
                     <TextField AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="16" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_token" layoutX="8" layoutY="16" prefColumnCount="12" prefHeight="25" prefWidth="552" promptText="Введите token" styleClass="text-input text-field " text="">
                       <font>
@@ -102,7 +102,7 @@
             </Tab>
             <Tab text="Список разрешенных пользователей">
               <content>
-                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="241" prefWidth="608" styleClass="">
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
                   <children>
                     <LabelEx AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="26.799995422363" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="labelAlt" layoutX="8" layoutY="8" prefHeight="17" prefWidth="384" styleClass="label " text="Только пользователи из этого списка могут управлять ботом" textAlignment="LEFT" underline="false" wrapText="false">
                       <font>
@@ -110,25 +110,25 @@
                       </font>
                     </LabelEx>
                     <Data cursor="DEFAULT" enabled="1" id="data-labelAlt" visible="1"/>
-                    <TextField AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="144.00000457764" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_username" layoutX="8" layoutY="32" prefColumnCount="12" prefHeight="25" prefWidth="416" promptText="Введите имя пользователя без знака @" styleClass="text-input text-field " text="">
+                    <TextField AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="128" AnchorPane.topAnchor="32" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_username" layoutX="8" layoutY="32" prefColumnCount="12" prefHeight="25" prefWidth="472" promptText="Введите имя пользователя без знака @" styleClass="text-input text-field " text="">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
                     </TextField>
                     <Data cursor="DEFAULT" enabled="1" id="data-edit_username" visible="1"/>
-                    <Button AnchorPane.rightAnchor="16" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_add_user" layoutX="472" layoutY="32" prefHeight="25" prefWidth="120" styleClass="button " text="Добавить" textAlignment="CENTER" underline="false" wrapText="false">
+                    <Button AnchorPane.rightAnchor="8" AnchorPane.topAnchor="32" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_add_user" layoutX="488" layoutY="32" prefHeight="25" prefWidth="112" styleClass="button " text="Добавить" textAlignment="CENTER" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
                     </Button>
                     <Data cursor="DEFAULT" enabled="1" graphic=".data/img/user_add.png" id="data-button_add_user" visible="1"/>
-                    <ListViewEx AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="146.00001068115" editable="false" fixedCellSize="-1" focusTraversable="true" id="list_users" layoutX="8" layoutY="64" prefHeight="176" prefWidth="414" styleClass="list-view ">
+                    <ListViewEx AnchorPane.bottomAnchor="9" AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="130" AnchorPane.topAnchor="64" editable="false" fixedCellSize="-1" focusTraversable="true" id="list_users" layoutX="8" layoutY="64" prefHeight="192" prefWidth="470" styleClass="list-view ">
                       <items xmlns:fx="http://javafx.com/fxml">
                         <FXCollections fx:factory="observableArrayList"/>
                       </items>
                     </ListViewEx>
                     <Data cursor="DEFAULT" enabled="1" id="data-list_users" visible="1"/>
-                    <Button AnchorPane.rightAnchor="16" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_delete_user" layoutX="472" layoutY="216" prefHeight="25" prefWidth="120" styleClass="button " text="Удалить" textAlignment="CENTER" underline="false" wrapText="false">
+                    <Button AnchorPane.bottomAnchor="8" AnchorPane.rightAnchor="10" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_delete_user" layoutX="486" layoutY="239" prefHeight="25" prefWidth="112" styleClass="button " text="Удалить" textAlignment="CENTER" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
@@ -140,7 +140,7 @@
             </Tab>
             <Tab text="Отладочная информация">
               <content>
-                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="240" prefWidth="608" styleClass="">
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
                   <children>
                     <TextArea AnchorPane.bottomAnchor="41" AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8" editable="true" focusTraversable="true" id="text_debug" layoutX="8" layoutY="8" prefColumnCount="40" prefHeight="184" prefWidth="592" promptText="" styleClass="text-input text-area " text="" wrapText="false">
                       <font>
@@ -148,12 +148,18 @@
                       </font>
                     </TextArea>
                     <Data cursor="DEFAULT" enabled="1" id="data-text_debug" visible="1"/>
-                    <Button AnchorPane.bottomAnchor="8" AnchorPane.rightAnchor="8" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_clear_logs" layoutX="472" layoutY="207" prefHeight="25" prefWidth="128" styleClass="button " text="Очистить логи" textAlignment="CENTER" underline="false" wrapText="false">
+                    <Button AnchorPane.bottomAnchor="8" AnchorPane.rightAnchor="8" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_clear_logs" layoutX="472" layoutY="239" prefHeight="25" prefWidth="128" styleClass="button " text="Очистить логи" textAlignment="CENTER" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
                     </Button>
                     <Data cursor="DEFAULT" enabled="1" graphic=".data/img/trash.png" id="data-button_clear_logs" visible="1"/>
+                    <CheckBox AnchorPane.bottomAnchor="8" AnchorPane.leftAnchor="8" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_logs" layoutX="8" layoutY="240" prefHeight="24" prefWidth="144" styleClass="check-box " text="Сохранять логи" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </CheckBox>
+                    <Data cursor="DEFAULT" enabled="1" id="data-checkbox_logs" visible="1"/>
                   </children>
                 </AnchorPane>
               </content>

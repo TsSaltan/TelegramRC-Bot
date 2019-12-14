@@ -7,6 +7,8 @@ use std, gui, framework, main;
 class Debug extends AbstractModule {
     
     public static $logFile = 'log.txt';
+    
+    public static $saveLogs = true;
 
     /**
      * levels
@@ -45,18 +47,20 @@ class Debug extends AbstractModule {
                 Logger::debug($date . $message);
         }
         
-        uiLater(function() use ($level, $color, $date, $fulldate, $message, $prefix){
-            $form = app()->getForm('Params');
-            if($form->visible){
-                $form->label_debug->text = $date . '['.$prefix.'] ' . $message;
-                $form->label_debug->textColor = $color;
-                $form->text_debug->text .= $fulldate . '['.$prefix.'] ' . $message . "\n";
-                $form->text_debug->end();
-            }
+        if(self::$saveLogs){
+            uiLater(function() use ($level, $color, $date, $fulldate, $message, $prefix){
+                $form = app()->getForm('Params');
+                if($form->visible){
+                    $form->label_debug->text = $date . '['.$prefix.'] ' . $message;
+                    $form->label_debug->textColor = $color;
+                    $form->text_debug->text .= $fulldate . '['.$prefix.'] ' . $message . "\n";
+                    $form->text_debug->end();
+                }
             
             
-        });
-        file_put_contents(self::$logFile, $fulldate . '['.$prefix.'] ' . $message . "\n", FILE_APPEND);
+            });
+            file_put_contents(self::$logFile, $fulldate . '['.$prefix.'] ' . $message . "\n", FILE_APPEND);
+        }
         
     }
     
