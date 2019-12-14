@@ -37,7 +37,6 @@ class Params extends AbstractForm {
         $this->text_debug->end();
         
         // Подгружаем настройки
-        $this->checkbox_tray->selected = Config::get('use_tray');
         $this->checkbox_autorun->selected = Config::get('autorun');
         $this->checkbox_iconified->selected = Config::get('iconified');
         
@@ -47,17 +46,22 @@ class Params extends AbstractForm {
         $this->tabPane->tabs->offsetGet(2)->graphic = new UXImageView(new UXImage('res://.data/img/users.png'));
         $this->tabPane->tabs->offsetGet(3)->graphic = new UXImageView(new UXImage('res://.data/img/bug.png'));
         
+        // При сворачивании помещаем в трей 
+        $this->observer('iconified')->addListener(function($old, $new){
+            if($new){
+                $this->free();
+            }
+        });
     }
     
     /**
-     * Если при закрытии формы бот не запущен, останавливаем программу.
+     * При закрытии формы останавливаем программу.
      * Exit нужен, чтоб закрыть программу, когда активен трей.
      * @event close 
      */
     function doClose(){     
-        if($this->getBotState() == 'off'){
-            exit(0);
-        }
+        //exit(0);
+        app()->appModule()->shutdown();
     }
 
 
@@ -223,15 +227,6 @@ class Params extends AbstractForm {
         $this->text_debug->clear();
     }
 
-    /**
-     * @event checkbox_tray.click 
-     */
-    function configTray(){
-        $value = $this->checkbox_tray->selected;
-        Config::set('use_tray', $value);
-        
-        app()->appModule()->systemTray->visible = $value;
-    }
 
     /**
      * @event checkbox_autorun.click 

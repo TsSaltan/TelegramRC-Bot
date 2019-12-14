@@ -267,15 +267,16 @@ class Commands extends AbstractModule {
         $text .= "/screenshot [n] - Сделать скриншот экрана из списка (/screens)\n";
         $text .= "/cameras - Вывести список web-камер\n";
         $text .= "/photo - Сделать фото с web-камеры по умолчанию\n";
-        $text .= "/photo [n] - Сделать фото с выбравнной из списка (/cameras) web-камеры\n";
-               
+        $text .= "/photo [n] - Сделать фото с выбравнной из списка камеры\n";
+        
+        $text .= "\n-- Клавиатура --\n";   
+        $text .= "/key \"код любой кнопки (ENTER, SPACE, etc...)\" - Нажать кнопку\n";  
         if($isWin){
-            $text .= "\n-- Кнопки --\n";     
-            $text .= "/media - Список доступных медиа кнопок\n";
             $text .= "/key__play - Воспроизведение / пауза\n";
             $text .= "/key__stop - Остановить воспроизведение\n";
             $text .= "/key__next - Следующий трек\n";
             $text .= "/key__prev - Предыдущий трек\n";
+            $text .= "/media - Клавиатура с медиа кнопками\n";
             
             $text .= "\n-- Железо --\n";
             //$text .= "/hardware - Железо компьютера\n";
@@ -286,10 +287,13 @@ class Commands extends AbstractModule {
             $text .= "\n-- Питание --\n";
             $text .= "/reboot - Перезагрузить ПК\n";
             $text .= "/shutdown - Выключить ПК\n";
-            
-            $text .= "\n-- Дополнительно --\n";
-            $text .= "/uptime - Время работы ПК\n";
-            $text .= "/volume - Получить уровень громкости\n";
+        }            
+        
+        $text .= "\n-- Дополнительно --\n";
+        $text .= "/uptime - Время работы\n";
+        
+        if($isWin){
+            $text .= "/volume - Управление громкостью\n";
             $text .= "/volume [0-100|up|+|down|-] - Установить уровень громкости\n";
             $text .= "/brightness - Получить уровень яркости\n";
             $text .= "/brightness [0-100] - Установить уровень яркости\n";
@@ -345,13 +349,11 @@ class Commands extends AbstractModule {
             $this->fso->changeDir($path, $selectBy);
         }
         
-        $list = "Содержимое директории \"" . $this->fso->getCurrentDir() . "\"";
         $btn[] = [SMILE_ARROW_UP . ' ls / ', SMILE_UP . ' ls ../ '];
-        $this->send($list, $this->keyboard($btn)); 
         
         $items = $this->fso->getFileList();
         
-        $message = "";
+        $message = "Содержимое директории \"" . $this->fso->getCurrentDir() . "\"\n\n";
         foreach($items as $item){    
             if(strlen($item['name']) > 30){
                 $name = substr($item['name'], 0, 13) . ' ... ' . substr($item['name'], -12);
@@ -374,14 +376,14 @@ class Commands extends AbstractModule {
             }
             
             if(strlen($message . $line) > TelegramBot::MAX_MESSAGE_LENGTH){
-                $this->send($message); 
+                $this->send($message, $this->keyboard($btn)); 
                 $message = '';
             }
             $message .= $line;
         }
         
         if(strlen($message) > 0){
-            $this->send($message);
+            $this->send($message, $this->keyboard($btn)); 
         }
     }    
     
@@ -442,8 +444,11 @@ class Commands extends AbstractModule {
      */    
     public function __delete($file = null, string $selectBy = 'name'){
         $file = $this->fso->getFile($file, $selectBy); 
-        $this->send(SMILE_TRASH . ' Удаляю файл "' . $file . '".');
-        unlink($file);       
+        if(File::of($file['path'])->delete()){
+            $this->send(SMILE_TRASH . ' Файл удалён "' . $file['name'] . '"');
+        } else {
+            $this->send(SMILE_TRASH . ' Не могу удалить файл "' . $file['name'] . '"');
+        }
     }     
     
     /**
@@ -791,17 +796,18 @@ class Commands extends AbstractModule {
     }
 
     public function __uptime(){
-        $this->checkWin();
-        $bootTime = Windows::getUptime(); 
         $programTime = (time() - app()->appModule()->startup) * 1000;
-        
-        $btime = new Time($bootTime, TimeZone::UTC()); 
         $ptime = new Time($programTime, TimeZone::UTC()); 
+        $message = SMILE_CLOCK . ' Программа работает: ' . ($ptime->day() - 1) . ' дней ' . $ptime->hourOfDay() . ' часов ' . $ptime->minute() . ' минут ' . $ptime->second() . " секунд.";
+
         
-        $this->send(
-            'Компьютер работает: ' . ($btime->day() - 1) . ' дней ' . $btime->hourOfDay() . ' часов ' . $btime->minute() . ' минут ' . $btime->second() . " секунд.\n" .
-            'Программа работает: ' . ($ptime->day() - 1) . ' дней ' . $ptime->hourOfDay() . ' часов ' . $ptime->minute() . ' минут ' . $ptime->second() . " секунд." 
-        );
+        if(Windows::isWin()){
+            $bootTime = Windows::getUptime(); 
+            $btime = new Time($bootTime, TimeZone::UTC());        
+            $message .= "\n" . SMILE_PC . " Компьютер работает: " . ($btime->day() - 1) . ' дней ' . $btime->hourOfDay() . ' часов ' . $btime->minute() . ' минут ' . $btime->second() . " секунд.";
+        }        
+        
+        $this->send($message);
     }         
       
     public function __battery(){

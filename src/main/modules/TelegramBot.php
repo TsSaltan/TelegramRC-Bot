@@ -11,10 +11,10 @@ define("SMILE_FILE", "📄");
 define("SMILE_FOLDER", "🗂");
 define("SMILE_NETWORK", "🌐");
 define("SMILE_BACK", "🔙");
+define("SMILE_CLOCK", "🕙");
 
 define("SMILE_ARROW_UP", "⤴️");
 define("SMILE_ARROW_REFRESH", "🔄");
-
 
 define("SMILE_SYMBOL_UP", "🔼");
 define("SMILE_SYMBOL_DOWN", "🔽");

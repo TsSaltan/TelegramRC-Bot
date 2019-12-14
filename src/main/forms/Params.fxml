@@ -76,12 +76,6 @@
                       </font>
                     </CheckBox>
                     <Data cursor="DEFAULT" enabled="1" id="data-checkbox_autorun" visible="1"/>
-                    <CheckBox AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="15" AnchorPane.topAnchor="64" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_tray" layoutX="16" layoutY="64" prefHeight="16" prefWidth="665" styleClass="check-box " text="Закрывать окно в трей, если бот запущен" textAlignment="LEFT" underline="false" wrapText="false">
-                      <font>
-                        <Font name="System Regular" size="12"/>
-                      </font>
-                    </CheckBox>
-                    <Data cursor="DEFAULT" enabled="1" id="data-checkbox_tray" visible="1"/>
                   </children>
                 </AnchorPane>
               </content>

@@ -8,7 +8,7 @@
       "x": 80,
       "y": 16,
       "props": {
-        "visible": false,
+        "visible": true,
         "tooltip": "TelegramRC Bot",
         "icon": ".data/img/remote_control.png",
         "manualExit": true,

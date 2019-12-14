@@ -50,10 +50,7 @@ class AppModule extends AbstractModule
         }
         
         Debug::info('Application started. Version ' . self::APP_VERSION);
-        
-        if(Config::get('use_tray')){
-            $this->systemTray->visible = true;
-        }
+        $this->systemTray->visible = true;
                   
         $this->tgBot = new TelegramBot;
         $this->tgBot->initBot(Config::get('token'));
@@ -91,15 +88,16 @@ class AppModule extends AbstractModule
         }
         
         if(!Config::get('iconified')){
-            // Если выключена опция "запускать свёрнутым", то показываем окно
             $form->show();
-        } elseif(!Config::get('use_tray')){
-            // Если нет трея, но нужно запустить свернутым, то показываем окно и сворачиваем его
-            $form->show();
-            $form->iconified = true;
         }
     }
 
+    function shutdown(){
+        $this->systemTray->visible = false;
+        $this->systemTray->manualExit = false;
+        app()->shutdown();
+        exit(0);
+    }
     
     /**
      * @event systemTray.click 
