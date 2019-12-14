@@ -15,6 +15,10 @@ define("SMILE_BACK", "🔙");
 define("SMILE_ARROW_UP", "⤴️");
 define("SMILE_ARROW_REFRESH", "🔄");
 
+
+define("SMILE_SYMBOL_UP", "🔼");
+define("SMILE_SYMBOL_DOWN", "🔽");
+
 define("SMILE_DOT_RED", "🛑");
 
 define("SMILE_UP", "🆙");
@@ -26,7 +30,13 @@ define("SMILE_DISPLAY", "🖥");
 
 define("SMILE_HELP", "🆘");
 define("SMILE_CAMERA", "📷");
+
 define("SMILE_MEDIA", "🎛");
+define("SMILE_MEDIA_PREV", "⏪");
+define("SMILE_MEDIA_STOP", "⏹");
+define("SMILE_MEDIA_PLAY", "⏯");
+define("SMILE_MEDIA_NEXT", "⏩");
+
 
 define("SMILE_BRIGHT_100", "🔆");
 define("SMILE_BRIGHT_50", "🔅");

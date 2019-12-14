@@ -123,7 +123,7 @@ class Commands extends AbstractModule {
         ];
         
         if($isWin){
-            $kb[] = ['/media' => SMILE_MEDIA . ' Media RC', '/volume' => 'Volume', '/brightness' => SMILE_BRIGHT_50 . ' Brightness'];
+            $kb[] = ['/media' => SMILE_MEDIA . ' Media RC', '/volume' => SMILE_SOUND_50 . ' Volume', '/brightness' => SMILE_BRIGHT_50 . ' Brightness'];
             $kb[] = ['/battery' => SMILE_BATTERY . ' Battery', '/reboot' => SMILE_ARROW_REFRESH . ' Reboot', '/shutdown' => SMILE_DOT_RED . ' Shutdown'];
         }
         
@@ -705,29 +705,28 @@ class Commands extends AbstractModule {
         
         $kb = [
             [
-                '/key__prev__1' => '⏪ Prev',
-                '/key__stop__1' => '⏹ Stop',
-                '/key__play__1' => '⏯ Play/Pause',
-                '/key__next__1' => '⏩ Next',
+                '/key__prev__1' => SMILE_MEDIA_PREV . ' Prev',
+                '/key__stop__1' => SMILE_MEDIA_STOP . ' Stop',
+                '/key__play__1' => SMILE_MEDIA_PLAY . ' Play/Pause',
+                '/key__next__1' => SMILE_MEDIA_NEXT . ' Next',
             ]
         ];
         
         try {
             $level = Windows::getVolumeLevel();
             $kb[] = [
-                '/volume__down__1' => '🔽 Volume -',
-                '/volume' => "🔉 $level%",
-                '/volume__up__1' => '🔼 Volume +',
+                '/volume__down__1' => SMILE_SYMBOL_DOWN . ' Volume -',
+                '/volume' => SMILE_SOUND_50 . " $level%",
+                '/volume__up__1' => SMILE_SYMBOL_UP . ' Volume +',
             ];
         } catch (WindowsException $e){
              $kb[] = [
-                '/volume__down__1' => '🔽 Volume -',
-                '/volume' => "🔉 Volume",
-                '/volume__up__1' => '🔼 Volume +',
+                '/volume__down__1' => SMILE_SYMBOL_DOWN . ' Volume -',
+                '/volume__up__1' => SMILE_SYMBOL_UP . ' Volume +',
             ];
         }
         
-        $this->send("🎛 Media remote control", $this->keyboardInline($kb));
+        $this->send(SMILE_MEDIA . " Media remote control", $this->keyboardInline($kb));
     }   
         
     public function __key($key = null, $noecho = null){
@@ -785,7 +784,7 @@ class Commands extends AbstractModule {
             $time = new Time($rtime, TimeZone::UTC()); 
             
             $this->send(
-                "🔋 Состояние аккумулятора: \n" . 
+                SMILE_BATTERY . " Состояние аккумулятора: \n" . 
                 "Текущий заряд: " . $perc . "%\n" .
                 "Напряжение: " . $voltage . "mV\n" .
                 "Заряжается: " . ($isCharge ? 'Да': 'Нет') . "\n" .
@@ -793,7 +792,7 @@ class Commands extends AbstractModule {
             );
             
         } catch (WindowsException $e){
-            $this->send('🔋 Аккумулятор не установлен');
+            $this->send(SMILE_BATTERY . ' Аккумулятор не установлен');
         }
     } 
 }
