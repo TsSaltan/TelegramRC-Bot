@@ -13,21 +13,31 @@ define("SMILE_NETWORK", "🌐");
 define("SMILE_BACK", "🔙");
 
 define("SMILE_ARROW_UP", "⤴️");
+define("SMILE_ARROW_REFRESH", "🔄");
+
+define("SMILE_DOT_RED", "🛑");
+
 define("SMILE_UP", "🆙");
 define("SMILE_TRASH", "🗑");
 define("SMILE_PRINT", "🖨");
 define("SMILE_DOWNLOAD", "🔰");
-define("SMILE_PC", "🖥");
+define("SMILE_PC", "💻");
 define("SMILE_DISPLAY", "🖥");
 
+define("SMILE_HELP", "🆘");
+define("SMILE_CAMERA", "📷");
+define("SMILE_MEDIA", "🎛");
 
+define("SMILE_BRIGHT_100", "🔆");
+define("SMILE_BRIGHT_50", "🔅");
 
+define("SMILE_BATTERY", "🔋");
 
-/*
-define("SMILE_", "");
-define("SMILE_", "");
-define("SMILE_", "");
-*/
+define("SMILE_SOUND_0", "🔇");
+define("SMILE_SOUND_25", "🔈");
+define("SMILE_SOUND_50", "🔉");
+define("SMILE_SOUND_100", "🔊");
+
 
 /**
  * Собственно здесь происходит "общение" с API Telegram

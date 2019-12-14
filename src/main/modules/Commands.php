@@ -118,13 +118,13 @@ class Commands extends AbstractModule {
     protected function getMainKeyboard(){
         $isWin = Windows::isWin();
         $kb = [
-            ['/help' => 'Help 🆘', '/osinfo' => 'OSInfo 💻', '/ip' => 'IP info 🌐'],
-            ['/screens' => 'Screens 🖥', '/cameras' => 'Cameras 📷', '/ls' => 'ls / 🗂'],
+            ['/help' => SMILE_HELP . ' Help', '/osinfo' => SMILE_PC . ' OSInfo', '/ip' => SMILE_NETWORK . ' IP info'],
+            ['/screens' => SMILE_DISPLAY . ' Screens', '/cameras' => SMILE_CAMERA . ' Cameras', '/ls' => SMILE_FOLDER . ' ls'],
         ];
         
         if($isWin){
-            $kb[] = ['/media' => 'Media RC 🎛 ', '/volume' => 'Volume 🔉', '/brightness' => 'Brightness 🔅']; //  🔆
-            $kb[] = ['/battery' => 'Battery 🔋', '/reboot' => 'Reboot 🔄', '/shutdown' => 'Shutdown 🛑'];
+            $kb[] = ['/media' => SMILE_MEDIA . ' Media RC', '/volume' => 'Volume', '/brightness' => SMILE_BRIGHT_50 . ' Brightness'];
+            $kb[] = ['/battery' => SMILE_BATTERY . ' Battery', '/reboot' => SMILE_ARROW_REFRESH . ' Reboot', '/shutdown' => SMILE_DOT_RED . ' Shutdown'];
         }
         
         return $this->keyboard($kb);       
@@ -284,7 +284,12 @@ class Commands extends AbstractModule {
         $data = json_decode(file_get_contents('http://ipinfo.io/json'), true);
         unset($data['readme']);
         
-        $this->send(SMILE_NETWORK . " IP info: " . json_encode($data, JSON_PRETTY_PRINT));
+        $info = SMILE_NETWORK . " IP info: \n";
+        foreach ($data as $k => $v){
+            $info .= "$k: $v\n";    
+        }
+        
+        $this->send($info);
     }  
     
     public function __osinfo(){
@@ -354,7 +359,7 @@ class Commands extends AbstractModule {
         }
         
         if(strlen($message) > 0){
-            $this->send($message/*, $this->keyboardInline($btn)*/);
+            $this->send($message);
         }
     }    
     
@@ -478,12 +483,12 @@ class Commands extends AbstractModule {
         $cameras = Webcam::getWebcams();
         $keyboard = [];
         if(sizeof($cameras) == 0){
-            $list = "📷 Web-камеры не обнаружены";
+            $list = SMILE_CAMERA . " Web-камеры не обнаружены";
         } else {
-            $list = "📷 Список web-камер (" . sizeof($cameras). "):\n";
+            $list = SMILE_CAMERA . " Список web-камер (" . sizeof($cameras). "):\n";
             foreach($cameras as $i => $camera){
                 $list .= " #$i. " . $camera->name;
-                $keyboard[] = ["/photo__$i" => "📷 Снимок с камеры №$i (" . $camera->name . ")"];
+                $keyboard[] = ["/photo__$i" => SMILE_CAMERA . " Снимок с камеры №$i (" . $camera->name . ")"];
             }
         }
           
@@ -551,27 +556,27 @@ class Commands extends AbstractModule {
         
         $kb = $this->keyboardInline([
             [
-                '/volume__0__1' => '🔇 0%',
-                '/volume__5__1' => '🔈 5%',
-                '/volume__10__1' => '🔈 10%',
-                '/volume__20__1' => '🔉 20%',
+                '/volume__0__1' => SMILE_SOUND_0 . ' 0%',
+                '/volume__5__1' => SMILE_SOUND_25. ' 5%',
+                '/volume__10__1' => SMILE_SOUND_25. ' 10%',
+                '/volume__20__1' => SMILE_SOUND_50. ' 20%',
             ],
             [
-                '/volume__30__1' => '🔉 30%',
-                '/volume__40__1' => '🔉 40%',
-                '/volume__50__1' => '🔉 50%',
-                '/volume__60__1' => '🔉 60%',
+                '/volume__30__1' => SMILE_SOUND_50. ' 30%',
+                '/volume__40__1' => SMILE_SOUND_50. ' 40%',
+                '/volume__50__1' => SMILE_SOUND_50. ' 50%',
+                '/volume__60__1' => SMILE_SOUND_50. ' 60%',
             ],            
             [
-                '/volume__70__1' => '🔉 70%',
-                '/volume__80__1' => '🔊 80%',
-                '/volume__90__1' => '🔊 90%',
-                '/volume__100__1' => '🔊 100%',
+                '/volume__70__1' => SMILE_SOUND_50. ' 70%',
+                '/volume__80__1' => SMILE_SOUND_100. ' 80%',
+                '/volume__90__1' => SMILE_SOUND_100. ' 90%',
+                '/volume__100__1' => SMILE_SOUND_100. ' 100%',
             ], 
             [
-                '/volume__down__1' => '🔈 Volume -',
-                '/media' => ' 🎛 Media RC',
-                '/volume__up__1' => '🔊 Volume +',
+                '/volume__down__1' => SMILE_SOUND_25 . ' Volume -',
+                '/media' => SMILE_MEDIA . ' Media RC',
+                '/volume__up__1' => SMILE_SOUND_100 . ' Volume +',
             ],
         ]);
         
