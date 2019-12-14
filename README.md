@@ -20,6 +20,7 @@
 ![File Explorer](https://user-images.githubusercontent.com/3524731/70854658-ac89d880-1ecf-11ea-9199-e990b0fc9299.png)
 * Отправка на печать файлов (windows only + необходим установленный microsoft word)
 ![Print](https://user-images.githubusercontent.com/3524731/70854668-d511d280-1ecf-11ea-9a5d-411801cdee16.png)
+* Другая логика кнопок закрытия окна: закрыть - полностью закрывает программу, свернуть - сворачивает в трей.
 
 ## Build
 Для сборки версии 2.0 необходимы пакеты:
