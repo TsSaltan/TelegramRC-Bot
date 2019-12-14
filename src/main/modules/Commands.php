@@ -456,7 +456,7 @@ class Commands extends AbstractModule {
      */    
     public function __print($file = null, string $selectBy = 'name'){
         $this->checkWin();
-        $file = $this->getFilePath($file, $selectBy);
+        $file = $this->fso->getFile($file, $selectBy); 
         $res = WindowsScriptHost::PowerShell('
             $word = New-Object -ComObject Word.Application
             $word.visible = $false

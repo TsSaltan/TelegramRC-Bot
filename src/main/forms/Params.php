@@ -40,8 +40,7 @@ class Params extends AbstractForm {
         $this->checkbox_autorun->selected = Config::get('autorun');
         $this->checkbox_iconified->selected = Config::get('iconified');
         $this->checkbox_logs->selected = Config::get('save_logs');
-        
-        
+                
         // Иконки у табов
         $this->tabPane->tabs->offsetGet(0)->graphic = new UXImageView(new UXImage('res://.data/img/console.png'));
         $this->tabPane->tabs->offsetGet(1)->graphic = new UXImageView(new UXImage('res://.data/img/key.png'));

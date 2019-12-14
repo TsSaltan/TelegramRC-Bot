@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC-Bot" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1576345235011">
+<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC-Bot" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1576356205783">
   <tree>
     <expanded>
     <path src=""/>
       <path src="/src"/>
+      <path src="/src/main"/>
+      <path src="/src/main/modules"/>
+      <path src="/vendor"/>
     </expanded>
   </tree>
   <openedFiles>
   <file src="TelegramRC-Bot.dnproject"/>
     <file src="src/main/modules/AppModule.php"/>
-    <file src="src/main/forms/Params.php"/>
-    <file src="src/main/modules/Config.php"/>
+    <file selected="1" src="src/main/forms/Params.php"/>
     <file src="src/main/modules/TelegramBot.php"/>
-    <file selected="1" src="src/main/modules/Commands.php"/>
+    <file src="src/main/modules/Commands.php"/>
     <file src="src/main/modules/FSO.php"/>
+    <file src="src/main/modules/Debug.php"/>
+    <file src="src/main/modules/Config.php"/>
   </openedFiles>
   <files/>
   <behaviours>
