@@ -1,14 +1,16 @@
 # TelegramRC-Bot
 Программа для дистанционного управления ПК через telegram
 
+* [**Описание программы**](https://tssaltan.top/1928.telegramrc-bot-удалённое-управление-пк-через-telegram/)
+* [**Скачать программу**](https://tssaltan.top/download/1931/)
+
 ![Screenshot v2.0: Install 1](https://user-images.githubusercontent.com/3524731/70854539-4badd080-1ece-11ea-8570-6671c50236d8.png)
 ![Screenshot v2.0: Install 2](https://sun9-63.userapi.com/c858016/v858016715/1288de/pql91LytdUc.jpg)
 ![Screenshot v2.0: Main window](https://user-images.githubusercontent.com/3524731/70854609-fd4d0180-1ece-11ea-9d25-41c5876e9c7f.png)
 
-* [**Описание программы**](https://tssaltan.top/1928.telegramrc-bot-удалённое-управление-пк-через-telegram/)
-* [**Скачать программу**](https://tssaltan.top/download/1931/)
 
 ## Что нового
+### v 2.0
 * Изменен внешний вид программы (в прошлой версии спойлеры ужасно лагали при редактировании)
 * Поддержка прокси (пока только сервера без авторизации, DN пока не умеет корректно работать с прокси с авторизациями)
 * Загрузка файлов, отправляемых пользователем в телеграм
@@ -21,6 +23,7 @@
 * Отправка на печать файлов (windows only + необходим установленный microsoft word)
 ![Print](https://user-images.githubusercontent.com/3524731/70854668-d511d280-1ecf-11ea-9a5d-411801cdee16.png)
 * Другая логика кнопок закрытия окна: закрыть - полностью закрывает программу, свернуть - сворачивает в трей.
+* Возможность отключить логирование
 
 ## Build
 Для сборки версии 2.0 необходимы пакеты:
