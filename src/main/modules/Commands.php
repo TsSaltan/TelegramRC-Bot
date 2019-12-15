@@ -1,6 +1,7 @@
 <?php
 namespace main\modules;
 
+use php\desktop\Runtime;
 use webcam\Webcam;
 use Exception;
 use windows;
@@ -218,7 +219,7 @@ class Commands extends AbstractModule {
      * Приветствие при запуске бота
      */
     public function __start(){  
-        return ['text' => 'Вас приветствует бот для удалённого управления компьютером. Введите /help для получения справки.', 'keyboard' => $this->getMainKeyboard()];        
+        return ['text' => SMILE_BOT . ' Вас приветствует бот для удалённого управления компьютером. Введите /help для получения справки.', 'keyboard' => $this->getMainKeyboard()];        
     }
     
     /**
@@ -228,7 +229,7 @@ class Commands extends AbstractModule {
     public function __help(){
         $isWin = Windows::isWin();
 
-        $text = "Версия бота: " . AppModule::APP_VERSION . " \n";
+        $text = SMILE_BOT . " Версия бота: " . AppModule::APP_VERSION . " \n";
 
         $text .= "\n- Команды -\n";
         $text .= "Команда необязательно должна начинаться со слеша /\n";
@@ -350,6 +351,7 @@ class Commands extends AbstractModule {
         }
         
         $btn[] = [SMILE_ARROW_UP . ' ls / ', SMILE_UP . ' ls ../ '];
+        $btn[] = [SMILE_HELP . ' Help'];
         
         $items = $this->fso->getFileList();
         
@@ -412,6 +414,8 @@ class Commands extends AbstractModule {
         }
         
         $kb[1][] = SMILE_TRASH . ' Удалить файл ' . $cmd;
+        $kb[2][] = SMILE_FOLDER . ' File Explorer';
+        $kb[2][] = SMILE_HELP . ' Help';
         
         $info = SMILE_FILE . " Имя файла: $name \n" . 
                 "Путь: " . dirname($file['path']) . "\n" .
@@ -422,7 +426,7 @@ class Commands extends AbstractModule {
     }
     
     /**
-     * Команда /download
+     * @command /download
      * Отдаёт файл на сксчивание пользователю 
      */    
     public function __download($file = null, string $selectBy = 'name'){  
@@ -431,6 +435,7 @@ class Commands extends AbstractModule {
     }
     
     /**
+     * /run "file"
      * Запустить файл 
      */    
     public function __run($file = null, string $selectBy = 'name'){
@@ -440,19 +445,27 @@ class Commands extends AbstractModule {
     }     
     
     /**
+     * /delete "file"
      * Удалить файл 
      */    
     public function __delete($file = null, string $selectBy = 'name'){
         $file = $this->fso->getFile($file, $selectBy); 
+        $kb = [
+            [SMILE_FOLDER . ' File Explorer'],
+            [SMILE_HELP . ' Help'],
+        ];
+        $kb = $this->keyboard($kb);
+        
         if(File::of($file['path'])->delete()){
-            $this->send(SMILE_TRASH . ' Файл удалён "' . $file['name'] . '"');
+            $this->send(SMILE_TRASH . ' Файл удалён "' . $file['name'] . '"', $kb);
         } else {
-            $this->send(SMILE_TRASH . ' Не могу удалить файл "' . $file['name'] . '"');
+            $this->send(SMILE_TRASH . ' Не удалось удалить файл "' . $file['name'] . '"', $kb);
         }
     }     
     
     /**
-     * Распечатать последний загруженный файл 
+     * /print file
+     * Отправить файл на печать
      */    
     public function __print($file = null, string $selectBy = 'name'){
         $this->checkWin();
@@ -468,6 +481,9 @@ class Commands extends AbstractModule {
         $this->send(SMILE_PRINT . ' Файл "' . $file['name'] . '" отправлен на печать. ' . "\n" . $res);
     }
     
+    /**
+     * /screens
+     */
     public function __screens(){
         $screens = UXScreen::getScreens();
         $info = SMILE_DISPLAY . " Список экранов (" . sizeof($screens) . "):\n";
@@ -483,7 +499,7 @@ class Commands extends AbstractModule {
     }  
     
     /**
-     * Команда /screenshot 
+     * /screenshot screen_num
      */
     public function __screenshot(int $screenN = 0){
     
@@ -512,7 +528,6 @@ class Commands extends AbstractModule {
     /**
      * Команда /cameras
      * Могут вываливаться ошибки, но вроде работает нормально 
-     * @param int $camN - Номер камеры в списке камер
      */
     public function __cameras(){
         $cameras = Webcam::getWebcams();
@@ -531,11 +546,11 @@ class Commands extends AbstractModule {
     }   
            
     /**
-     * Команда /photo
+     * Команда /photo camera_num
      * Могут вываливаться ошибки, но вроде работает нормально 
      * @param int $camN - Номер камеры в списке камер
      */
-    public function __photo(int $camN = -1){
+    public function __photo(int $camN = 0){
         $cameras = Webcam::getWebcams();
         if(!isset($cameras[$camN])) return $this->send('Указана несуществующая камера. Список камер доступен по команде /cameras');
         $camera = $cameras[$camN];
@@ -582,13 +597,21 @@ class Commands extends AbstractModule {
      * Только для Windows
      */
     public function __ram(){
-        $this->checkWin();
-        $total = Windows::getTotalRAM();
-        $free = Windows::getFreeRAM();
-        $perc = round($free / $total * 100);
-        $msg = "Всего оперативной памяти: " . round($total / 1024 / 1024, 2) . "MiB\n";
-        $msg.= "Свободно: ". round($free / 1024 / 1024, 2) . "MiB (" . $perc . "%)";
-        $this->send($msg);
+        $jfree = Runtime::freeMemory();
+        $jtotal = Runtime::totalMemory();
+        
+        
+        $message = SMILE_BOT . ' TelegramRC Bot used ' . $this->fso->formatBytes($jtotal - $jfree) . ' of ' . $this->fso->formatBytes($jtotal) . ' (' . round($jfree / $jtotal * 100) . '%)';
+        
+        if(Windows::isWin()){   
+            $total = Windows::getTotalRAM();
+            $free = Windows::getFreeRAM();  
+            $message .= "\n" . SMILE_DISC . " Total RAM: " . $this->fso->formatBytes($total);
+            $message .= "\nUsed RAM: ". $this->fso->formatBytes($total-$free) . " (" .  round(($total-$free) / $total * 100) . "%)";
+            $message .= "\nFree RAM: ". $this->fso->formatBytes($free);
+        }
+                
+        $this->send($message);
     }
         
     /**

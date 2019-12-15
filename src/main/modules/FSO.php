@@ -86,25 +86,28 @@ class FSO {
         throw new \Exception('Cannot find file #' . $num . ' in path: ' . $this->cd);    
     }
     
-    public function getFileList(){
+    public function getFileList(?string $fullpath = null){
         $drives = [];
         $dirs = [];
         $files = [];
         
+        $fullpath = is_null($fullpath) ? $this->cd : $fullpath;
+        
         // Если корень - отгображаем диски
-        if(is_null($this->cd) || $this->cd == "/" || $this->cd == "\\") {
+        if(is_null($fullpath) || $fullpath == "/" || $fullpath == "\\") {
             $drives = array_map(function($e){
                 static $driveNum = 0; 
                 $path = $e->getAbsolutePath();
+                
                 return ['name' => $path, 'path' => $path, 'type' => 'drive', 'num' => $driveNum++]; 
             }, File::listRoots());
             $roots = [];
         } else {
-            $roots = File::of($this->cd)->find();
+            $roots = File::of($fullpath)->find();
         }
         
         foreach($roots as $i => $root){
-            $path = realpath($this->cd . '/' . $root);
+            $path = realpath($fullpath . '/' . $root);
             if(is_file($path)){
                 $files[] = [
                     'num' => $i,
@@ -127,7 +130,7 @@ class FSO {
         return array_merge($drives, $dirs, $files);
     }
     
-    protected function formatBytes(int $bytes){
+    public function formatBytes(int $bytes){
         if($bytes > 1024 * 1024 * 1024 * 0.9){
             return round($bytes / (1024 * 1024 * 1024), 2) . ' GiB';
         }
