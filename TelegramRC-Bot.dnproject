@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC-Bot" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1576407043207">
+<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC-Bot" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1576599055628">
   <tree>
     <expanded>
     <path src=""/>
@@ -10,11 +10,11 @@
     </expanded>
   </tree>
   <openedFiles>
-  <file src="TelegramRC-Bot.dnproject"/>
+  <file selected="1" src="TelegramRC-Bot.dnproject"/>
     <file src="src/main/modules/AppModule.php"/>
     <file src="src/main/forms/Params.php"/>
     <file src="src/main/modules/TelegramBot.php"/>
-    <file selected="1" src="src/main/modules/Commands.php"/>
+    <file src="src/main/modules/Commands.php"/>
     <file src="src/main/modules/FSO.php"/>
     <file src="src/main/modules/Debug.php"/>
     <file src="src/main/modules/Config.php"/>

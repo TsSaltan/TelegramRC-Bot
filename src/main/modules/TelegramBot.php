@@ -285,19 +285,17 @@ class TelegramBot extends AbstractModule {
      */
     public function sendAnswer($chat_id, $data){
         if(!is_array($data) || sizeof($data) == 0) return;
-        
-        Debug::info('[OUTPUT] Chat #' . $chat_id . ': ' . json_encode($data));
-        
+                
         if(isset($data['callback'])){
             $text = $data['text'] ?? $data['alert'] ?? 'OK';
             $alert = isset($data['alert']);
-            $this->api->query('answerCallbackQuery', ['callback_query_id' => $data['callback'], 'text' => $text, 'show_alert' => $alert]);
+            $this->api->answerCallbackQuery()->callback_query_id($data['callback'])->text($text)->show_alert($alert)->query();
             return;
         }
         
         if(isset($data['text'])){
            $query = $this->api->sendMessage()->chat_id($chat_id)->text($data['text']);
-           if(isset($data['keyboard']) && is_array($data['keyboard'])){
+           if(isset($data['keyboard'])){
                $query->reply_markup($data['keyboard']);
            }
            $query->query();

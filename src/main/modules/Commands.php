@@ -1,6 +1,7 @@
 <?php
 namespace main\modules;
 
+use telegram\object\TMarkup;
 use php\desktop\Runtime;
 use webcam\Webcam;
 use Exception;
@@ -133,17 +134,20 @@ class Commands extends AbstractModule {
      */
     protected function getMainKeyboard(){
         $isWin = Windows::isWin();
-        $kb = [
-            ['/help' => SMILE_HELP . ' Help', '/osinfo' => SMILE_PC . ' OSInfo', '/ip' => SMILE_NETWORK . ' IP info'],
-            ['/screens' => SMILE_DISPLAY . ' Screens', '/cameras' => SMILE_CAMERA . ' Cameras', '/ls' => SMILE_FOLDER . ' File Explorer'],
-        ];
+        $keyboard = TMarkup::replyKeyboard();
+        $keyboard->button(SMILE_HELP . ' Help')->button(SMILE_PC . ' OSInfo')->button(SMILE_NETWORK . ' IP info');
+        $keyboard->row();
         
-        if($isWin){
-            $kb[] = ['/media' => SMILE_MEDIA . ' Media RC', '/volume' => SMILE_SOUND_50 . ' Volume', '/brightness' => SMILE_BRIGHT_50 . ' Brightness'];
-            $kb[] = ['/battery' => SMILE_BATTERY . ' Battery', '/reboot' => SMILE_ARROW_REFRESH . ' Reboot', '/shutdown' => SMILE_DOT_RED . ' Shutdown'];
+        $keyboard->button(SMILE_DISPLAY . ' Screens')->button(SMILE_CAMERA . ' Cameras')->button(SMILE_FOLDER . ' File Explorer');
+        
+         if($isWin){
+            $keyboard->row()
+                     ->button(SMILE_MEDIA . ' Media RC')->button(SMILE_SOUND_50 . ' Volume')->button(SMILE_BRIGHT_50 . ' Brightness')
+                     ->row()
+                     ->button(SMILE_BATTERY . ' Battery')->button(SMILE_ARROW_REFRESH . ' Reboot')->button(SMILE_DOT_RED . ' Shutdown');
         }
         
-        return $this->keyboard($kb);       
+        return $keyboard;       
     }
     
     /**
