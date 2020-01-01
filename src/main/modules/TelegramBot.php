@@ -100,7 +100,19 @@ class TelegramBot extends AbstractModule {
     /**
      * @var callable 
      */
-    public $errorCallback;
+    public $errorCallback;  
+      
+    /**
+     * @var callable 
+     */
+    public $startCallback;    
+    
+    /**
+     * @var callable 
+     */
+    public $stopCallback;
+    
+    
  
     public function initBot($token){
         $this->api = new TelegramBotApi($token);
@@ -129,11 +141,21 @@ class TelegramBot extends AbstractModule {
     
     public function setErrorCallback(callable $func){
         $this->errorCallback = $func;
+    }    
+    
+    public function setStartCallback(callable $func){
+        $this->startCallback = $func;
+    }    
+    
+    public function setStopCallback(callable $func){
+        $this->stopCallback = $func;
     }
     
     public function startListener(){
         $thread = new Thread(function(){
             try{
+                if(is_callable($this->startCallback)) call_user_func($this->startCallback);
+                
                 $this->listener = new TUpdateListener($this->api);
                 $this->listener->setAsync(false); 
                 $this->listener->setThreadsCount(4); 
@@ -169,6 +191,7 @@ class TelegramBot extends AbstractModule {
         }
         
         $this->status = 'off';
+        if(is_callable($this->stopCallback)) call_user_func($this->stopCallback);
         Debug::warning('Long-poll deactivated');
     }
     
