@@ -14,7 +14,7 @@ define("SMILE_BACK", "🔙");
 define("SMILE_CLOCK", "🕙");
 define("SMILE_BOT", "🤖");
 define("SMILE_HOME", "🏠");
-
+define("SMILE_USER", "🤵");
 define("SMILE_ARROW_UP", "⤴️");
 define("SMILE_ARROW_REFRESH", "🔄");
 define("SMILE_ARROW_DOWN", "⬇️");
@@ -214,6 +214,7 @@ class TelegramBot extends AbstractModule {
                 
                 if(isset($update->message)){
                     $chat_id = $update->message->chat->id;
+                    $user_id = $update->message->from->id;
                     $username = $update->message->from->username;
                     $text = $update->message->text;
                 }
@@ -221,6 +222,7 @@ class TelegramBot extends AbstractModule {
                 if(isset($update->callback_query)){
                     $chat_id = $update->callback_query->message->chat->id;
                     $username = $update->callback_query->from->username;
+                    $user_id = $update->callback_query->from->id;
                     $text = $update->callback_query->data;
                     
                     if(isset($update->callback_query->id)){
@@ -261,7 +263,7 @@ class TelegramBot extends AbstractModule {
                 if($this->checkUser($username)){
                     // Если ранее пользователь не обращался к боту, создадим ему экземпляр Commands
                     if(!isset($this->commands[$chat_id])){
-                        $this->commands[$chat_id] = new Commands($chat_id, $username, $this);
+                        $this->commands[$chat_id] = new Commands($chat_id, $username, $user_id, $this);
                     }
                     
                     $commands = $this->commands[$chat_id];       

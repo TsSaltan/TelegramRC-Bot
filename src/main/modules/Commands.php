@@ -38,7 +38,12 @@ class Commands extends AbstractModule {
     /**
      * @var string 
      */
-    public $username;
+    public $username;  
+      
+    /**
+     * @var int
+     */
+    public $user_id;
     
     /**
      * @var TelegramBot 
@@ -51,9 +56,10 @@ class Commands extends AbstractModule {
      */
     public $fso;
     
-    public function __construct($chat_id = -1, $username = null, ?TelegramBot $bot = null){
+    public function __construct($chat_id = -1, $username = null, $user_id = -1, ?TelegramBot $bot = null){
         $this->chat_id = $chat_id;
         $this->username = $username;
+        $this->user_id = $user_id;
         $this->bot = $bot;
         $this->fso = new FSO;
     }
@@ -255,6 +261,7 @@ class Commands extends AbstractModule {
         $text .= "-- Общее --\n";
         $text .= "/start - Приветствие бота\n";
         $text .= "/help - Текущая справка\n";
+        $text .= "/whoami - Информация о пользователе\n";        
         $text .= "/ip - Получить внешний ip\n";
         $text .= "/browse [url] - Открыть ссылку на ПК (в браузере по умолчанию)\n";
         $text .= "/alert [message] - Отобразить уведомление\n";
@@ -964,5 +971,12 @@ class Commands extends AbstractModule {
     public function __alert(string $text){
         $this->appModule()->notify(implode(' ', func_get_args()), '[Telegram Remote Control] ' . $this->username);
         $this->send('Сообщение отправлено!');
+    }
+    
+    public function __whoami(){
+        $this->send(
+            SMILE_USER . ' Username: ' . $this->username . "\n".
+            'User id: ' . $this->user_id
+        );
     }
 }
