@@ -73,6 +73,8 @@ class Commands extends AbstractModule {
             'Распечатать файл' => '/print',
             'Удалить файл' => '/delete',
             'File Explorer' => '/ls',
+            'http:' => '/browse http:',
+            'https:' => '/browse https:',
         ];
         
         return str_replace(array_keys($replace), array_values($replace), $cmd);
@@ -250,6 +252,7 @@ class Commands extends AbstractModule {
         $text .= "/start - Приветствие бота\n";
         $text .= "/help - Текущая справка\n";
         $text .= "/ip - Получить внешний ip\n";
+        $text .= "/browse [url] - Открыть ссылку на ПК (в браузере по умолчанию)\n";
 
         $text .= "\n-- Система --\n";
         $text .= "/exec [cmd] - Выполнить команду\n";
@@ -876,4 +879,18 @@ class Commands extends AbstractModule {
             $this->send(SMILE_BATTERY . ' Аккумулятор не установлен');
         }
     } 
+    
+    public function __browse(?string $url){
+        if(str::startsWith($url, 'http:') || str::startsWith($url, 'https:')){        
+            browse($url);   
+            $this->send(SMILE_NETWORK . ' Открываю ссылку...');
+        } else {
+            $this->send(SMILE_DOT_RED . ' Ошибка: введите корректную ссылку!');
+        }
+    }
+    
+    public function __alert(string $text){
+        $this->appModule()->notify(implode(' ', func_get_args()), '[Telegram Remote Control] ' . $this->username);
+        $this->send('Сообщение отправлено!');
+    }
 }

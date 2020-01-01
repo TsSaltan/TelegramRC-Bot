@@ -7,9 +7,9 @@
       </font>
     </LabelEx>
     <Data cursor="DEFAULT" enabled="1" graphic=".data/img/plane.png" id="data-label_title" visible="1"/>
-    <LabelEx alignment="TOP_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label" layoutX="8" layoutY="32" prefHeight="64" prefWidth="464" styleClass="label " text="Notice text" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="true">
+    <LabelEx alignment="TOP_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label" layoutX="8" layoutY="32" prefHeight="64" prefWidth="464" styleClass="label " text="Notify text" textAlignment="LEFT" textFill="#f2f2f2" underline="false" wrapText="true">
       <font>
-        <Font name="System Regular" size="12"/>
+        <Font name="System Regular" size="13"/>
       </font>
     </LabelEx>
     <Data cursor="DEFAULT" enabled="1" id="data-label" visible="1"/>
