@@ -82,7 +82,10 @@ class Params extends AbstractForm {
             });
         }
     }
-
+    
+    /**
+     * @return TelegramBot 
+     */
     function getBot(){
         return app()->appModule()->tgBot;
     }
@@ -137,7 +140,7 @@ class Params extends AbstractForm {
     }
 
     /**
-     * Запуск или остановка бота
+     * Переключение состояния бота (вкл/выкл)
      * @event button_run.action 
      */
     function toggleBot(){  

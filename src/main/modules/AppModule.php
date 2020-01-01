@@ -6,7 +6,7 @@ use std, gui, framework, main;
 
 class AppModule extends AbstractModule
 {
-    const APP_VERSION = '2.0.1';
+    const APP_VERSION = '2.0.1-dev';
     
     /**
      * Время запуска программы 
@@ -18,14 +18,15 @@ class AppModule extends AbstractModule
      */
     public $tgBot;
     
+    public $trayTooltop;
+    
     /**
      * Запуск программы
      * @event action  
      */
-    function сonstruct(){         
+    function сonstruct(){           
         $this->startup = time(); 
-        $this->systemTray->tooltip = "TelegramRC v " . self::APP_VERSION;
-        
+        $this->trayTooltop = "TelegramRC (v " . self::APP_VERSION . ')';
         // Создаём папку для прорграммы в домашней директории текущего пользователя (туда всегда разрешена запись)
         $app_dir = $this->getAppDir();       
         if(!fs::exists($app_dir)){
@@ -81,6 +82,16 @@ class AppModule extends AbstractModule
                 }
             });
             }
+        });
+        
+        $this->tgBot->setStartCallback(function(){
+            $this->systemTray->icon = new UXImage('res://.data/img/plane_arrow.png');
+            $this->systemTray->tooltip = $this->trayTooltop . ': Online';
+        });
+                
+        $this->tgBot->setStopCallback(function(){
+            $this->systemTray->icon = new UXImage('res://.data/img/plane_warn.png');
+            $this->systemTray->tooltip = $this->trayTooltop . ': Offline';
         });     
                   
         if(Config::get('autorun', $value)){
@@ -128,20 +139,12 @@ class AppModule extends AbstractModule
         return dirname(realpath(str::split($path, $sep)[0])) . $ds;
     } 
     
-    public function notify($text, $type = "NOTICE"){
-        $notify = new UXTrayNotification;    
-        $notify->title = "TelegramRC Bot";
-        $notify->message = $text;
-        $notify->notificationType = $type;
-        $notify->on('click', function(){
-            /** @var Params $form */
-            $form = $this->form('Params');
-            if(!$form->visible){
-                $form->show();
-            }
-            $form->requestFocus();
+    public function notify(string $text, ?string $title = null){   
+        uiLater(function() use ($text, $title){
+            $noticeForm = $this->form('NotifyForm');
+            $noticeForm->setText($text);
+            if(strlen($title) > 0) $noticeForm->setTitleText($title);
+            $noticeForm->show();
         });
-        
-        $notify->show();
     }
 }

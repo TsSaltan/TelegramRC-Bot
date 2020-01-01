@@ -10,7 +10,7 @@
       "props": {
         "visible": true,
         "tooltip": "TelegramRC Bot",
-        "icon": ".data/img/remote_control.png",
+        "icon": ".data/img/plane.png",
         "manualExit": true,
         "alwaysShowing": true
       }
