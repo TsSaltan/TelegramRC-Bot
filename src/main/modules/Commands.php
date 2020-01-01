@@ -56,12 +56,18 @@ class Commands extends AbstractModule {
      */
     public $fso;
     
+    /**
+     * @var bool 
+     */
+    public $isWin;
+    
     public function __construct($chat_id = -1, $username = null, $user_id = -1, ?TelegramBot $bot = null){
         $this->chat_id = $chat_id;
         $this->username = $username;
         $this->user_id = $user_id;
         $this->bot = $bot;
         $this->fso = new FSO;
+        $this->isWin = Windows::isWin();
     }
     
     public function setCallbackInstance(int $instance = -1){
@@ -142,7 +148,6 @@ class Commands extends AbstractModule {
      * Клавиатура по умолчанию (над полем ввода) 
      */
     protected function getMainKeyboard(){
-        $isWin = Windows::isWin();
         $keyboard = TMarkup::replyKeyboard();
         $keyboard->button(SMILE_HELP . ' Help')->button(SMILE_PC . ' OSInfo')->button(SMILE_NETWORK . ' IP info');
         $keyboard->row();
@@ -151,7 +156,7 @@ class Commands extends AbstractModule {
         $keyboard->row();
         $keyboard->button(SMILE_KEYBOARD . ' Keyboard');
                 
-        if($isWin){
+        if($this->isWin){
             $keyboard->button(SMILE_MEDIA . ' Media RC')
                      ->row()
                      ->button(SMILE_SOUND_50 . ' Volume')->button(SMILE_BRIGHT_50 . ' Brightness')
@@ -213,7 +218,7 @@ class Commands extends AbstractModule {
     }
     
     public function checkWin(){
-        if(!Windows::isWin()) throw new \Exception('Required Windows OS');
+        if(!$this->isWin) throw new \Exception('Required Windows OS');
     }  
             
     /**
@@ -243,8 +248,6 @@ class Commands extends AbstractModule {
      * Справка / помощь
      */
     public function __help(){
-        $isWin = Windows::isWin();
-
         $text = SMILE_BOT . " Версия бота: " . AppModule::APP_VERSION . " \n";
 
         $text .= "\n- Команды -\n";
@@ -275,7 +278,7 @@ class Commands extends AbstractModule {
         $text .= "/cd [path] - Указать текущую директорию\n";
         $text .= "/ls - Показать содержимое текущей директории\n";
         $text .= "/file [file] - Отобразить информацию о файле\n";
-        if($isWin){
+        if($this->isWin){
             $text .= "/print [file] - Отправить файл на печать \n";
         }
         $text .= "/download [file] - Скачать файл\n";
@@ -292,7 +295,7 @@ class Commands extends AbstractModule {
         $text .= "\n-- Клавиатура --\n";   
         $text .= "/key \"код любой кнопки (ENTER, SPACE, etc...)\" - Нажать кнопку\n"; 
         $text .= "/keyboard - Клавиатура и горячие клавиши\n";  
-        if($isWin){
+        if($this->isWin){
             $text .= "/key__play - Воспроизведение / пауза\n";
             $text .= "/key__stop - Остановить воспроизведение\n";
             $text .= "/key__next - Следующий трек\n";
@@ -313,7 +316,7 @@ class Commands extends AbstractModule {
         $text .= "\n-- Дополнительно --\n";
         $text .= "/uptime - Время работы\n";
         
-        if($isWin){
+        if($this->isWin){
             $text .= "/volume - Управление громкостью\n";
             $text .= "/volume [0-100|up|+|down|-] - Установить уровень громкости\n";
             $text .= "/brightness - Получить уровень яркости\n";
@@ -335,7 +338,7 @@ class Commands extends AbstractModule {
         foreach ($data as $k => $v){
             $info .= "$k: $v\n";    
         }
-        
+        $info .= "MAC: " . UXApplication::getMacAddress() . "\n"; 
         $this->send($info);
     }  
     
@@ -347,6 +350,18 @@ class Commands extends AbstractModule {
         $info.= "Предпочитаемый язык: " . System::getProperty('user.language') . "\n";
         $info.= "Домашняя папка: " . System::getProperty('user.home') . "\n";
         $info.= "Страна: " . System::getProperty('user.country') . "\n";
+        
+        if($this->isWin){
+            $info.= "\n- Windows info: \n";
+            $info.= "Arch: " . Windows::getArch() . "\n";
+            $info.= "Build: " . Windows::getProductBuild() . "\n";
+            $info.= "ProductKey: " . Windows::getProductKey() . "\n";
+            $info.= "Version: " . Windows::getProductVersion() . "\n";
+            
+            $info.= "\n- Hardware: \n";
+            $info.= "CPU: " . Windows::getCpuManufacturer() . " | " . Windows::getCpuProduct() . " | " . Windows::getCpuFrequency() . " MHz \n";
+            $info.= "BaseBoard: " . Windows::getMotherboardProduct() . " | " . Windows::getMotherboardManufacturer() . "\n";         
+        }
         
         $this->send($info);
     }     
