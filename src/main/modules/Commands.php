@@ -1,6 +1,7 @@
 <?php
 namespace main\modules;
 
+use php\desktop\Robot;
 use telegram\object\TMarkup;
 use php\desktop\Runtime;
 use webcam\Webcam;
@@ -141,10 +142,13 @@ class Commands extends AbstractModule {
         $keyboard->row();
         
         $keyboard->button(SMILE_DISPLAY . ' Screens')->button(SMILE_CAMERA . ' Cameras')->button(SMILE_FOLDER . ' File Explorer');
-        
-         if($isWin){
-            $keyboard->row()
-                     ->button(SMILE_MEDIA . ' Media RC')->button(SMILE_SOUND_50 . ' Volume')->button(SMILE_BRIGHT_50 . ' Brightness')
+        $keyboard->row();
+        $keyboard->button(SMILE_KEYBOARD . ' Keyboard');
+                
+        if($isWin){
+            $keyboard->button(SMILE_MEDIA . ' Media RC')
+                     ->row()
+                     ->button(SMILE_SOUND_50 . ' Volume')->button(SMILE_BRIGHT_50 . ' Brightness')
                      ->row()
                      ->button(SMILE_BATTERY . ' Battery')->button(SMILE_ARROW_REFRESH . ' Reboot')->button(SMILE_DOT_RED . ' Shutdown');
         }
@@ -253,6 +257,7 @@ class Commands extends AbstractModule {
         $text .= "/help - Текущая справка\n";
         $text .= "/ip - Получить внешний ip\n";
         $text .= "/browse [url] - Открыть ссылку на ПК (в браузере по умолчанию)\n";
+        $text .= "/alert [message] - Отобразить уведомление\n";
 
         $text .= "\n-- Система --\n";
         $text .= "/exec [cmd] - Выполнить команду\n";
@@ -278,7 +283,8 @@ class Commands extends AbstractModule {
         $text .= "/photo [n] - Сделать фото с выбравнной из списка камеры\n";
         
         $text .= "\n-- Клавиатура --\n";   
-        $text .= "/key \"код любой кнопки (ENTER, SPACE, etc...)\" - Нажать кнопку\n";  
+        $text .= "/key \"код любой кнопки (ENTER, SPACE, etc...)\" - Нажать кнопку\n"; 
+        $text .= "/keyboard - Клавиатура и горячие клавиши\n";  
         if($isWin){
             $text .= "/key__play - Воспроизведение / пауза\n";
             $text .= "/key__stop - Остановить воспроизведение\n";
@@ -357,7 +363,7 @@ class Commands extends AbstractModule {
             $this->fso->changeDir($path, $selectBy);
         }
         
-        $btn[] = [SMILE_ARROW_UP . ' ls / ', SMILE_UP . ' ls ../ '];
+        $btn[] = [SMILE_HOME . ' ls / ', SMILE_UP . ' ls ../ '];
         $btn[] = [SMILE_HELP . ' Help'];
         
         $items = $this->fso->getFileList();
@@ -428,7 +434,6 @@ class Commands extends AbstractModule {
                 "Путь: " . dirname($file['path']) . "\n" .
                 "Размер: " . $file['size'] . "\n";
             
-//        $this->send($info, $this->keyboardInline($kb));
         $this->send($info, $this->keyboard($kb));
     }
     
@@ -806,41 +811,108 @@ class Commands extends AbstractModule {
             ];
         }
         
+        $kb[] = [
+            '/keyboard' => SMILE_KEYBOARD . ' Keyboard / Hotkeys'
+        ];
+        
         $this->send(SMILE_MEDIA . " Media remote control", $this->keyboardInline($kb));
     }   
         
-    public function __key($key = null){
-        switch($key){
-            case 'next':
-                $this->checkWin();
-                Windows::pressKey(Windows::VK_MEDIA_NEXT_TRACK);
-                break;
-                
-            case 'prev':
-                $this->checkWin();
-                Windows::pressKey(Windows::VK_MEDIA_PREV_TRACK);
-                break;  
-                              
-            case 'stop':
-                $this->checkWin();
-                Windows::pressKey(178);
-                break;             
-                                 
-            case 'play':         
-            case 'pause':
-                $this->checkWin();
-                Windows::pressKey(Windows::VK_MEDIA_PLAY_PAUSE);
-                break;
-                
-            default:
-                app()->appModule()->robot->keyPress($key);
+    public function __key(){
+        $keys = func_get_args();
+        $keyText = implode('+', $keys);
+        foreach($keys as $key){
+            switch($key){
+                case 'next':
+                    $this->checkWin();
+                    Windows::pressKey(Windows::VK_MEDIA_NEXT_TRACK);
+                    break;
+                    
+                case 'prev':
+                    $this->checkWin();
+                    Windows::pressKey(Windows::VK_MEDIA_PREV_TRACK);
+                    break;  
+                                  
+                case 'stop':
+                    $this->checkWin();
+                    Windows::pressKey(178);
+                    break;             
+                                     
+                case 'play':         
+                case 'pause':
+                    $this->checkWin();
+                    Windows::pressKey(Windows::VK_MEDIA_PLAY_PAUSE);
+                    break;
+                    
+                default:
+                    app()->appModule()->robot->keyDown($key);
+            }
+        }
+        
+        foreach($keys as $key){
+            switch($key){
+                case 'next':
+                case 'prev':      
+                case 'stop':       
+                case 'play':         
+                case 'pause':
+                    break;
+                    
+                default:
+                    app()->appModule()->robot->keyUp($key);
+            }
         }
         
         if($this->isCallback()){
-            $this->sendCallback(SMILE_MEDIA . " Pressed: " . $key);
+            $this->sendCallback(SMILE_MEDIA . " Pressed: " . $keyText);
         } else {
-            $this->send(SMILE_MEDIA . " Pressed: " . $key);
+            $this->send(SMILE_MEDIA . " Pressed: " . $keyText);
         }
+    }
+    
+         
+    public function __keyboard(){       
+        $isWin = Windows::isWin();
+        
+        $kb = [];
+        
+        if($isWin){    
+            $kb[] = ['/key__control__shift__escape' => ' Ctrl + Shift + Escape / Task Manager'];
+            $kb[] = [
+                '/key__windows__a' => 'Win + A',
+                '/key__windows' => 'Win',
+                '/key__windows__d' => 'Win + D',
+            ];              
+        }
+        
+        $kb[] = [
+            '/key__escape' => 'Esc',
+            '/key__enter' => 'Enter',
+            '/key__tab' => 'Tab',
+        ];  
+              
+        $kb[] = [
+            '/key__back_space' => SMILE_BACK . ' Backspace',
+            '/key__delete' => 'Delete',
+        ];  
+                    
+        $kb[] = [
+            '/key__space' => 'Space',
+        ]; 
+                           
+        $kb[] = [
+            '/key__home' => 'Home',
+            '/key__up' => SMILE_ARROW_UP_DIRECT,
+            '/key__end' => 'End',
+        ];    
+                               
+        $kb[] = [
+            '/key__left' => SMILE_ARROW_LEFT,
+            '/key__down' => SMILE_ARROW_DOWN,
+            '/key__right' => SMILE_ARROW_RIGHT,
+        ];
+        
+        $this->send(SMILE_KEYBOARD . " Hotkeys ", $this->keyboardInline($kb));
     }
 
     public function __uptime(){

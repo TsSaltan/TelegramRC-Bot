@@ -13,10 +13,14 @@ define("SMILE_NETWORK", "🌐");
 define("SMILE_BACK", "🔙");
 define("SMILE_CLOCK", "🕙");
 define("SMILE_BOT", "🤖");
-
+define("SMILE_HOME", "🏠");
 
 define("SMILE_ARROW_UP", "⤴️");
 define("SMILE_ARROW_REFRESH", "🔄");
+define("SMILE_ARROW_DOWN", "⬇️");
+define("SMILE_ARROW_LEFT", "⬅️");
+define("SMILE_ARROW_RIGHT", "➡️");
+define("SMILE_ARROW_UP_DIRECT", "⬆️");
 
 define("SMILE_SYMBOL_UP", "🔼");
 define("SMILE_SYMBOL_DOWN", "🔽");
@@ -29,7 +33,7 @@ define("SMILE_PRINT", "🖨");
 define("SMILE_DOWNLOAD", "🔰");
 define("SMILE_PC", "💻");
 define("SMILE_DISPLAY", "🖥");
-
+define("SMILE_KEYBOARD", "⌨️");
 define("SMILE_HELP", "🆘");
 define("SMILE_CAMERA", "📷");
 
@@ -38,7 +42,6 @@ define("SMILE_MEDIA_PREV", "⏪");
 define("SMILE_MEDIA_STOP", "⏹");
 define("SMILE_MEDIA_PLAY", "⏯");
 define("SMILE_MEDIA_NEXT", "⏩");
-
 
 define("SMILE_BRIGHT_100", "🔆");
 define("SMILE_BRIGHT_50", "🔅");
