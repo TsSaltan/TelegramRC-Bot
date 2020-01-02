@@ -1,6 +1,8 @@
 <?php
 namespace main\modules;
 
+use Error;
+use Throwable;
 use Exception;
 use telegram\tools\TUpdateListener;
 use telegram\TelegramBotApi;
@@ -202,10 +204,10 @@ class TelegramBot extends AbstractModule {
      * Обработка событий от long-poll 
      */
     public function onUpdate($update){
-        Debug::info('[Update] ' . json_encode($update, JSON_PRETTY_PRINT));
+        //Debug::info('[Update] ' . json_encode($update, JSON_PRETTY_PRINT));
         try{ 
             $last_doc = null;
-            $callbackId = -1;
+            $callback_id = -1;
             
             // Сравниваем числовую метку события
             if($update->update_id > $this->last_update){
@@ -226,7 +228,7 @@ class TelegramBot extends AbstractModule {
                     $text = $update->callback_query->data;
                     
                     if(isset($update->callback_query->id)){
-                        $callbackId = $update->callback_query->id;
+                        $callback_id = $update->callback_query->id;
                     }
                     
                 }
@@ -257,47 +259,73 @@ class TelegramBot extends AbstractModule {
                 if($hasDoc){
                     $text .= ' [attach: '. $last_doc['type'] . '; ' . $last_doc['file_name'] . '; ' . $last_doc['mime_type'] . '; #' . $last_doc['file_id']. '; ' . $last_doc['file_size'] . ' bytes]';
                 }
-                Debug::info('[INPUT] ' . $username . ':' . $text);
+                Debug::info('[INPUT] ' . $username . ': ' . $text);
                 
-                // Проверка, есть ли такой пользователь в списке разрешённых
-                if($this->checkUser($username)){
-                    // Если ранее пользователь не обращался к боту, создадим ему экземпляр Commands
-                    if(!isset($this->commands[$chat_id])){
-                        $this->commands[$chat_id] = new Commands($chat_id, $username, $user_id, $this);
-                    }
-                    
-                    $commands = $this->commands[$chat_id];       
-                    $answer = $commands->undefinedMsg(($cmd['command'] ?? $text));
-                    
-                    $cmd = $this->parseCommand($commands->alias($text));
-                    
-                    try {
-                        $commands->setCallbackInstance($callbackId);
-                        
-                        // Если удалось распасрсить команду
-                        if(!$hasDoc && $cmd !== false && method_exists($commands, '__' . $cmd['command'])){                                               
-                            $answer = call_user_func_array([$commands, '__' . $cmd['command']], $cmd['args']);
-                        }
-                        
-                        // Если неизвестная команда, но есть документ
-                        elseif($hasDoc) {             
-                            $file = $this->getFile($last_doc);
-                            $answer = call_user_func_array([$commands, 'inputFileMsg'], [$file, $last_doc]);
-                        }
-                    }
-                    catch (\Exception $e){
-                        Debug::error('Command error [' . get_class($e) .'] : ' . $e->getMessage());
-                        $answer = $commands->errorMsg($e->getMessage());
-                    }
-                } else {
-                    $answer = (new Commands($chat_id, $username, $this))->deniedMsg();
-                }
+                $this->processCommand($text, $username, $chat_id, $user_id, $callback_id, $last_doc);
                 
-                $this->sendAnswer($chat_id, $answer);
             }
         } catch (\Exception $e){
             Debug::error('[OnUpdate] ' . get_class($e). ': ' . $e->getMessage());
         }
+    }
+    
+    public function processCommand(string $command, string $username, int $chat_id, int $user_id = -1, int $callbackId = -1, ?array $doc = null){
+        // Если ранее пользователь не обращался к боту, создадим ему экземпляр Commands
+        /** @var Commands $commands */
+        if(!isset($this->commands[$chat_id])){
+            $commands = new Commands($this);
+            $commands->setChatId($chat_id);
+            $commands->setUserId($user_id);
+            $commands->setUsername($username);
+            $this->commands[$chat_id] = $commands;
+        } else {    
+            $commands = $this->commands[$chat_id]; 
+        }
+        
+            
+        // Проверка, есть ли такой пользователь в списке разрешённых
+        if(!$this->checkUser($username)){
+            $commands->deniedMsg();
+            return;
+        }
+        
+        $cmd = $this->parseCommand($commands->alias($command));
+        $hasDoc = is_array($doc) && sizeof($doc) > 0;
+                    
+        try {
+            $commands->setCallbackInstance($callbackId);
+                        
+            // Если удалось распасрсить команду
+            if(!$hasDoc && $cmd !== false && method_exists($commands, '__' . $cmd['command'])){                                               
+                $answer = call_user_func_array([$commands, '__' . $cmd['command']], $cmd['args']);
+            }
+                        
+            // Если есть документ
+            elseif($hasDoc) {             
+                $file = $this->getFile($last_doc);
+                $answer = call_user_func_array([$commands, 'inputFileMsg'], [$file, $last_doc]);
+            }
+            
+            // Если команда неизвестна
+            else {
+                $commands->undefinedMsg(($cmd['command'] ?? $text));
+                return;
+            }
+        }
+        catch (Exception | Error $e){
+            $emessage = $e->getMessage();
+            Debug::error('Command error: [' . get_class($e) .'] ' . $emessage);
+            if(str::contains($emessage, 'Missing argument')){
+                // Ошибка об неверном вызове команд
+                $emessage = str::replace($emessage, get_class($commands) . '::__', 'command /');
+            }
+            
+            $commands->errorMsg($emessage);
+            
+            
+        }
+                
+        $this->sendAnswer($chat_id, $answer);
     }
     
     /**

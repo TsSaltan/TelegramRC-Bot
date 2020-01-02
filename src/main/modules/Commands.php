@@ -61,13 +61,22 @@ class Commands extends AbstractModule {
      */
     public $isWin;
     
-    public function __construct($chat_id = -1, $username = null, $user_id = -1, ?TelegramBot $bot = null){
-        $this->chat_id = $chat_id;
-        $this->username = $username;
-        $this->user_id = $user_id;
+    public function __construct(?TelegramBot $bot = null){
         $this->bot = $bot;
         $this->fso = new FSO;
         $this->isWin = Windows::isWin();
+    }
+    
+    public function setChatId(int $chat_id){
+        $this->chat_id = $chat_id;
+    }   
+      
+    public function setUserId(int $user_id){
+        $this->user_id = $user_id;
+    }    
+    
+    public function setUsername(string $username){
+        $this->username = $username;
     }
     
     public function setCallbackInstance(int $instance = -1){
@@ -199,14 +208,14 @@ class Commands extends AbstractModule {
      * Сообщение об неизвестной команде 
      */
     public function undefinedMsg($cmd = null){
-        return ['text' => 'Неизвестная команда "' . $cmd . '"'];        
+        $this->send(SMILE_DOT_RED . ' Неизвестная команда: ' . $cmd);        
     }
         
     /**
      * Сообщение при возникшей ошибке 
      */    
     public function errorMsg($e){
-        return ['text' => 'Произошла ошибка во время выполнения команды: ' . $e];        
+        $this->send(SMILE_DOT_RED . ' Error: ' . $e);      
     }
 
      
@@ -214,7 +223,7 @@ class Commands extends AbstractModule {
      * Сообщение доступ запрещён 
      */
     public function deniedMsg(){
-        return ['text' => 'Извините, но у вас нет доступа к данному боту. Если вы хотите управлять ботом, внесите имя пользователя "' . $this->username . '" в список разрешённых'];        
+        $this->send(SMILE_DOT_RED . ' У этого пользователя нет доступа к данному боту. Если вы хотите управлять ботом, внесите имя пользователя "' . $this->username . '" в список разрешённых');        
     }
     
     public function checkWin(){
@@ -240,7 +249,7 @@ class Commands extends AbstractModule {
      * Приветствие при запуске бота
      */
     public function __start(){  
-        return ['text' => SMILE_BOT . ' Вас приветствует бот для удалённого управления компьютером. Введите /help для получения справки.', 'keyboard' => $this->getMainKeyboard()];        
+        $this->send(SMILE_BOT . ' Вас приветствует бот для удалённого управления компьютером. Введите /help для получения справки.', $this->getMainKeyboard());        
     }
     
     /**
@@ -323,7 +332,7 @@ class Commands extends AbstractModule {
             $text .= "/brightness [0-100] - Установить уровень яркости\n";
         }
         
-        return ['text' => $text, 'keyboard' => $this->getMainKeyboard()];        
+        $this->send($text, $this->getMainKeyboard());        
     }    
     
     /**
@@ -370,8 +379,8 @@ class Commands extends AbstractModule {
      * Команда /cd
      * Смена/отображение текущей директории 
      */
-    public function __cd($path = null){                
-        return ['text' => 'Текущая директория: ' . $this->fso->changeDir($path)];
+    public function __cd(?string $path = null){                
+        return $this->send('Текущая директория: ' . $this->fso->changeDir($path));
     }
     
     /**
@@ -380,7 +389,7 @@ class Commands extends AbstractModule {
      * @param string $path Путь. / - корень, для отображения дисков
      * @param string $selectBy name|num Ищет файл или по его имени (если name) или по порядковому номеру (если num - используется, когда есть лимит на длину сообщения в telegram)
      */
-    public function __ls($path = null, string $selectBy = 'name'){
+    public function __ls(string $path, string $selectBy = 'name'){
         if(strlen($path) > 0){
             $this->fso->changeDir($path, $selectBy);
         }
@@ -428,7 +437,7 @@ class Commands extends AbstractModule {
     /**
      * Информация о файле
      */    
-    public function __file($file = null, string $selectBy = 'name'){
+    public function __file(string $file, string $selectBy = 'name'){
         $file = $this->fso->getFile($file, $selectBy);      
              
         $name = $file['name'];
@@ -463,7 +472,7 @@ class Commands extends AbstractModule {
      * @command /download
      * Отдаёт файл на сксчивание пользователю 
      */    
-    public function __download($file = null, string $selectBy = 'name'){  
+    public function __download(string $file, string $selectBy = 'name'){  
         $file = $this->fso->getFile($file, $selectBy);          
         $this->sendDoc($file['path']);
     }
@@ -472,7 +481,7 @@ class Commands extends AbstractModule {
      * /run "file"
      * Запустить файл 
      */    
-    public function __run($file = null, string $selectBy = 'name'){
+    public function __run(string $file, string $selectBy = 'name'){
         $file = $this->fso->getFile($file, $selectBy); 
         $this->send(SMILE_PC . ' Запускаю файл "' . $file['name'] . '".');
         open($file['path']);       
@@ -482,7 +491,7 @@ class Commands extends AbstractModule {
      * /delete "file"
      * Удалить файл 
      */    
-    public function __delete($file = null, string $selectBy = 'name'){
+    public function __delete(string $file, string $selectBy = 'name'){
         $file = $this->fso->getFile($file, $selectBy); 
         $kb = [
             [SMILE_FOLDER . ' File Explorer'],
@@ -501,7 +510,7 @@ class Commands extends AbstractModule {
      * /print file
      * Отправить файл на печать
      */    
-    public function __print($file = null, string $selectBy = 'name'){
+    public function __print(string $file, string $selectBy = 'name'){
         $this->checkWin();
         $file = $this->fso->getFile($file, $selectBy); 
         $res = WindowsScriptHost::PowerShell('
@@ -512,6 +521,7 @@ class Commands extends AbstractModule {
             $word.Application.ActiveDocument.Close()
             $word.quit()
         ', ['file' => $file['path']]);
+        
         $this->send(SMILE_PRINT . ' Файл "' . $file['name'] . '" отправлен на печать. ' . "\n" . $res);
     }
     
@@ -628,16 +638,14 @@ class Commands extends AbstractModule {
     /**
      * Команда /ram 
      * Получить данные об свободной и занятой оперативной памяти
-     * Только для Windows
      */
     public function __ram(){
         $jfree = Runtime::freeMemory();
         $jtotal = Runtime::totalMemory();
         
-        
         $message = SMILE_BOT . ' TelegramRC Bot used ' . $this->fso->formatBytes($jtotal - $jfree) . ' of ' . $this->fso->formatBytes($jtotal) . ' (' . round($jfree / $jtotal * 100) . '%)';
         
-        if(Windows::isWin()){   
+        if($this->isWin){   
             $total = Windows::getTotalRAM();
             $free = Windows::getFreeRAM();  
             $message .= "\n" . SMILE_DISC . " Total RAM: " . $this->fso->formatBytes($total);
@@ -974,7 +982,7 @@ class Commands extends AbstractModule {
         }
     } 
     
-    public function __browse(?string $url){
+    public function __browse(string $url){
         if(str::startsWith($url, 'http:') || str::startsWith($url, 'https:')){        
             browse($url);   
             $this->send(SMILE_NETWORK . ' Открываю ссылку...');
@@ -989,9 +997,9 @@ class Commands extends AbstractModule {
     }
     
     public function __whoami(){
-        $this->send(
-            SMILE_USER . ' Username: ' . $this->username . "\n".
-            'User id: ' . $this->user_id
-        );
+        $info = SMILE_USER . ' Username: ' . $this->username . "\n".
+                'Chat id: ' . $this->chat_id . "\n".
+                'User id: ' . $this->user_id ;
+        $this->send($info);
     }
 }
