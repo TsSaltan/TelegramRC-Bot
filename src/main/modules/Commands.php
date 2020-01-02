@@ -695,27 +695,27 @@ class Commands extends AbstractModule {
         
         $kb = $this->keyboardInline([
             [
-                '/volume__0__1' => SMILE_SOUND_0 . ' 0%',
-                '/volume__5__1' => SMILE_SOUND_25. ' 5%',
-                '/volume__10__1' => SMILE_SOUND_25. ' 10%',
-                '/volume__20__1' => SMILE_SOUND_50. ' 20%',
+                '/volume__0' => SMILE_SOUND_0 . ' 0%',
+                '/volume__5' => SMILE_SOUND_25. ' 5%',
+                '/volume__10' => SMILE_SOUND_25. ' 10%',
+                '/volume__20' => SMILE_SOUND_50. ' 20%',
             ],
             [
-                '/volume__30__1' => SMILE_SOUND_50. ' 30%',
-                '/volume__40__1' => SMILE_SOUND_50. ' 40%',
-                '/volume__50__1' => SMILE_SOUND_50. ' 50%',
-                '/volume__60__1' => SMILE_SOUND_50. ' 60%',
+                '/volume__30' => SMILE_SOUND_50. ' 30%',
+                '/volume__40' => SMILE_SOUND_50. ' 40%',
+                '/volume__50' => SMILE_SOUND_50. ' 50%',
+                '/volume__60' => SMILE_SOUND_50. ' 60%',
             ],            
             [
-                '/volume__70__1' => SMILE_SOUND_50. ' 70%',
-                '/volume__80__1' => SMILE_SOUND_100. ' 80%',
-                '/volume__90__1' => SMILE_SOUND_100. ' 90%',
-                '/volume__100__1' => SMILE_SOUND_100. ' 100%',
+                '/volume__70' => SMILE_SOUND_50. ' 70%',
+                '/volume__80' => SMILE_SOUND_100. ' 80%',
+                '/volume__90' => SMILE_SOUND_100. ' 90%',
+                '/volume__100' => SMILE_SOUND_100. ' 100%',
             ], 
             [
-                '/volume__down__1' => SMILE_SOUND_25 . ' Volume -',
+                '/volume__down' => SMILE_SOUND_25 . ' Volume -',
                 '/media' => SMILE_MEDIA . ' Media RC',
-                '/volume__up__1' => SMILE_SOUND_100 . ' Volume +',
+                '/volume__up' => SMILE_SOUND_100 . ' Volume +',
             ],
         ]);
         
@@ -739,7 +739,14 @@ class Commands extends AbstractModule {
                 $answer = 'Volume level: ' . $level . '%';
             }
         } catch (WindowsException $e){
-           $answer = 'Error: Cannot control volume level';
+            $answer = 'Volume level: N/A';
+            $kb = $this->keyboardInline([
+                [
+                    '/volume__down' => SMILE_SOUND_25 . ' Volume -',
+                    '/media' => SMILE_MEDIA . ' Media RC',
+                    '/volume__up' => SMILE_SOUND_100 . ' Volume +',
+                ],
+            ]);
         }
         
         if($this->isCallback() && !$showKb){
