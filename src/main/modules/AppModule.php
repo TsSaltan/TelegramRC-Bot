@@ -48,11 +48,24 @@ class AppModule extends AbstractModule
         
         // Загрузка настроек из файла    
         Config::load();
-        if(Config::isInstallRequired()){
-            // Если в конфиге нет токена, открываем форму установки 
-            return $this->loadForm('Setup');
-        }
         
+        // Если в конфиге нет токена, открываем форму установки 
+        if(Config::isInstallRequired()){
+            $setup = $this->form('Setup');
+             
+            // При запуске первым аргументом можно передать токен 
+            if(isset($GLOBALS['argv'][1])){
+                $setup->edit_token->text = $GLOBALS['argv'][1];
+            }
+                         
+            // Вторым аргументом - имя пользователя 
+            if(isset($GLOBALS['argv'][2])){
+                $setup->edit_user->text = $GLOBALS['argv'][2];
+            }
+             
+            return $setup->show();
+        }
+           
         Debug::$saveLogs = Config::get('save_logs');
         Debug::info('Application started. Version ' . self::APP_VERSION);
                     
