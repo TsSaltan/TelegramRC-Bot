@@ -92,6 +92,13 @@ class Setup extends AbstractForm {
         browse('https://t.me/botfather');
     }
 
+    /**
+     * @event close 
+     */
+    function doClose(){    
+        app()->appModule()->shutdown();
+    }
+
     function saveParams(){
         $proxy_type = $this->combobox_proxy_type->value;
         $proxy_host = $this->edit_proxy_host->text;

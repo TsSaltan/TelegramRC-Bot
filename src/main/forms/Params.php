@@ -61,7 +61,6 @@ class Params extends AbstractForm {
      * @event close 
      */
     function doClose(){     
-        //exit(0);
         app()->appModule()->shutdown();
     }
 

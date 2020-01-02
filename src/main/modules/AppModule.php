@@ -30,6 +30,7 @@ class AppModule extends AbstractModule
     function сonstruct(){           
         $this->startup = time(); 
         $this->trayTooltop = "TelegramRC (v " . self::APP_VERSION . ')';
+        
         // Создаём папку для прорграммы в домашней директории текущего пользователя (туда всегда разрешена запись)
         $app_dir = $this->getAppDir();       
         if(!fs::exists($app_dir)){
