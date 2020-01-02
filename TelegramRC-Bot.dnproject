@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC-Bot" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1577964887858">
+<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC-Bot" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1577964977221">
   <tree>
     <expanded>
     <path src=""/>

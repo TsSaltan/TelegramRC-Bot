@@ -6,7 +6,7 @@ use std, gui, framework, main;
 
 class AppModule extends AbstractModule
 {
-    const APP_VERSION = '2.1-dev';
+    const APP_VERSION = '2.1';
     
     /**
      * Время запуска программы 
@@ -18,6 +18,9 @@ class AppModule extends AbstractModule
      */
     public $tgBot;
     
+    /**
+     * @var string
+     */
     public $trayTooltop;
     
     /**
