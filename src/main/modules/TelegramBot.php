@@ -23,7 +23,7 @@ define("SMILE_ARROW_DOWN", "⬇️");
 define("SMILE_ARROW_LEFT", "⬅️");
 define("SMILE_ARROW_RIGHT", "➡️");
 define("SMILE_ARROW_UP_DIRECT", "⬆️");
-
+define("SMILE_CLOCK", "🕓");
 define("SMILE_SYMBOL_UP", "🔼");
 define("SMILE_SYMBOL_DOWN", "🔽");
 
@@ -261,7 +261,8 @@ class TelegramBot extends AbstractModule {
                 }
                 Debug::info('[INPUT] ' . $username . ': ' . $text);
                 
-                $this->processCommand($text, $username, $chat_id, $user_id, $callback_id, $last_doc);
+                $command = $this->createCommand($username, $chat_id, $user_id);
+                $this->processCommand($text, $command, $callback_id, $last_doc);
                 
             }
         } catch (\Exception $e){
@@ -269,63 +270,58 @@ class TelegramBot extends AbstractModule {
         }
     }
     
-    public function processCommand(string $command, string $username, int $chat_id, int $user_id = -1, int $callbackId = -1, ?array $doc = null){
+    public function createCommand(string $username, int $chat_id, int $user_id): Commands {        
         // Если ранее пользователь не обращался к боту, создадим ему экземпляр Commands
-        /** @var Commands $commands */
-        if(!isset($this->commands[$chat_id])){
+        if(!isset($this->commands[$chat_id])){        
             $commands = new Commands($this);
             $commands->setChatId($chat_id);
             $commands->setUserId($user_id);
             $commands->setUsername($username);
             $this->commands[$chat_id] = $commands;
-        } else {    
-            $commands = $this->commands[$chat_id]; 
         }
         
-            
-        // Проверка, есть ли такой пользователь в списке разрешённых
-        if(!$this->checkUser($username)){
-            $commands->deniedMsg();
-            return;
-        }
+        return $this->commands[$chat_id];
+    }
+    
+    public function processCommand(string $text, Commands $commands, int $callback_id = -1, ?array $doc = null){
+        try {  
+            // Проверка, есть ли такой пользователь в списке разрешённых
+            if(!$this->checkUser($commands->getUsername())){
+                $commands->deniedMsg();
+                return;
+            }
         
-        $cmd = $this->parseCommand($commands->alias($command));
-        $hasDoc = is_array($doc) && sizeof($doc) > 0;
-                    
-        try {
-            $commands->setCallbackInstance($callbackId);
+            $cmd = $this->parseCommand($commands->alias($text));
+            $hasDoc = is_array($doc) && sizeof($doc) > 0;                    
+            $commands->setCallbackInstance($callback_id);
                         
             // Если удалось распасрсить команду
             if(!$hasDoc && $cmd !== false && method_exists($commands, '__' . $cmd['command'])){                                               
-                $answer = call_user_func_array([$commands, '__' . $cmd['command']], $cmd['args']);
+                call_user_func_array([$commands, '__' . $cmd['command']], $cmd['args']);
             }
                         
             // Если есть документ
             elseif($hasDoc) {             
                 $file = $this->getFile($last_doc);
-                $answer = call_user_func_array([$commands, 'inputFileMsg'], [$file, $last_doc]);
+                call_user_func_array([$commands, 'inputFileMsg'], [$file, $last_doc]);
             }
             
             // Если команда неизвестна
             else {
                 $commands->undefinedMsg(($cmd['command'] ?? $text));
-                return;
             }
         }
         catch (Exception | Error $e){
             $emessage = $e->getMessage();
             Debug::error('Command error: [' . get_class($e) .'] ' . $emessage);
+            
+            // Ошибка об неверном вызове команды
             if(str::contains($emessage, 'Missing argument')){
-                // Ошибка об неверном вызове команд
                 $emessage = str::replace($emessage, get_class($commands) . '::__', 'command /');
             }
             
-            $commands->errorMsg($emessage);
-            
-            
+            $commands->errorMsg($emessage);   
         }
-                
-        $this->sendAnswer($chat_id, $answer);
     }
     
     /**

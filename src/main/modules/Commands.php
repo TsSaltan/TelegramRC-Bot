@@ -77,7 +77,11 @@ class Commands extends AbstractModule {
     
     public function setUsername(string $username){
         $this->username = $username;
-    }
+    }    
+    
+    public function getUsername(){
+        return $this->username;
+    }   
     
     public function setCallbackInstance(int $instance = -1){
         $this->cb_instance = $instance;        
@@ -179,7 +183,7 @@ class Commands extends AbstractModule {
     /**
      * Отправить сообщение 
      */
-    public function send($text, ?array $keyboard = null){
+    public function send($text, $keyboard = null){
         $this->bot->sendAnswer($this->chat_id, ['text' => $text, 'keyboard' => $keyboard]);
     }    
     
@@ -389,7 +393,7 @@ class Commands extends AbstractModule {
      * @param string $path Путь. / - корень, для отображения дисков
      * @param string $selectBy name|num Ищет файл или по его имени (если name) или по порядковому номеру (если num - используется, когда есть лимит на длину сообщения в telegram)
      */
-    public function __ls(string $path, string $selectBy = 'name'){
+    public function __ls(?string $path = null, string $selectBy = 'name'){
         if(strlen($path) > 0){
             $this->fso->changeDir($path, $selectBy);
         }
@@ -1002,15 +1006,48 @@ class Commands extends AbstractModule {
                 'User id: ' . $this->user_id ;
         $this->send($info);
     }
-       
-    public function __timer(int $seconds, string $command){
-        $args = func_get_args();
-        $secs = $args[0];
+    
+    /**
+     * @var array 
+     * [$id => [timer => $timer, command => $string]]
+     */
+    public $timers = [];
+    
+    public function __timer(string $after, string ...$command){
+        $cmd = implode(' ', $command);
+        $id = str::uuid();
+        $timer = Timer::after($after, function() use ($cmd, $id){
+            $this->bot->processCommand($cmd, $this);
+            unset($this->timers[$id]);
+        });
         
-        unset($args[0]);
-        $cmd = implode(' ', $args);
-        // @todo
+        $this->timers[$id] = ['timer' => $timer, 'command' => $cmd];
+
+        $time = new Time($timer->scheduledTime());
+        $sTime = $time->toString('YYYY-MM-dd HH:mm:ss');
+        $this->send(SMILE_CLOCK . ' Timer started! Launch time: ' . $sTime);
+ 
     }
+    
+    public function __timers(){
+        if(sizeof($this->timers) == 0){
+            $this->send(SMILE_CLOCK . ' Timers not found');
+            return;
+        }
+        
+        $timers = SMILE_CLOCK . " Active timers: \n\n";
+        foreach ($this->timers as $id => $timer){
+            $time = new Time($timer['timer']->scheduledTime());
+            $sTime = $time->toString('YYYY-MM-dd HH:mm:ss');
+        
+            $timers .= "ID: " . $id . "\n";
+            $timers .= "Command: " . $timer['command'] . "\n";
+            $timers .= "Launch time: " . $sTime . "\n\n";
+        }
+        
+        $this->send($timers);
+    }
+
     
     
 }
