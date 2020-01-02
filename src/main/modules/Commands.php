@@ -766,14 +766,40 @@ class Commands extends AbstractModule {
     public function __brightness(?int $level = null){
         $this->checkWin();
         try{
+            $kb = $this->keyboardInline([
+                [
+                    '/brightness__0' => SMILE_BRIGHT_50 . ' 0%',
+                    '/brightness__10' => SMILE_BRIGHT_50 . ' 10%',
+                    '/brightness__20' => SMILE_BRIGHT_50 . ' 20%',
+                    '/brightness__30' => SMILE_BRIGHT_50 . ' 30%',
+                ],
+                [
+                    '/brightness__40' => SMILE_BRIGHT_50 . ' 40%',
+                    '/brightness__50' => SMILE_BRIGHT_50 . ' 50%',
+                    '/brightness__60' => SMILE_BRIGHT_100 . ' 60%',
+                    '/brightness__70' => SMILE_BRIGHT_100 . ' 70%',
+                ],
+                [
+                    '/brightness__80' => SMILE_BRIGHT_100 . ' 80%',
+                    '/brightness__90' => SMILE_BRIGHT_100 . ' 90%',
+                    '/brightness__100' => SMILE_BRIGHT_100 . ' 100%'
+                ],
+            ]);
+        
             if(is_int($level) && $level >= 0 && $level <= 100){
                 Windows::setBrightnessLevel($level);
-                $this->send('Установлен уровень ярности: ' . $level);
+                $text = SMILE_BRIGHT_50 . ' Установлен уровень яркости: ' . $level;
+                if($this->isCallback() && !$showKb){
+                    $this->sendCallback($text);
+                } else {
+                    $this->send($text, $kb);
+                }
+        
             } else {
-                $this->send('Текущий уровень яркости: ' . Windows::getBrightnessLevel());
+                $this->send(SMILE_BRIGHT_50 . ' Текущий уровень яркости: ' . Windows::getBrightnessLevel(), $kb);
             }
         } catch (WindowsException $e){
-            $this->send('Ошибка: Управление яркостью недоступно на данном устройстве');
+            throw new Exception('Управление яркостью недоступно на данном устройстве');
         }
     }    
                 
@@ -784,7 +810,7 @@ class Commands extends AbstractModule {
      */
     public function __shutdown(){
         $this->checkWin();
-        $this->send('Отправлен запрос на выключение компьютера');
+        $this->send(SMILE_DIAMOND_ORANGE . ' Отправлен запрос на выключение компьютера');
         
         uiLater(function(){
             $confirm = app()->getForm('ConfirmTimeout');
@@ -796,10 +822,10 @@ class Commands extends AbstractModule {
                     Windows::shutdown();
                             
                 } catch (WindowsException $e){
-                    $this->send('Ошибка: не удалось выключить ПК');
+                    throw new Exception('Не удалось выключить ПК');
                 } 
             }, function(){
-                $this->send('Отменено пользователем');
+                throw new Exception('Команда отменена пользователем');
             });
         });
     }    
@@ -811,7 +837,7 @@ class Commands extends AbstractModule {
      */
     public function __reboot(){
         $this->checkWin();
-        $this->send('Отправлен запрос на перезагрузку компьютера');
+        $this->send(SMILE_DIAMOND_ORANGE . ' Отправлен запрос на перезагрузку компьютера');
         
         uiLater(function(){
             $confirm = app()->getForm('ConfirmTimeout');
@@ -823,10 +849,10 @@ class Commands extends AbstractModule {
                     Windows::reboot();
                             
                 } catch (WindowsException $e){
-                    $this->send('Ошибка: не удалось перезагрузить ПК');
+                    throw new Exception('Не удалось перезагрузить ПК');
                 } 
             }, function(){
-                $this->send('Отменено пользователем');
+                throw new Exception('Команда отменена пользователем');
             });
         });
         $this->checkWin();
@@ -841,13 +867,11 @@ class Commands extends AbstractModule {
                 /** @var Process $res */
                 $exec = execute($cmd);
                 $exec = $exec->start();
-                $result = $exec->getInput()->readFully();
+                $this->send($exec->getInput()->readFully());
             }                    
         } catch (\Exception $e){
-            $result = 'Exec error: [' . get_class($e) . '] ' . $e->getMessage();
+            throw new Exception('Exec error: [' . get_class($e) . '] ' . $e->getMessage());
         }
-        
-        $this->send($result);
     }
      
     public function __media(){       
@@ -874,6 +898,19 @@ class Commands extends AbstractModule {
                 '/volume__down__1' => SMILE_SYMBOL_DOWN . ' Volume -',
                 '/volume__up__1' => SMILE_SYMBOL_UP . ' Volume +',
             ];
+        }
+                
+        try {
+            $level = Windows::getBrightnessLevel();
+            $kb[] = [
+                '/brightness__0' => SMILE_BRIGHT_50 . ' 0%',
+                '/brightness__25' => SMILE_BRIGHT_50 . ' 25%',
+                '/brightness' => SMILE_BRIGHT_50 . " $level%",
+                '/brightness__50' => SMILE_BRIGHT_100 . ' 50%',
+                '/brightness__100' => SMILE_BRIGHT_100 . ' 100%',
+            ];
+        } catch (WindowsException $e){
+
         }
         
         $kb[] = [
