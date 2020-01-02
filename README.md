@@ -4,6 +4,7 @@
 ### ![FAQ](https://tssaltan.top/files/2019/07/Pasted.png) [FAQ + скриншоты](https://tssaltan.top/?p=1928)
 ### ![Download](https://tssaltan.top/files/2019/07/download.png) [Скачать программу](https://tssaltan.top/download/1931/)
 
+## Screenshots
 ![Screenshot v2.0: Install 1](https://user-images.githubusercontent.com/3524731/70854539-4badd080-1ece-11ea-8570-6671c50236d8.png)
 ![Screenshot v2.0: Install 2](https://sun9-63.userapi.com/c858016/v858016715/1288de/pql91LytdUc.jpg)
 ![Screenshot v2.0: Main window](https://user-images.githubusercontent.com/3524731/70854609-fd4d0180-1ece-11ea-9d25-41c5876e9c7f.png)
@@ -12,7 +13,7 @@
 ## Что нового / Changelog
 ### v 2.1
 * Добавлены команды **/alert**, **/whoami**, **/keyboard**, **/browse**
-* Команды для работы с таймерами: /timer и /timers [(подробнее)](https://tssaltan.top/?p=1928#timers)
+* Команды для работы с таймерами: **/timer** и **/timers** [(подробнее)](https://tssaltan.top/?p=1928#timers)
 * Добавлена возможность указать токен и имя пользователя в параметрах при запуске программы
 
 ### v 2.0
