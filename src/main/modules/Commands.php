@@ -1002,4 +1002,15 @@ class Commands extends AbstractModule {
                 'User id: ' . $this->user_id ;
         $this->send($info);
     }
+       
+    public function __timer(int $seconds, string $command){
+        $args = func_get_args();
+        $secs = $args[0];
+        
+        unset($args[0]);
+        $cmd = implode(' ', $args);
+        // @todo
+    }
+    
+    
 }
