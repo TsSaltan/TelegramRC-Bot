@@ -92,8 +92,9 @@ class Commands extends AbstractModule {
     }
     
     public function alias(string $cmd){
-        $cmd = Regex::of('[^\\p{L}\\p{N}\\p{P}\\p{Z}]', Regex::UNICODE_CASE)->with($cmd)->replace('');
+        $cmd = trim(Regex::of('[^\\p{L}\\p{N}\\p{P}\\p{Z}]', Regex::UNICODE_CASE)->with($cmd)->replace(''));
         $replace = [
+            'System Info' => '/systeminfo',
             'Запустить файл' => '/run',
             'Скачать файл' => '/download',
             'Распечатать файл' => '/print',
@@ -103,7 +104,13 @@ class Commands extends AbstractModule {
             'https:' => '/browse https:',
         ];
         
-        return str_replace(array_keys($replace), array_values($replace), $cmd);
+        foreach($replace as $from => $to){
+           if(str::startsWith($cmd, $from)){
+               $cmd = str::replace($cmd, $from, $to);
+           } 
+        }
+        
+        return $cmd;
     }
     
     /**
@@ -162,12 +169,12 @@ class Commands extends AbstractModule {
      */
     protected function getMainKeyboard(){
         $keyboard = TMarkup::replyKeyboard();
-        $keyboard->button(SMILE_HELP . ' Help')->button(SMILE_PC . ' OSInfo')->button(SMILE_NETWORK . ' IP info');
+        $keyboard->button(SMILE_HELP . ' Help')->button(SMILE_PC . ' System Info')->button(SMILE_NETWORK . ' IP Info');
         $keyboard->row();
         
         $keyboard->button(SMILE_DISPLAY . ' Screens')->button(SMILE_CAMERA . ' Cameras')->button(SMILE_FOLDER . ' File Explorer');
         $keyboard->row();
-        $keyboard->button(SMILE_KEYBOARD . ' Keyboard');
+        $keyboard->button(SMILE_CLOCK . ' Timers')->button(SMILE_KEYBOARD . ' Keyboard');
                 
         if($this->isWin){
             $keyboard->button(SMILE_MEDIA . ' Media RC')
@@ -261,9 +268,12 @@ class Commands extends AbstractModule {
      * Справка / помощь
      */
     public function __help(){
+        $part = "\n" . SMILE_DIAMOND_ORANGE . ' ';
+        $item = "\n" . SMILE_DIAMOND_BLUE . ' ';
+        
         $text = SMILE_BOT . " Версия бота: " . AppModule::APP_VERSION . " \n";
 
-        $text .= "\n- Команды -\n";
+        $text .= $part . "Команды\n";
         $text .= "Команда необязательно должна начинаться со слеша /\n";
         $text .= "т.е. разницы между командами /cd и cd - нет.\n";
         $text .= "Аргумены передаются через знак пробел. Если аргумент содержит пробел, его нужно обрамить в двойные кавычки \".\n";
@@ -273,20 +283,21 @@ class Commands extends AbstractModule {
         $text .= "/command__0__1__2\n";
         $text .= "/photo 0 == /photo__0\n";
 
-        $text .= "\n- Список доступных команд -\n";
-        $text .= "-- Общее --\n";
+        $text .= $part . "Список доступных команд \n";
+        $text .= $item . "Общее\n";
         $text .= "/start - Приветствие бота\n";
         $text .= "/help - Текущая справка\n";
         $text .= "/whoami - Информация о пользователе\n";        
         $text .= "/ip - Получить внешний ip\n";
         $text .= "/browse [url] - Открыть ссылку на ПК (в браузере по умолчанию)\n";
         $text .= "/alert [message] - Отобразить уведомление\n";
+        $text .= "/uptime - Время работы программы\n";
 
-        $text .= "\n-- Система --\n";
+        $text .= $item ."Система\n";
+        $text .= "/systeminfo - Информация о системе\n";
         $text .= "/exec [cmd] - Выполнить команду\n";
-        $text .= "/osinfo - Информация об ОС\n";
             
-        $text .= "\n-- Файловая система --\n";
+        $text .= $item . "Файловая система\n";
         $text .= "/cd - Получить текущую директорию\n";
         $text .= "/cd [path] - Указать текущую директорию\n";
         $text .= "/ls - Показать содержимое текущей директории\n";
@@ -296,18 +307,33 @@ class Commands extends AbstractModule {
         }
         $text .= "/download [file] - Скачать файл\n";
         $text .= "/delete [file] - Удалить файл\n";
+    
+        $text .= $item . "Таймеры \n";
+        $text .= "/timers - Список активных таймеров\n"; 
+        $text .= "/timer [after_time] [command] - Добавление таймера\n"; 
+        $text .= "[after_time] - 10s, 1m 10s, 1h 10m 20s\n";
+        $text .= "[command] - текст команды (пробелы разрешаются)\n";
 
-        $text .= "\n-- Медиа --\n";
+        $text .= $item . "Медиа\n";
         $text .= "/screens - Информация об экранах\n";
         $text .= "/screenshot - Сделать скриншот экрана по умолчанию\n";
         $text .= "/screenshot [n] - Сделать скриншот экрана из списка (/screens)\n";
         $text .= "/cameras - Вывести список web-камер\n";
         $text .= "/photo - Сделать фото с web-камеры по умолчанию\n";
         $text .= "/photo [n] - Сделать фото с выбравнной из списка камеры\n";
+        if($this->isWin){
+            $text .= "/volume - Управление громкостью\n";
+            $text .= "/volume [0-100|up|+|down|-] - Установить уровень громкости\n";
+            $text .= "/brightness - Получить уровень яркости\n";
+            $text .= "/brightness [0-100] - Установить уровень яркости\n";
+        }
         
-        $text .= "\n-- Клавиатура --\n";   
-        $text .= "/key \"код любой кнопки (ENTER, SPACE, etc...)\" - Нажать кнопку\n"; 
-        $text .= "/keyboard - Клавиатура и горячие клавиши\n";  
+        $text .= $item . "Клавиатура\n";   
+        $text .= "/keyboard - Показать клавиатуру и (некоторые) горячие клавиши\n"; 
+        $text .= "/key [code1] [code2] ... - Нажать кнопку или комбинацию кнопок\n"; 
+        $text .= "[code] - Код кнопки (ENTER, SPACE, BACK_SPACE, ...) или текстовая кнопка (A, B, C, 0, 1, ...)\n"; 
+         
+        
         if($this->isWin){
             $text .= "/key__play - Воспроизведение / пауза\n";
             $text .= "/key__stop - Остановить воспроизведение\n";
@@ -315,26 +341,15 @@ class Commands extends AbstractModule {
             $text .= "/key__prev - Предыдущий трек\n";
             $text .= "/media - Клавиатура с медиа кнопками\n";
             
-            $text .= "\n-- Железо --\n";
-            //$text .= "/hardware - Железо компьютера\n";
+            $text .= $item . "Железо\n";
             $text .= "/ram - Оперативная память\n";
             $text .= "/battery - Информация об аккумуляторе\n";
             $text .= "/temperature - Датчики температуры\n";
             
-            $text .= "\n-- Питание --\n";
+            $text .= $item . "Питание\n";
             $text .= "/reboot - Перезагрузить ПК\n";
             $text .= "/shutdown - Выключить ПК\n";
         }            
-        
-        $text .= "\n-- Дополнительно --\n";
-        $text .= "/uptime - Время работы\n";
-        
-        if($this->isWin){
-            $text .= "/volume - Управление громкостью\n";
-            $text .= "/volume [0-100|up|+|down|-] - Установить уровень громкости\n";
-            $text .= "/brightness - Получить уровень яркости\n";
-            $text .= "/brightness [0-100] - Установить уровень яркости\n";
-        }
         
         $this->send($text, $this->getMainKeyboard());        
     }    
@@ -355,8 +370,12 @@ class Commands extends AbstractModule {
         $this->send($info);
     }  
     
-    public function __osinfo(){
-        $info = "Название ОС: " . System::getProperty('os.name') . "\n";
+    public function __systeminfo(){
+        $part = "\n" . SMILE_DIAMOND_ORANGE . ' ';
+        $item = "\n" . SMILE_DIAMOND_BLUE . ' ';
+        
+        $info = $part . "Информация о системе:\n";
+        $info.= "Название ОС: " . System::getProperty('os.name') . "\n";
         $info.= "Архитектура JVM:  " . System::getProperty('os.arch') . "\n";
         $info.= "Версия: " . System::getProperty('os.version') . "\n";
         $info.= "Имя пользователя: " . System::getProperty('user.name') . "\n";
@@ -365,18 +384,24 @@ class Commands extends AbstractModule {
         $info.= "Страна: " . System::getProperty('user.country') . "\n";
         
         if($this->isWin){
-            $info.= "\n- Windows info: \n";
+            $info.= $part . "Windows info: \n";
             $info.= "Arch: " . Windows::getArch() . "\n";
             $info.= "Build: " . Windows::getProductBuild() . "\n";
             $info.= "ProductKey: " . Windows::getProductKey() . "\n";
             $info.= "Version: " . Windows::getProductVersion() . "\n";
             
-            $info.= "\n- Hardware: \n";
-            $info.= "CPU: " . Windows::getCpuManufacturer() . " | " . Windows::getCpuProduct() . " | " . Windows::getCpuFrequency() . " MHz \n";
-            $info.= "BaseBoard: " . Windows::getMotherboardProduct() . " | " . Windows::getMotherboardManufacturer() . "\n";         
+            $info.= $part . "Hardware:";
+            $info.= $item . "CPU: \n- " . Windows::getCpuManufacturer() . "\n- " . Windows::getCpuProduct() . "\n- " . Windows::getCpuFrequency() . " MHz";
+            $info.= $item . "BaseBoard: \n- " . Windows::getMotherboardProduct() . "\n- " . Windows::getMotherboardManufacturer() . "\n";         
+            
+            $keyboard = TMarkup::inlineKeyboard();
+            $keyboard->button(SMILE_TEMPERATURE . "Температура", "/temperature")->button(SMILE_BATTERY . "Аккумулятор", "/battery");
+            
+            $this->send($info, $keyboard);
+
+        } else {
+            $this->send($info);
         }
-        
-        $this->send($info);
     }     
     
     /**
@@ -628,9 +653,8 @@ class Commands extends AbstractModule {
      */
     public function __temperature(){
         $this->checkWin();
-        $this->send('Получаю данные с датчиков...');
         $t = Windows::getTemperature();
-        $res = "🌡 Температурные датчики: ";
+        $res = SMILE_TEMPERATURE . " Температурные датчики: ";
         if(sizeof($t) == 0) $res.='недоступны.';
         foreach($t as $s){
             $name = strlen($s['name']) < 15 ? $s['name'] : (substr($s['name'], 0, 13) . '...');
@@ -804,7 +828,7 @@ class Commands extends AbstractModule {
     public function __exec(){
         try{
             $cmd = implode(' ', func_get_args());
-            if(Windows::isWin()){
+            if($this->isWin){
                 $result = WindowsScriptHost::cmd($cmd);
             } else {    
                 /** @var Process $res */
@@ -905,12 +929,10 @@ class Commands extends AbstractModule {
     }
     
          
-    public function __keyboard(){       
-        $isWin = Windows::isWin();
-        
+    public function __keyboard(){        
         $kb = [];
         
-        if($isWin){    
+        if($this->isWin){    
             $kb[] = ['/key__control__shift__escape' => ' Ctrl + Shift + Escape / Task Manager'];
             $kb[] = [
                 '/key__windows__a' => 'Win + A',
@@ -953,9 +975,8 @@ class Commands extends AbstractModule {
         $programTime = (time() - app()->appModule()->startup) * 1000;
         $ptime = new Time($programTime, TimeZone::UTC()); 
         $message = SMILE_CLOCK . ' Программа работает: ' . ($ptime->day() - 1) . ' дней ' . $ptime->hourOfDay() . ' часов ' . $ptime->minute() . ' минут ' . $ptime->second() . " секунд.";
-
         
-        if(Windows::isWin()){
+        if($this->isWin){
             $bootTime = Windows::getUptime(); 
             $btime = new Time($bootTime, TimeZone::UTC());        
             $message .= "\n" . SMILE_PC . " Компьютер работает: " . ($btime->day() - 1) . ' дней ' . $btime->hourOfDay() . ' часов ' . $btime->minute() . ' минут ' . $btime->second() . " секунд.";
@@ -986,12 +1007,12 @@ class Commands extends AbstractModule {
         }
     } 
     
-    public function __browse(string $url){
+    public function __browse(?string $url = null){
         if(str::startsWith($url, 'http:') || str::startsWith($url, 'https:')){        
             browse($url);   
             $this->send(SMILE_NETWORK . ' Открываю ссылку...');
         } else {
-            $this->send(SMILE_DOT_RED . ' Ошибка: введите корректную ссылку!');
+            $this->send(SMILE_NETWORK . ' Введите ссылку, которая начинается с http:// или https://');
         }
     }
     
@@ -1017,6 +1038,7 @@ class Commands extends AbstractModule {
         $cmd = implode(' ', $command);
         $id = str::uuid();
         $timer = Timer::after($after, function() use ($cmd, $id){
+            $this->send(SMILE_CLOCK . ' Выполнение команды по таймеру: ' . $cmd);
             $this->bot->processCommand($cmd, $this);
             unset($this->timers[$id]);
         });
@@ -1025,26 +1047,27 @@ class Commands extends AbstractModule {
 
         $time = new Time($timer->scheduledTime());
         $sTime = $time->toString('YYYY-MM-dd HH:mm:ss');
-        $this->send(SMILE_CLOCK . ' Timer started! Launch time: ' . $sTime);
+        $this->send(SMILE_CLOCK . ' Таймер будет запущен: ' . $sTime);
  
     }
     
     public function __timers(){
         if(sizeof($this->timers) == 0){
-            $this->send(SMILE_CLOCK . ' Timers not found');
-            return;
+            $timers = SMILE_CLOCK . ' Активных таймеров нет.';
+        }
+        else {
+            $timers = SMILE_CLOCK . " Активные таймеры:";
+            foreach ($this->timers as $id => $timer){
+                $time = new Time($timer['timer']->scheduledTime());
+                $sTime = $time->toString('YYYY-MM-dd HH:mm:ss');
+            
+                $timers .= "\n\nID: " . $id . "\n";
+                $timers .= "Command: " . $timer['command'] . "\n";
+                $timers .= "Launch time: " . $sTime;
+            }
         }
         
-        $timers = SMILE_CLOCK . " Active timers: \n\n";
-        foreach ($this->timers as $id => $timer){
-            $time = new Time($timer['timer']->scheduledTime());
-            $sTime = $time->toString('YYYY-MM-dd HH:mm:ss');
-        
-            $timers .= "ID: " . $id . "\n";
-            $timers .= "Command: " . $timer['command'] . "\n";
-            $timers .= "Launch time: " . $sTime . "\n\n";
-        }
-        
+        $timers .= "\n\n" . SMILE_DIAMOND_BLUE . " Добавление таймера: /timer [after_time] [command]\n[after_time] - 10s, 1m 10s, 1h 10m 20s\n[command] - текст команды (пробелы разрешаются)";
         $this->send($timers);
     }
 

@@ -17,19 +17,22 @@ define("SMILE_CLOCK", "🕙");
 define("SMILE_BOT", "🤖");
 define("SMILE_HOME", "🏠");
 define("SMILE_USER", "🤵");
+
+define("SMILE_UP", "🆙");
+define("SMILE_SYMBOL_UP", "🔼");
+define("SMILE_SYMBOL_DOWN", "🔽");
 define("SMILE_ARROW_UP", "⤴️");
 define("SMILE_ARROW_REFRESH", "🔄");
 define("SMILE_ARROW_DOWN", "⬇️");
 define("SMILE_ARROW_LEFT", "⬅️");
 define("SMILE_ARROW_RIGHT", "➡️");
 define("SMILE_ARROW_UP_DIRECT", "⬆️");
-define("SMILE_CLOCK", "🕓");
-define("SMILE_SYMBOL_UP", "🔼");
-define("SMILE_SYMBOL_DOWN", "🔽");
 
 define("SMILE_DOT_RED", "🛑");
+define("SMILE_DIAMOND_BLUE", "🔹");
+define("SMILE_DIAMOND_ORANGE", "🔸");
 
-define("SMILE_UP", "🆙");
+define("SMILE_CLOCK", "🕓");
 define("SMILE_TRASH", "🗑");
 define("SMILE_PRINT", "🖨");
 define("SMILE_DOWNLOAD", "🔰");
@@ -49,6 +52,7 @@ define("SMILE_BRIGHT_100", "🔆");
 define("SMILE_BRIGHT_50", "🔅");
 
 define("SMILE_BATTERY", "🔋");
+define("SMILE_TEMPERATURE", "🌡");
 
 define("SMILE_SOUND_0", "🔇");
 define("SMILE_SOUND_25", "🔈");
