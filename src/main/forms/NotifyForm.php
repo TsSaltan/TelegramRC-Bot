@@ -57,6 +57,7 @@ class NotifyForm extends AbstractForm
     }
     
     public function setTitleText(string $text){
+        $this->title =
         $this->label_title->text = $text;
     }
 }
