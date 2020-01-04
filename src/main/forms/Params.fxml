@@ -138,7 +138,7 @@
                 </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Отладочная информация">
+            <Tab text="Логи">
               <content>
                 <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
                   <children>
@@ -160,6 +160,32 @@
                       </font>
                     </CheckBox>
                     <Data cursor="DEFAULT" enabled="1" id="data-checkbox_logs" visible="1"/>
+                  </children>
+                </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Информация">
+              <content>
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
+                  <children>
+                    <Hyperlink alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="link_about" layoutX="16" layoutY="16" prefHeight="16" prefWidth="144" styleClass="hyperlink " text="TelegramRC FAQ" textAlignment="LEFT" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </Hyperlink>
+                    <Data cursor="DEFAULT" enabled="1" graphic=".data/img/info.png" id="data-link_about" visible="1"/>
+                    <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label_uptime_title" layoutX="16" layoutY="40" prefHeight="17" prefWidth="56" styleClass="label " text="Uptime:" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Bold" size="12"/>
+                      </font>
+                    </LabelEx>
+                    <Data cursor="DEFAULT" enabled="1" id="data-label_uptime_title" visible="1"/>
+                    <LabelEx AnchorPane.leftAnchor="72" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="40" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label_uptime" layoutX="72" layoutY="40" prefHeight="17" prefWidth="528" styleClass="label " text="0h" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </LabelEx>
+                    <Data cursor="DEFAULT" enabled="1" id="data-label_uptime" visible="1"/>
                   </children>
                 </AnchorPane>
               </content>

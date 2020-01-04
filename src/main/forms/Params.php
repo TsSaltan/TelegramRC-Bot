@@ -46,6 +46,7 @@ class Params extends AbstractForm {
         $this->tabPane->tabs->offsetGet(1)->graphic = new UXImageView(new UXImage('res://.data/img/key.png'));
         $this->tabPane->tabs->offsetGet(2)->graphic = new UXImageView(new UXImage('res://.data/img/users.png'));
         $this->tabPane->tabs->offsetGet(3)->graphic = new UXImageView(new UXImage('res://.data/img/bug.png'));
+        $this->tabPane->tabs->offsetGet(4)->graphic = new UXImageView(new UXImage('res://.data/img/info.png'));
         
         // При сворачивании помещаем в трей 
         $this->observer('iconified')->addListener(function($old, $new){
@@ -125,17 +126,6 @@ class Params extends AbstractForm {
      */
     function doListUsers(){ 
         $this->button_delete_user->enabled = true;
-    }
-
-    /**
-     * Нажатие на ссылку бота
-     * @event link_botnick.action 
-     */
-    function doLink(){
-        $url = str_replace('@', 'https://t.me/', $this->link_botnick->text);
-        if($this->getBotState() == 'on'){
-            browse($url);        
-        }
     }
 
     /**
@@ -257,6 +247,33 @@ class Params extends AbstractForm {
         $value = $this->checkbox_iconified->selected;
         Debug::$saveLogs = $value;
         Config::set('save_logs', $value);
+    }
+
+    /**
+     * @event link_about.action 
+     */
+    function doLinkAbout(){    
+        browse('https://tssaltan.top/?p=1928&utm_source=program');
+    }
+    
+    /**
+     * Нажатие на ссылку бота
+     * @event link_botnick.action 
+     */
+    function doLink(){
+        $url = str_replace('@', 'https://t.me/', $this->link_botnick->text);
+        if($this->getBotState() == 'on'){
+            browse($url);        
+        }
+    }
+
+    /**
+     * @event tabPane.change 
+     */
+    function doTabPaneChange(UXEvent $e = null){    
+        $programTime = (time() - app()->appModule()->startup) * 1000;
+        $ptime = new Time($programTime, TimeZone::UTC()); 
+        $this->label_uptime->text = ($ptime->day() - 1) . 'd ' . $ptime->hourOfDay() . 'h ' . $ptime->minute() . 'm';
     }
 
 }
