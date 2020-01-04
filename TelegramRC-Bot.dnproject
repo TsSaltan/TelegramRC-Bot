@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC-Bot" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1577964977221">
+<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC-Bot" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1578162599517">
   <tree>
     <expanded>
     <path src=""/>
@@ -8,10 +8,9 @@
       <path src="/src/main/forms"/>
       <path src="/src/main/modules"/>
       <path src="/vendor"/>
-      <path src="/vendor/develnext.bundle.telegram.TelegramBotAPIBundle"/>
-      <path src="/vendor/develnext.bundle.telegram.TelegramBotAPIBundle/telegram"/>
-      <path src="/vendor/develnext.bundle.telegram.TelegramBotAPIBundle/telegram/object"/>
-      <path src="/vendor/develnext.bundle.telegram.TelegramBotAPIBundle/telegram/object/markup"/>
+      <path src="/vendor/develnext.bundle.windows.WindowsBundle"/>
+      <path src="/vendor/develnext.bundle.windows.WindowsBundle/bundle"/>
+      <path src="/vendor/develnext.bundle.windows.WindowsBundle/bundle/windows"/>
     </expanded>
   </tree>
   <openedFiles>
@@ -22,6 +21,7 @@
     <file src="src/main/modules/Commands.php"/>
     <file src="src/main/modules/FSO.php"/>
     <file src="src/main/modules/Debug.php"/>
+    <file src="vendor/develnext.bundle.windows.WindowsBundle/bundle/windows/Metadata.php"/>
   </openedFiles>
   <files/>
   <behaviours>
