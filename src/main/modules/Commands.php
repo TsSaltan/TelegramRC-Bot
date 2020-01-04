@@ -60,6 +60,12 @@ class Commands extends AbstractModule {
      * @var bool 
      */
     public $isWin;
+        
+    /**
+     * @var array 
+     * [$id => [timer => $timer, command => $string]]
+     */
+    public $timers = [];
     
     public function __construct(?TelegramBot $bot = null){
         $this->bot = $bot;
@@ -102,6 +108,8 @@ class Commands extends AbstractModule {
             'File Explorer' => '/ls',
             'http:' => '/browse http:',
             'https:' => '/browse https:',
+            'Мета-данные' => '/meta',
+            
         ];
         
         foreach($replace as $from => $to){
@@ -423,8 +431,13 @@ class Commands extends AbstractModule {
             $this->fso->changeDir($path, $selectBy);
         }
         
-        $btn[] = [SMILE_HOME . ' ls / ', SMILE_UP . ' ls ../ '];
-        $btn[] = [SMILE_HELP . ' Help'];
+        $btn[0] = [SMILE_HOME . ' ls / ', SMILE_UP . ' ls ../ ', SMILE_MEDIA_STOP . ' ls ./'];
+        
+        /*if($this->isWin && is_dir($this->fso->getCurrentDir())){
+            $btn[1][] = SMILE_DIAMOND_BLUE . ' Мета-данные "' . $this->fso->getCurrentDir() . '"'; 
+        }*/
+        
+        $btn[1][] = SMILE_HELP . ' Help';
         
         $items = $this->fso->getFileList();
         
@@ -446,7 +459,7 @@ class Commands extends AbstractModule {
                     break;
                     
                 case 'file':
-                    $line = SMILE_FILE . ' ' . $name . " | /file__" . $item['num'] . "__num \n";
+                    $line = $this->getFileIcon($item['name']) . ' ' . $name . " | /file__" . $item['num'] . "__num \n";
                     break;
             }
             
@@ -462,6 +475,30 @@ class Commands extends AbstractModule {
         }
     }    
     
+    protected function getFileIcon(string $filename){
+        $smile = SMILE_FILE;
+        if(
+            str::endsWith($filename, '.jpg') || 
+            str::endsWith($filename, '.jpeg') || 
+            str::endsWith($filename, '.gif') || 
+            str::endsWith($filename, '.png') || 
+            str::endsWith($filename, '.bmp') || 
+            str::endsWith($filename, '.ico')
+        ) $smile = SMILE_PICTURE;                    
+        elseif(
+            str::endsWith($filename, '.mp3') || 
+            str::endsWith($filename, '.wav') || 
+            str::endsWith($filename, '.flac')
+        ) $smile = SMILE_AUDIO;                    
+        elseif(
+            str::endsWith($filename, '.mp4') || 
+            str::endsWith($filename, '.avi') || 
+            str::endsWith($filename, '.webm') || 
+            str::endsWith($filename, '.mkv')
+        ) $smile = SMILE_VIDEO;
+
+        return $smile;
+    }
    
     /**
      * Информация о файле
@@ -474,25 +511,27 @@ class Commands extends AbstractModule {
             $cmd = $file['num'] . " num";
         }
         else {
-            $cmd = $file['name'];
+            $cmd = '"' . $file['name'] . '"';
         }
         
+        $info = $this->getFileIcon($file['path']) . " Имя файла: $name \n" . 
+        "Путь: " . dirname($file['path']) . "\n" .
+        "Размер: " . $file['size'] . "\n";
+                
         $kb = [];
         
         $kb[0][] = SMILE_PC . ' Запустить файл ' . $cmd;
         $kb[0][] = SMILE_DOWNLOAD . ' Скачать файл ' . $cmd;
+        $kb[0][] = SMILE_TRASH . ' Удалить файл ' . $cmd;
         
-        if(Windows::isWin()){
+        if($this->isWin){
             $kb[1][] = SMILE_PRINT . ' Распечатать файл ' . $cmd;
+            $kb[1][] = SMILE_DIAMOND_BLUE . ' Мета-данные ' . $cmd;         
         }
         
-        $kb[1][] = SMILE_TRASH . ' Удалить файл ' . $cmd;
         $kb[2][] = SMILE_FOLDER . ' File Explorer';
         $kb[2][] = SMILE_HELP . ' Help';
         
-        $info = SMILE_FILE . " Имя файла: $name \n" . 
-                "Путь: " . dirname($file['path']) . "\n" .
-                "Размер: " . $file['size'] . "\n";
             
         $this->send($info, $this->keyboard($kb));
     }
@@ -542,16 +581,32 @@ class Commands extends AbstractModule {
     public function __print(string $file, string $selectBy = 'name'){
         $this->checkWin();
         $file = $this->fso->getFile($file, $selectBy); 
-        $res = WindowsScriptHost::PowerShell('
-            $word = New-Object -ComObject Word.Application
-            $word.visible = $false
-            $word.Documents.Open(":file") > $null
-            $word.Application.ActiveDocument.printout()
-            $word.Application.ActiveDocument.Close()
-            $word.quit()
-        ', ['file' => $file['path']]);
-        
+        $res = Windows::print($file['path']);
         $this->send(SMILE_PRINT . ' Файл "' . $file['name'] . '" отправлен на печать. ' . "\n" . $res);
+    }
+    
+    /**
+     * Получить мета-данные файла или директории
+     * Windows only 
+     */
+    public function __meta(string $path, string $selectBy = 'name'){
+        $this->checkWin();
+        $file = $this->fso->getFile($path, $selectBy); 
+        $meta = Windows::getFileMeta($file['path']);
+            
+        $info = SMILE_DIAMOND_BLUE . " Мета-данные \"". $file['name'] . "\" :\n";
+        foreach ($meta as $key => $value){
+            $item = SMILE_DIAMOND_ORANGE . " " . $key . ": " . $value . "\n";
+            
+            if(strlen($info . $item) > TelegramBot::MAX_MESSAGE_LENGTH){
+                $this->send($info); 
+                $info = '';
+            }
+            
+            $info .= $item; 
+        }
+        
+        $this->send($info);
     }
     
     /**
@@ -1071,12 +1126,6 @@ class Commands extends AbstractModule {
                 'User id: ' . $this->user_id ;
         $this->send($info);
     }
-    
-    /**
-     * @var array 
-     * [$id => [timer => $timer, command => $string]]
-     */
-    public $timers = [];
     
     public function __timer(string $after, string ...$command){
         $cmd = implode(' ', $command);
