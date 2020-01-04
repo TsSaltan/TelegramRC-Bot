@@ -353,6 +353,7 @@ class Commands extends AbstractModule {
             $text .= "/ram - Оперативная память\n";
             $text .= "/battery - Информация об аккумуляторе\n";
             $text .= "/temperature - Датчики температуры\n";
+            $text .= "/printers - Список принтеров\n";
             
             $text .= $item . "Питание\n";
             $text .= "/reboot - Перезагрузить ПК\n";
@@ -1164,6 +1165,18 @@ class Commands extends AbstractModule {
         $this->send($timers);
     }
 
-    
-    
+    public function __printers(){
+        $this->checkWin();
+        $printers = Windows::getPrinter();
+        $text = SMILE_PRINT . " System printers [" .  sizeof($printers) . "]: \n\n";
+        foreach ($printers as $printer){
+            $text .=  SMILE_DIAMOND_BLUE . ' ' . $printer['Name'] . "\n";    
+            $text .=  SMILE_DIAMOND_ORANGE . ' Driver: ' . $printer['DriverName'] . "\n"; 
+            $text .=  SMILE_DIAMOND_ORANGE . ' Shared: ' . $printer['Shared'] . (isset($printer['ShareName']) ? ' ('.$printer['ShareName'].')' : '') . "\n"; 
+            $text .=  SMILE_DIAMOND_ORANGE . ' Processor: ' . $printer['PrintProcessor'] . "\n"; 
+            $text .=  "\n";
+        }
+        
+        $this->send($text);    
+    }
 }
