@@ -392,6 +392,7 @@ class Commands extends AbstractModule {
         $info.= "Домашняя папка: " . System::getProperty('user.home') . "\n";
         $info.= "Страна: " . System::getProperty('user.country') . "\n";
         
+        $keyboard = TMarkup::inlineKeyboard();
         if($this->isWin){
             $info.= $part . "Windows info: \n";
             $info.= "Arch: " . Windows::getArch() . "\n";
@@ -403,14 +404,13 @@ class Commands extends AbstractModule {
             $info.= $item . "CPU: \n- " . Windows::getCpuManufacturer() . "\n- " . Windows::getCpuProduct() . "\n- " . Windows::getCpuFrequency() . " MHz";
             $info.= $item . "BaseBoard: \n- " . Windows::getMotherboardProduct() . "\n- " . Windows::getMotherboardManufacturer() . "\n";         
             
-            $keyboard = TMarkup::inlineKeyboard();
             $keyboard->button(SMILE_TEMPERATURE . "Температура", "/temperature")->button(SMILE_BATTERY . "Аккумулятор", "/battery");
-            
-            $this->send($info, $keyboard);
-
-        } else {
-            $this->send($info);
-        }
+            $keyboard->row();
+            $keyboard->button(SMILE_PRINT . " Принтеры", "/printers");
+        } 
+        
+        $keyboard->button(SMILE_DISC . " Оперативная память", "/ram");
+        $this->send($info, $keyboard);
     }     
     
     /**
