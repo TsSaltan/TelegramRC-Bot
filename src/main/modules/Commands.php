@@ -736,19 +736,24 @@ class Commands extends AbstractModule {
             $message .= "\nUsed RAM: ". $this->fso->formatBytes($total-$free) . " (" .  round(($total-$free) / $total * 100) . "%)";
             $message .= "\nFree RAM: ". $this->fso->formatBytes($free);
             
-            $rams = Windows::getRAM();
-            $message .= "\n\n" . SMILE_DIAMOND_BLUE . "RAM devices [" . sizeof($rams) . "]: \n\n";
-            foreach ($rams as $ram){
-                $message .= SMILE_DIAMOND_ORANGE . " " . $ram['Name'] . "\n";
-                $message .= " Caption: " . $ram['Caption'] . "\n";
-                $message .= " Speed: " . $ram['Speed'] . "\n";
-                $message .= " Voltage: " . $ram['ConfiguredVoltage'] . "\n";
-                $message .= " Manufacturer: " . $ram['Manufacturer'] . "\n";
-                $message .= " DeviceLocator: " . $ram['DeviceLocator'] . "\n";
-                $message .= " PartNumber: " . $ram['PartNumber'] . "\n";
-                $message .= " SerialNumber: " . $ram['SerialNumber'] . "\n";
-                $message .= " Tag: " . $ram['Tag'] . "\n";
-                $message .= ""\n";
+            try{
+                $rams = Windows::getRAM();
+                $message .= "\n\n" . SMILE_DIAMOND_BLUE . "RAM devices [" . sizeof($rams) . "]: \n\n";
+                foreach ($rams as $ram){
+                    $message .= SMILE_DIAMOND_ORANGE . " " . $ram['Name'] . "\n";
+                    $message .= " Caption: " . $ram['Caption'] . "\n";
+                    $message .= " Speed: " . $ram['Speed'] . "\n";
+                    $message .= " Voltage: " . $ram['ConfiguredVoltage'] . "\n";
+                    $message .= " Manufacturer: " . $ram['Manufacturer'] . "\n";
+                    $message .= " DeviceLocator: " . $ram['DeviceLocator'] . "\n";
+                    $message .= " PartNumber: " . $ram['PartNumber'] . "\n";
+                    $message .= " SerialNumber: " . $ram['SerialNumber'] . "\n";
+                    $message .= " Tag: " . $ram['Tag'] . "\n";
+                    $message .= "\n";
+                }
+            }
+            catch (WindowsException $e){
+                
             }
         }
                 
@@ -1182,17 +1187,21 @@ class Commands extends AbstractModule {
 
     public function __printers(){
         $this->checkWin();
-        $printers = Windows::getPrinter();
-        $text = SMILE_PRINT . " System printers [" .  sizeof($printers) . "]: \n\n";
-        foreach ($printers as $printer){
-            $text .=  SMILE_DIAMOND_BLUE . ' ' . $printer['Name'] . "\n";    
-            $text .=  SMILE_DIAMOND_ORANGE . ' Driver: ' . $printer['DriverName'] . "\n"; 
-            $text .=  SMILE_DIAMOND_ORANGE . ' Shared: ' . $printer['Shared'] . (isset($printer['ShareName']) ? ' ('.$printer['ShareName'].')' : '') . "\n"; 
-            $text .=  SMILE_DIAMOND_ORANGE . ' Processor: ' . $printer['PrintProcessor'] . "\n"; 
-            $text .=  SMILE_DIAMOND_ORANGE . ' Default: ' . $printer['Default'] . "\n"; 
-            $text .=  "\n";
+        try {
+            $printers = Windows::getPrinter();
+            $text = SMILE_PRINT . " System printers [" .  sizeof($printers) . "]: \n\n";
+            foreach ($printers as $printer){
+                $text .=  SMILE_DIAMOND_BLUE . ' ' . $printer['Name'] . "\n";    
+                $text .=  SMILE_DIAMOND_ORANGE . ' Driver: ' . $printer['DriverName'] . "\n"; 
+                $text .=  SMILE_DIAMOND_ORANGE . ' Shared: ' . $printer['Shared'] . (isset($printer['ShareName']) ? ' ('.$printer['ShareName'].')' : '') . "\n"; 
+                $text .=  SMILE_DIAMOND_ORANGE . ' Processor: ' . $printer['PrintProcessor'] . "\n"; 
+                $text .=  SMILE_DIAMOND_ORANGE . ' Default: ' . $printer['Default'] . "\n"; 
+                $text .=  "\n";
+            }
+            
+            $this->send($text); 
+        } catch (WindowsException $e){
+            throw new Exception('Cannot get printers');
         }
-        
-        $this->send($text);    
     }
 }
