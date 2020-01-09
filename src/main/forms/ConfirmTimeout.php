@@ -62,4 +62,11 @@ class ConfirmTimeout extends AbstractForm {
         $this->sec = 0;
         $this->free();
     }
+
+    /**
+     * @event close 
+     */
+    function doClose(){    
+        $this->cancelAction();
+    }
 }

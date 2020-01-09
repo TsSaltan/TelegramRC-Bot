@@ -898,10 +898,10 @@ class Commands extends AbstractModule {
                     Windows::shutdown();
                             
                 } catch (WindowsException $e){
-                    throw new Exception('Не удалось выключить ПК');
+                    $this->errorMsg('Не удалось выключить ПК');
                 } 
             }, function(){
-                throw new Exception('Команда отменена пользователем');
+                $this->errorMsg('Команда отменена пользователем');
             });
         });
     }    
@@ -922,13 +922,12 @@ class Commands extends AbstractModule {
             $confirm->start(10, function(){
                 try{
                     $this->send('Перезагрузка');
-                    Windows::reboot();
-                            
+                    Windows::reboot();        
                 } catch (WindowsException $e){
-                    throw new Exception('Не удалось перезагрузить ПК');
+                    $this->errorMsg('Не удалось перезагрузить ПК');
                 } 
             }, function(){
-                throw new Exception('Команда отменена пользователем');
+                $this->errorMsg('Команда отменена пользователем');
             });
         });
         $this->checkWin();
