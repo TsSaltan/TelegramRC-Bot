@@ -61,8 +61,12 @@ class Params extends AbstractForm {
      * Exit нужен, чтоб закрыть программу, когда активен трей.
      * @event close 
      */
-    function doClose(){     
-        app()->appModule()->shutdown();
+    function doClose(UXWindowEvent $e){   
+        if(uiConfirm('Бот будет остановлен, продолжить?')){
+            app()->appModule()->shutdown();
+        }
+        
+        $e->consume();
     }
 
 
