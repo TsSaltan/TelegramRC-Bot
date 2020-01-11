@@ -80,27 +80,57 @@
                 </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Токен">
+            <Tab text="Соединение">
               <content>
                 <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
                   <children>
-                    <TextField AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="16" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_token" layoutX="8" layoutY="16" prefColumnCount="12" prefHeight="25" prefWidth="552" promptText="Введите token" styleClass="text-input text-field " text="">
+                    <TextField AnchorPane.leftAnchor="80" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="16" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_token" layoutX="80" layoutY="16" prefColumnCount="12" prefHeight="25" prefWidth="520" promptText="Введите token" styleClass="text-input text-field " text="">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
                     </TextField>
                     <Data cursor="DEFAULT" enabled="1" id="data-edit_token" visible="1"/>
-                    <Button AnchorPane.rightAnchor="8" AnchorPane.topAnchor="48" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_save_token" layoutX="488" layoutY="48" prefHeight="24" prefWidth="112" styleClass="button " text="Сохранить" textAlignment="CENTER" underline="false" wrapText="false">
+                    <Button AnchorPane.rightAnchor="8" AnchorPane.topAnchor="240" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_save_token" layoutX="480" layoutY="240" prefHeight="24" prefWidth="120" styleClass="button " text="Сохранить" textAlignment="CENTER" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
                     </Button>
                     <Data cursor="DEFAULT" enabled="1" graphic=".data/img/save.png" id="data-button_save_token" visible="1"/>
+                    <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label3" layoutX="8" layoutY="16" prefHeight="24" prefWidth="56" styleClass="label " text="Token" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </LabelEx>
+                    <Data cursor="DEFAULT" enabled="1" graphic=".data/img/key.png" id="data-label3" visible="1"/>
+                    <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label5" layoutX="8" layoutY="48" prefHeight="24" prefWidth="64" styleClass="label " text="API URL" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </LabelEx>
+                    <Data cursor="DEFAULT" enabled="1" graphic=".data/img/api.png" id="data-label5" visible="1"/>
+                    <TextField AnchorPane.leftAnchor="80" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="48" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_api_url" layoutX="80" layoutY="48" prefColumnCount="12" prefHeight="25" prefWidth="520" promptText="https://" styleClass="text-input text-field " text="">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </TextField>
+                    <Data cursor="DEFAULT" enabled="1" id="data-edit_api_url" visible="1"/>
+                    <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label6" layoutX="80" layoutY="80" prefHeight="16" prefWidth="96" styleClass="label " text="По умолчанию:" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </LabelEx>
+                    <Data cursor="DEFAULT" enabled="1" id="data-label6" visible="1"/>
+                    <Hyperlink alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="link_default_api" layoutX="168" layoutY="80" prefHeight="16" prefWidth="144" styleClass="hyperlink " text="https://api.telegram.org" textAlignment="LEFT" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </Hyperlink>
+                    <Data cursor="DEFAULT" enabled="1" id="data-link_default_api" visible="1"/>
                   </children>
                 </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Список разрешенных пользователей">
+            <Tab text="Разрешенные пользователи">
               <content>
                 <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
                   <children>

@@ -124,10 +124,13 @@ class TelegramBot extends AbstractModule {
      */
     public $stopCallback;
     
-    
  
     public function initBot($token){
         $this->api = new TelegramBotApi($token);
+    }  
+    
+    public function setApiURL(string $url){
+        $this->api->setApiURL($url);
     } 
     
     public function setProxy($proxy){
@@ -175,12 +178,7 @@ class TelegramBot extends AbstractModule {
                                 
                 $this->status = 'on';
                 Debug::info('Long-poll activated');
-                
-                uiLater(function(){
-                    $notify = new UXTrayNotification;
-                    $notify->title = APP;
-                });
-                
+                 
                 $this->listener->start();
             } catch (\Exception $e){
                 Debug::error('Long-poll listener error: ' . '['. get_class($e) .'] ' . $e->getMessage($e));
@@ -237,7 +235,6 @@ class TelegramBot extends AbstractModule {
                     if(isset($update->callback_query->id)){
                         $callback_id = $update->callback_query->id;
                     }
-                    
                 }
                 
                 if(isset($update->message->document)){
@@ -309,8 +306,8 @@ class TelegramBot extends AbstractModule {
                         
             // Если есть документ
             elseif($hasDoc) {             
-                $file = $this->getFile($last_doc);
-                call_user_func_array([$commands, 'inputFileMsg'], [$file, $last_doc]);
+                $file = $this->getFile($doc);
+                call_user_func_array([$commands, 'inputFileMsg'], [$file, $doc]);
             }
             
             // Если команда неизвестна

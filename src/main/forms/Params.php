@@ -18,7 +18,11 @@ class Params extends AbstractForm {
     
         // Загрузка токена
         $token = Config::get('token');
-        $this->edit_token->text = $token;
+        $this->edit_token->text = $token;   
+         
+        // Загрузка API URL
+        $api_url = Config::get('api_url');
+        $this->edit_api_url->text = $api_url;
         
         // Загрузка списка пользователей
         $users = Config::get('users');
@@ -43,7 +47,7 @@ class Params extends AbstractForm {
                 
         // Иконки у табов
         $this->tabPane->tabs->offsetGet(0)->graphic = new UXImageView(new UXImage('res://.data/img/console.png'));
-        $this->tabPane->tabs->offsetGet(1)->graphic = new UXImageView(new UXImage('res://.data/img/key.png'));
+        $this->tabPane->tabs->offsetGet(1)->graphic = new UXImageView(new UXImage('res://.data/img/connection.png'));
         $this->tabPane->tabs->offsetGet(2)->graphic = new UXImageView(new UXImage('res://.data/img/users.png'));
         $this->tabPane->tabs->offsetGet(3)->graphic = new UXImageView(new UXImage('res://.data/img/bug.png'));
         $this->tabPane->tabs->offsetGet(4)->graphic = new UXImageView(new UXImage('res://.data/img/info.png'));
@@ -76,15 +80,29 @@ class Params extends AbstractForm {
      */
     function saveToken(){
         $token = $this->edit_token->text;
+        if(strlen($token) < 40){
+            return alert('Ошибка: заполните поле token!');
+        } 
         Config::set('token', $token);
+        
+        $api_url = $this->edit_api_url->text;
+        if(!str::startsWith($api_url, 'https://')){
+            return alert('Ошибка: API URL должен начинаться с https://');
+        }
+        Config::set('api_url', $api_url);
         
         // Если бот активен, его нужно перезапустить
         if($this->getBotState() == 'on'){
             $this->runBot('off');
-            waitAsync(1000, function(){
+            $this->showPreloader();
+            waitAsync(1500, function(){
+                $this->hidePreloader();
                 $this->runBot('on');
             });
         }
+        
+        $this->getBot()->initBot($token);
+        $this->getBot()->setApiURL($api_url);
     }
     
     /**
@@ -155,7 +173,6 @@ class Params extends AbstractForm {
                     $this->setStartButton('on');
                 } else {
                     alert('Произошла ошибка! Проверьте интернет-подключение.');
-                    // $this->runBot('off');
                 }
                 break;
             
@@ -278,6 +295,13 @@ class Params extends AbstractForm {
         $programTime = (time() - app()->appModule()->startup) * 1000;
         $ptime = new Time($programTime, TimeZone::UTC()); 
         $this->label_uptime->text = ($ptime->day() - 1) . 'd ' . $ptime->hourOfDay() . 'h ' . $ptime->minute() . 'm';
+    }
+
+    /**
+     * @event link_default_api.action 
+     */
+    function doLink_default_apiAction(UXEvent $e = null){    
+        $this->edit_api_url->text = $e->sender->text;
     }
 
 }

@@ -79,7 +79,12 @@ class AppModule extends AbstractModule
             $pr = new Proxy($proxy['type'], $proxy['host'], $proxy['port']);
             $this->tgBot->setProxy($pr);
         }
-
+        
+        $api_url = Config::get('api_url');
+        if(str::startsWith($api_url, 'https://')){
+            $this->tgBot->setApiURL($api_url);
+        }
+        
         /** @var Params $form */
         $form = $this->form('Params'); 
    
