@@ -29,7 +29,7 @@
             </AnchorPane>
           </content>
         </Tab>
-        <Tab text="Шаг 1: Настройка прокси">
+        <Tab text="Шаг 1: Настройка соединения">
           <content>
             <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="338" prefWidth="640" styleClass="">
               <children>
@@ -73,6 +73,30 @@
                   </font>
                 </LabelEx>
                 <Data cursor="DEFAULT" enabled="1" id="data-label4" visible="1"/>
+                <LabelEx AnchorPane.leftAnchor="16" AnchorPane.topAnchor="160" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label14" layoutX="16" layoutY="160" prefHeight="24" prefWidth="64" styleClass="label " text="API URL" textAlignment="LEFT" textFill="#ffffff" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Bold" size="14"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label14" visible="1"/>
+                <Hyperlink alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="link_proxy" layoutX="328" layoutY="192" prefHeight="16" prefWidth="272" style="-fx-text-fill: #bbeaFA;" styleClass="hyperlink " text="скрипт для проксирования запросов к API" textAlignment="LEFT" wrapText="false">
+                  <font>
+                    <Font name="System Bold" size="12"/>
+                  </font>
+                </Hyperlink>
+                <Data cursor="DEFAULT" enabled="1" id="data-link_proxy" visible="1"/>
+                <LabelEx alignment="TOP_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label15" layoutX="16" layoutY="192" prefHeight="32" prefWidth="312" styleClass="label " text="* Если доступ к Telegram API закрыт, можете установить&#10;Затем измените API URL на свой" textAlignment="LEFT" textFill="#ffffff" underline="false" wrapText="false">
+                  <font>
+                    <Font name="System Regular" size="12"/>
+                  </font>
+                </LabelEx>
+                <Data cursor="DEFAULT" enabled="1" id="data-label15" visible="1"/>
+                <TextField AnchorPane.leftAnchor="80" AnchorPane.rightAnchor="344" AnchorPane.topAnchor="160" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_api_url" layoutX="80" layoutY="160" prefColumnCount="12" prefHeight="25" prefWidth="216" promptText="https://" styleClass="text-input text-field " text="https://api.telegram.org">
+                  <font>
+                    <Font name="System Regular" size="12"/>
+                  </font>
+                </TextField>
+                <Data cursor="DEFAULT" enabled="1" id="data-edit_api_url" visible="1"/>
               </children>
             </AnchorPane>
           </content>
