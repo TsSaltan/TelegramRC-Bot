@@ -11,6 +11,12 @@
 
 
 ## Что нового / Changelog
+### v 3.0
+* Возможность работы через [собственный прокси-сервер](https://github.com/TsSaltan/Telegram-bot-api-php-proxy)
+* Изменения в команде **/ram**
+* Команды для windows: **/printers**, **/meta**
+* Bugfix
+
 ### v 2.1
 * Добавлены команды **/alert**, **/whoami**, **/keyboard**, **/browse**
 * Команды для работы с таймерами: **/timer** и **/timers** [(подробнее)](https://tssaltan.top/?p=1928#timers)
@@ -27,9 +33,8 @@
 * Возможность отключить логирование
 
 ## Build
-Для сборки версии 2.0 необходимы пакеты:
-* [Windows 2.1](https://github.com/TsSaltan/DevelNext-Windows/releases/tag/2.1)
+Для сборки версии 3.0 необходимы пакеты:
+* [Telegram Bot API 1.2](https://github.com/jphp-group/jphp-telegram-bot-api/releases/)
+* [Windows 2.2](https://github.com/TsSaltan/DevelNext-Windows/releases/tag/2.2)
 * [Webcam 1.0.2](https://github.com/jphp-group/jphp-webcam-ext/releases/tag/1.0.3)
 * SystemTray 1.0 (в составе DevelNext)
-
-Для 1.0 также необходим пакет [Telegram Bot API 1.0](https://github.com/broelik/jphp-telegram-bot-api/releases/tag/1.0.0), в версии 2.0 он изменен и уже прикреплен к проекту.
