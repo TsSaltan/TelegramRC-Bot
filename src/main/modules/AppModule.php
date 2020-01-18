@@ -27,7 +27,7 @@ class AppModule extends AbstractModule
      * Запуск программы
      * @event action  
      */
-    function сonstruct(){           
+    public function сonstruct(){           
         $this->startup = time(); 
         $this->trayTooltop = "TelegramRC (v " . self::APP_VERSION . ')';
         
@@ -125,7 +125,7 @@ class AppModule extends AbstractModule
         }
     }
 
-    function shutdown(){
+    public function shutdown(){
         $this->systemTray->visible = false;
         $this->systemTray->manualExit = false;
         app()->shutdown();
@@ -135,7 +135,7 @@ class AppModule extends AbstractModule
     /**
      * @event systemTray.click 
      */
-    function doSystemTrayClick(){    
+    public function doSystemTrayClick(){    
         $form = $this->form('Params');
         if($form->visible){
             $form->free();
@@ -144,17 +144,17 @@ class AppModule extends AbstractModule
         }
     }
     
-    function getAppDir(){
+    public function getAppDir(){
         $ds = System::getProperty('file.separator');
         return System::getProperty('user.home') . $ds . 'TelegramRemoteBot'. $ds;
     }    
     
-    function getAppDownloadDir(){
+    public function getAppDownloadDir(){
         $ds = System::getProperty('file.separator');
         return $this->getAppDir(). $ds . 'download';
     }
     
-    function getCurrentDir() : string {
+    public function getCurrentDir() : string {
         $ds = System::getProperty('file.separator');
         $path = System::getProperty("java.class.path");
         $sep = System::getProperty("path.separator");
