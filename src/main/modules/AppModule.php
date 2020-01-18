@@ -24,6 +24,11 @@ class AppModule extends AbstractModule
     public $trayTooltop;
     
     /**
+     * @var string 
+     */
+    public $lockFile = 'app.lock';
+    
+    /**
      * Запуск программы
      * @event action  
      */
@@ -46,6 +51,9 @@ class AppModule extends AbstractModule
         // Путь к конфигам и логам
         Config::$cfgFile = $app_dir . Config::$cfgFile;
         Debug::$logFile = $app_dir . Debug::$logFile;
+        
+                
+        $this->singleRun();
         
         // Загрузка настроек из файла    
         Config::load();
@@ -123,6 +131,22 @@ class AppModule extends AbstractModule
         if(!Config::get('iconified')){
             $form->show();
         }
+    }
+    
+    public function singleRun(){
+        /* @var File $file */
+        $file = File::of($this->getAppDir() . $this->lockFile);
+        if($file->exists()){
+            if(!$file->delete()){
+                Debug::error('Program already started!');
+                alert('Программа уже запущена! Возможна работа только одной копии программы.');
+                $this->shutdown();
+            }
+        }
+        
+        $file->createNewFile();
+        $stream = FileStream::of($file->getAbsolutePath(), 'w');
+        $stream->write(1);
     }
 
     public function shutdown(){
