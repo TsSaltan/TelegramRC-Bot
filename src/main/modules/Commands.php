@@ -709,6 +709,11 @@ class Commands extends AbstractModule {
      */
     public function __temperature(){
         $this->checkWin();
+        
+        if($this->isCallback()){
+            $this->sendCallback(SMILE_TEMPERATURE . " Loading temperature data ...");
+        }
+        
         $t = Windows::getTemperature();
         $res = SMILE_TEMPERATURE . " Температурные датчики: ";
         if(sizeof($t) == 0) $res.='недоступны.';
@@ -723,10 +728,13 @@ class Commands extends AbstractModule {
      * Команда /ram 
      * Получить данные об свободной и занятой оперативной памяти
      */
-    public function __ram(){
+    public function __ram(){               
+        if($this->isCallback()){
+            $this->sendCallback(SMILE_DISC . " Loading memory data ...");
+        }
+        
         $jfree = Runtime::freeMemory();
         $jtotal = Runtime::totalMemory();
-        
         $message = SMILE_BOT . ' TelegramRC Bot used ' . $this->fso->formatBytes($jtotal - $jfree) . ' of ' . $this->fso->formatBytes($jtotal) . ' (' . round($jfree / $jtotal * 100) . '%)';
         
         if($this->isWin){   
@@ -753,7 +761,6 @@ class Commands extends AbstractModule {
                 }
             }
             catch (WindowsException $e){
-                
             }
         }
                 
@@ -954,24 +961,24 @@ class Commands extends AbstractModule {
         
         $kb = [
             [
-                '/key__prev__1' => SMILE_MEDIA_PREV . ' Prev',
-                '/key__stop__1' => SMILE_MEDIA_STOP . ' Stop',
-                '/key__play__1' => SMILE_MEDIA_PLAY . ' Play/Pause',
-                '/key__next__1' => SMILE_MEDIA_NEXT . ' Next',
+                '/key__prev' => SMILE_MEDIA_PREV . ' Prev',
+                '/key__stop' => SMILE_MEDIA_STOP . ' Stop',
+                '/key__play' => SMILE_MEDIA_PLAY . ' Play/Pause',
+                '/key__next' => SMILE_MEDIA_NEXT . ' Next',
             ]
         ];
         
         try {
             $level = Windows::getVolumeLevel();
             $kb[] = [
-                '/volume__down__1' => SMILE_SYMBOL_DOWN . ' Volume -',
+                '/volume__down' => SMILE_SYMBOL_DOWN . ' Volume -',
                 '/volume' => SMILE_SOUND_50 . " $level%",
-                '/volume__up__1' => SMILE_SYMBOL_UP . ' Volume +',
+                '/volume__up' => SMILE_SYMBOL_UP . ' Volume +',
             ];
         } catch (WindowsException $e){
              $kb[] = [
-                '/volume__down__1' => SMILE_SYMBOL_DOWN . ' Volume -',
-                '/volume__up__1' => SMILE_SYMBOL_UP . ' Volume +',
+                '/volume__down' => SMILE_SYMBOL_DOWN . ' Volume -',
+                '/volume__up' => SMILE_SYMBOL_UP . ' Volume +',
             ];
         }
                 
@@ -1106,6 +1113,11 @@ class Commands extends AbstractModule {
       
     public function __battery(){
         $this->checkWin();
+        
+        if($this->isCallback()){
+            $this->sendCallback(SMILE_BATTERY . " Loading battery data ...");
+        }
+        
         try {
             $perc = Windows::getBatteryPercent();
             $voltage = Windows::getBatteryVoltage();
@@ -1186,6 +1198,11 @@ class Commands extends AbstractModule {
 
     public function __printers(){
         $this->checkWin();
+        
+        if($this->isCallback()){
+            $this->sendCallback(SMILE_PRINT . " Loading printers data ...");
+        }
+        
         try {
             $printers = Windows::getPrinter();
             $text = SMILE_PRINT . " System printers [" .  sizeof($printers) . "]: \n\n";
