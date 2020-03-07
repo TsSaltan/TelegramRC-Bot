@@ -190,6 +190,7 @@ class TelegramBot extends AbstractModule {
                 
                 if($e instanceof TelegramException){
                     $e = $e->getPrevious();
+                    Debug::error('['. get_class($e) .'] ' . $e->getMessage($e));
                 }
                 
                 uiLater(function() use ($e){
