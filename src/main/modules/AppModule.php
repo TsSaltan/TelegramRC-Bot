@@ -6,7 +6,7 @@ use std, gui, framework, main;
 
 class AppModule extends AbstractModule
 {
-    const APP_VERSION = '3.0';
+    const APP_VERSION = '3.0.1-dev';
     
     /**
      * Время запуска программы 
@@ -97,7 +97,13 @@ class AppModule extends AbstractModule
         $form = $this->form('Params'); 
    
         $this->tgBot->setErrorCallback(function($e) use ($form){
-            $this->notify('Произошла ошибка: [' . get_class($e) . '] ' . $e->getMessage(), 'ERROR');
+            $className = basename(get_class($e));
+            $errMsg = $e->getMessage();
+            $this->notify('Произошла ошибка: [' . $className . '] ' . $errMsg, 'ERROR');
+            
+            if(str::contains($errMsg, 'Parse error')){
+                Debug::info("Raw query: " . $this->tgBot->getApi()->getRawResponse());
+            }
             
             if($form->visible){
                $form->setStartButton('off'); 

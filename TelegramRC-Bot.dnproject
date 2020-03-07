@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC-Bot" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1578741816447">
+<project author="Ts.Saltan" authorOS="Windows 10" createdAt="1562245331390" ideName="DevelNext" ideVersion="16.7.0" ideVersionHash="2017103112" name="TelegramRC-Bot" packageName="main" template="ide\project\templates\DefaultGuiProjectTemplate" updatedAt="1581878859288">
   <tree>
     <expanded>
     <path src=""/>
-      <path src="/src"/>
-      <path src="/src/main"/>
-      <path src="/src/main/forms"/>
-      <path src="/src/main/modules"/>
-      <path src="/vendor"/>
-      <path src="/vendor/develnext.bundle.windows.WindowsBundle"/>
-      <path src="/vendor/develnext.bundle.windows.WindowsBundle/bundle"/>
-      <path src="/vendor/develnext.bundle.windows.WindowsBundle/bundle/windows"/>
     </expanded>
   </tree>
   <openedFiles>
   <file src="TelegramRC-Bot.dnproject"/>
-    <file src="src/main/modules/AppModule.php"/>
+    <file selected="1" src="src/main/modules/AppModule.php"/>
     <file src="src/main/forms/Params.php"/>
-    <file selected="1" src="src/main/modules/TelegramBot.php"/>
-    <file src="src/main/modules/Commands.php"/>
-    <file src="src/main/modules/FSO.php"/>
-    <file src="src/main/modules/Debug.php"/>
-    <file src="src/main/forms/ConfirmTimeout.php"/>
     <file src="src/main/forms/Setup.php"/>
+    <file src="src/main/modules/TelegramBot.php"/>
   </openedFiles>
   <files/>
   <behaviours>

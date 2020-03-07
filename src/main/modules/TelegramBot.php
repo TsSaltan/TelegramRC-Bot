@@ -1,6 +1,7 @@
 <?php
 namespace main\modules;
 
+use telegram\exception\TelegramException;
 use Error;
 use Throwable;
 use Exception;
@@ -144,7 +145,11 @@ class TelegramBot extends AbstractModule {
     public function getStatus(){
         return $this->status;
     } 
-       
+    
+    public function getApi(): TelegramBotApi {
+        return $this->api;
+    }
+    
     public function getMe(){
         try {
             return $this->api->getMe()->query();
@@ -182,6 +187,11 @@ class TelegramBot extends AbstractModule {
                 $this->listener->start();
             } catch (\Exception $e){
                 Debug::error('Long-poll listener error: ' . '['. get_class($e) .'] ' . $e->getMessage($e));
+                
+                if($e instanceof TelegramException){
+                    $e = $e->getPrevious();
+                }
+                
                 uiLater(function() use ($e){
                     if(is_callable($this->errorCallback)) call_user_func($this->errorCallback, $e);
                 });
