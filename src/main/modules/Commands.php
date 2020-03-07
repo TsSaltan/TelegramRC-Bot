@@ -1159,21 +1159,71 @@ class Commands extends AbstractModule {
         $this->send($info);
     }
     
+    /**
+     * Добавление или управление таймером
+     * /timer [after_time] [command] - добавление таймера
+     * /timer [timer_id] - информация о таймере
+     * /timer [timer_id] [run] - запуск таймера
+     * /timer [timer_id] [cancel] - остановка таймера
+     */
     public function __timer(string $after, string ...$command){
         $cmd = implode(' ', $command);
-        $id = str::uuid();
-        $timer = Timer::after($after, function() use ($cmd, $id){
-            $this->send(SMILE_CLOCK . ' Выполнение команды по таймеру: ' . $cmd);
-            $this->bot->processCommand($cmd, $this);
-            unset($this->timers[$id]);
-        });
         
-        $this->timers[$id] = ['timer' => $timer, 'command' => $cmd];
-
-        $time = new Time($timer->scheduledTime());
-        $sTime = $time->toString('YYYY-MM-dd HH:mm:ss');
-        $this->send(SMILE_CLOCK . ' Таймер будет запущен: ' . $sTime);
- 
+        try {
+            if(isset($this->timers[$after])){
+                $timer = $this->timers[$after];
+                $kb = [];
+                
+                switch($cmd){
+                    case 'run':
+                        $tText =  'Run timer #' . $after;
+                        Timer::after('1s', function() use ($timer){
+                            $timer['timer']->run();
+                            $timer['timer']->cancel();
+                        });
+                        break;
+                        
+                   case 'cancel':
+                        $tText =  'Cancel timer #' . $after;
+                        $timer['timer']->cancel();
+                        unset($this->timers[$after]);
+                        break;
+                        
+                    default:
+                        $tText =  'Timer id: ' . $after . "\n";
+                        $tText .= 'Command: ' . $timer['command'] . "\n";
+                        $tText .= 'Execute time: ' . $timer['time']->toString('YYYY-MM-dd HH:mm:ss');
+                                            
+                        $kb[0]['/timer__' . $after . '__run'] = SMILE_DIAMOND_BLUE . ' Запустить сейчас';
+                        $kb[0]['/timer__' . $after . '__cancel'] = SMILE_DOT_RED . ' Остановить таймер';
+                        $kb[1]['/timers'] = SMILE_CLOCK . ' Список таймеров';
+                }
+                
+                if($this->isCallback()){
+                    $this->sendCallback(SMILE_CLOCK . ' ' . $tText);
+                }
+                elseif(sizeof($kb) == 0){
+                    $this->send(SMILE_CLOCK . ' ' . $tText);
+                }
+                else $this->send(SMILE_CLOCK . ' ' . $tText, $this->keyboardInline($kb));
+                
+            } else {
+                $id = 't' . time() . rand(10, 99);
+                $timer = Timer::after($after, function() use ($cmd, $id){
+                    $this->send(SMILE_CLOCK . ' Выполнение команды по таймеру: ' . $cmd);
+                    $this->bot->processCommand($cmd, $this);
+                    unset($this->timers[$id]);
+                });
+                
+                $time = new Time($timer->scheduledTime());
+                $this->timers[$id] = ['timer' => $timer, 'command' => $cmd, 'time' => $time];
+                
+                $this->send(SMILE_CLOCK . ' Таймер будет запущен: ' . $time->toString('YYYY-MM-dd HH:mm:ss'));
+            }
+        }
+        catch (IllegalArgumentException $e){
+            $this->errorMsg("Invalid time period or timer id in string '" . $after . "'");
+        }
     }
     
     public function __timers(){
@@ -1186,13 +1236,14 @@ class Commands extends AbstractModule {
                 $time = new Time($timer['timer']->scheduledTime());
                 $sTime = $time->toString('YYYY-MM-dd HH:mm:ss');
             
-                $timers .= "\n\nID: " . $id . "\n";
-                $timers .= "Command: " . $timer['command'] . "\n";
-                $timers .= "Launch time: " . $sTime;
+                $timers .= "\n\n" . SMILE_CLOCK . " Timer ID: " . $id . "\n";
+                $timers .= SMILE_DIAMOND_ORANGE . " Command: " . $timer['command'] . "\n";
+                $timers .= SMILE_DIAMOND_ORANGE . " Launch time: " . $sTime . "\n";
+                $timers .= SMILE_DIAMOND_BLUE . " Control: /timer__" . $id;
             }
         }
         
-        $timers .= "\n\n" . SMILE_DIAMOND_BLUE . " Добавление таймера: /timer [after_time] [command]\n[after_time] - 10s, 1m 10s, 1h 10m 20s\n[command] - текст команды (пробелы разрешаются)";
+        $timers .= "\n\n" . SMILE_DIAMOND_BLUE . " Добавление таймера: /timer [after_time] [command]\n" . SMILE_DIAMOND_ORANGE . "[after_time] - 10s, 1m 10s, 1h 10m 20s\n" . SMILE_DIAMOND_ORANGE . "[command] - текст команды (пробелы разрешаются)";
         $this->send($timers);
     }
 
