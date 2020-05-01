@@ -6,7 +6,7 @@ use std, gui, framework, main;
 
 class AppModule extends AbstractModule
 {
-    const APP_VERSION = '3.1';
+    const APP_VERSION = '4.0-dev';
     
     /**
      * Время запуска программы 
