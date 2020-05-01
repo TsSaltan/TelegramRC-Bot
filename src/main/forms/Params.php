@@ -63,7 +63,12 @@ class Params extends AbstractForm {
         });
         
         // Событие при изменении числового поля с клавиатуры
-        $this->number_restart->editor->observer('text')->addListener(function(){
+        $this->number_restart->editor->observer('text')->addListener(function($old, $new){
+            if(!is_numeric($new) || intval($new) < 1){                
+                $this->number_restart->editor->text =
+                $this->number_restart->value = (intval($old) > 0) ? $old : $this->number_restart->min;
+            }
+            
             $this->configRestart();
         });
     }
