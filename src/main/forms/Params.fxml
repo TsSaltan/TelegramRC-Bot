@@ -64,18 +64,32 @@
               <content>
                 <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
                   <children>
-                    <CheckBox AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="18" AnchorPane.topAnchor="16" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_iconified" layoutX="16" layoutY="16" prefHeight="16" prefWidth="662" styleClass="check-box " text="Запускать программу свёрнутой" textAlignment="LEFT" underline="false" wrapText="false">
+                    <CheckBox AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="18" AnchorPane.topAnchor="16" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_iconified" layoutX="16" layoutY="16" prefHeight="24" prefWidth="574" styleClass="check-box " text="Запускать программу свёрнутой" textAlignment="LEFT" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
                     </CheckBox>
                     <Data cursor="DEFAULT" enabled="1" id="data-checkbox_iconified" visible="1"/>
-                    <CheckBox AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="16" AnchorPane.topAnchor="40" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_autorun" layoutX="16" layoutY="40" prefHeight="17" prefWidth="664" styleClass="check-box " text="Автоматически запускать бота при запуске программы" textAlignment="LEFT" underline="false" wrapText="false">
+                    <CheckBox AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="16" AnchorPane.topAnchor="40" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_autorun" layoutX="16" layoutY="40" prefHeight="24" prefWidth="576" styleClass="check-box " text="Автоматически запускать бота при запуске программы" textAlignment="LEFT" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
                     </CheckBox>
                     <Data cursor="DEFAULT" enabled="1" id="data-checkbox_autorun" visible="1"/>
+                    <CheckBox AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="352" AnchorPane.topAnchor="64" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_restart" layoutX="16" layoutY="64" prefHeight="24" prefWidth="240" styleClass="check-box " text="Регулярно перезапускать бота каждые" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </CheckBox>
+                    <Data cursor="DEFAULT" enabled="1" id="data-checkbox_restart" visible="1"/>
+                    <org.develnext.jphp.ext.javafx.support.control.NumberSpinner alignment="CENTER" arrowsStyle="SPLIT_HORIZONTAL" editable="true" focusTraversable="true" id="number_restart" initial="10" layoutX="256" layoutY="64" max="2147483647" min="1" prefHeight="24" prefWidth="96" step="1" styleClass="spinner split-arrows-horizontal "/>
+                    <Data cursor="DEFAULT" enabled="1" id="data-number_restart" visible="1"/>
+                    <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label7" layoutX="360" layoutY="64" prefHeight="24" prefWidth="96" styleClass="label " text="минут" textAlignment="LEFT" underline="false" wrapText="false">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </LabelEx>
+                    <Data cursor="DEFAULT" enabled="1" id="data-label7" visible="1"/>
                   </children>
                 </AnchorPane>
               </content>

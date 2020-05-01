@@ -44,6 +44,9 @@ class Params extends AbstractForm {
         $this->checkbox_autorun->selected = Config::get('autorun');
         $this->checkbox_iconified->selected = Config::get('iconified');
         $this->checkbox_logs->selected = Config::get('save_logs');
+        $this->number_restart->enabled =
+        $this->checkbox_restart->selected = Config::get('restart', false);
+        $this->number_restart->value = Config::get('restart_minutes', 60);
                 
         // Иконки у табов
         $this->tabPane->tabs->offsetGet(0)->graphic = new UXImageView(new UXImage('res://.data/img/console.png'));
@@ -57,6 +60,11 @@ class Params extends AbstractForm {
             if($new){
                 $this->free();
             }
+        });
+        
+        // Событие при изменении числового поля с клавиатуры
+        $this->number_restart->editor->observer('text')->addListener(function(){
+            $this->configRestart();
         });
     }
     
@@ -304,4 +312,27 @@ class Params extends AbstractForm {
         $this->edit_api_url->text = $e->sender->text;
     }
 
+    /**
+     * @event checkbox_restart.click 
+     * @event checkbox_restart.keyPress 
+     * @event number_restart.click 
+     * @event number_restart.keyPress 
+     */
+    function configRestart($e = null)
+    {    
+        $minutes = intval($this->number_restart->editor->text);
+        Config::set('restart', $this->checkbox_restart->selected);
+        Config::set('restart_minutes', $minutes);
+        
+        $this->number_restart->enabled = $this->checkbox_restart->selected;
+        
+        if($this->checkbox_restart->selected && $minutes > 0){
+        
+            $this->appModule()->setRestartTime($minutes);        
+            Debug::info('Enable automatic restart. (time = ' . $minutes . ' minute(s))');
+        } else {
+            $this->appModule()->setRestartTime(-1);
+            Debug::info('Disable automatic restart (time = -1)');
+        }
+    }
 }

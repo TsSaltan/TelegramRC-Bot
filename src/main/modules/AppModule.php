@@ -6,7 +6,7 @@ use std, gui, framework, main;
 
 class AppModule extends AbstractModule
 {
-    const APP_VERSION = '3.0.2-dev';
+    const APP_VERSION = '3.1-dev';
     
     /**
      * Время запуска программы 
@@ -111,12 +111,12 @@ class AppModule extends AbstractModule
             
             // Переподключение, если программа скрыта
             if(!$form->visible){
-            waitAsync(5000, function() use ($form){
-                if(!$form->visible){
-                    Debug::info('Try to reconnect after error (hidden)...');
-                    $this->tgBot->startListener();  
-                }
-            });
+                waitAsync(5000, function() use ($form){
+                    if(!$form->visible){
+                        Debug::info('Try to reconnect after error (hidden)...');
+                        $this->tgBot->startListener();  
+                    }
+                });
             }
         });
         
@@ -130,12 +130,17 @@ class AppModule extends AbstractModule
             $this->systemTray->tooltip = $this->trayTooltop . ': Offline';
         });     
                   
-        if(Config::get('autorun', $value)){
+        if(Config::get('autorun')){
             $this->tgBot->startListener();    
         }
         
         if(!Config::get('iconified')){
             $form->show();
+        }
+        
+        $minutes = Config::get('restart_minutes');
+        if(Config::get('restart') === true && intval($minutes) > 0){
+            $this->setRestartTime($minutes);
         }
     }
     
@@ -198,5 +203,30 @@ class AppModule extends AbstractModule
             if(strlen($title) > 0) $noticeForm->setTitleText($title);
             $noticeForm->show();
         });
+    }
+    
+    /**
+     * @var Timer
+     **/
+    public $restarter;
+    
+    /**
+     * Установить время для автоматического переподключения
+     * @var int $minutes Количество минут. Если -1, то переподключения не будет 
+     */
+    public function setRestartTime(int $minutes){
+        if($this->restarter instanceof Timer){
+            $this->restarter->cancel();    
+        }
+        
+        if($minutes > 0){
+             $this->restarter = Timer::every($minutes * 60000, function() use ($minutes){
+                 Debug::info('Automatic reconnection (after '. $minutes.' minute(s))');
+                 $this->tgBot->stopListener();  
+                 waitAsync(1000, function(){
+                     $this->tgBot->startListener();  
+                 });
+             });
+        }
     }
 }
