@@ -128,6 +128,7 @@ class AppModule extends AbstractModule
                 /* @var Params $form */            
                 $form = $this->form('Params');
                 if($form->visible){
+                    $form->updateBotInfo();
                     $form->setStartButton('on');
                 }
             });
@@ -239,7 +240,7 @@ class AppModule extends AbstractModule
              $this->restarter = Timer::every($minutes * 60000, function() use ($minutes){
                  Debug::info('Automatic reconnection (after '. $minutes.' minute(s))');
                  $this->tgBot->stopListener();  
-                 waitAsync(1000, function(){
+                 waitAsync(3000, function(){
                      $this->tgBot->startListener();  
                  });
              });
