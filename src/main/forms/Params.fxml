@@ -234,6 +234,26 @@
                 </AnchorPane>
               </content>
             </Tab>
+            <Tab text="События">
+              <content>
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
+                  <children>
+                    <LabelEx AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8" alignment="TOP_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label8" layoutX="8" layoutY="8" prefHeight="40" prefWidth="592" styleClass="label " text="Выберите события, при срабатывании которых будет отправлено сообщение всем привязанным пользователям" textAlignment="LEFT" underline="false" wrapText="true">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </LabelEx>
+                    <Data cursor="DEFAULT" enabled="1" id="data-label8" visible="1"/>
+                    <CheckBox AnchorPane.leftAnchor="8" AnchorPane.topAnchor="48" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="event_startup" layoutX="8" layoutY="48" prefHeight="17" prefWidth="600" selected="true" styleClass="check-box " text="Запуск приложения" textAlignment="LEFT" underline="false" wrapText="true">
+                      <font>
+                        <Font name="System Regular" size="12"/>
+                      </font>
+                    </CheckBox>
+                    <Data cursor="DEFAULT" enabled="1" id="data-event_startup" visible="1"/>
+                  </children>
+                </AnchorPane>
+              </content>
+            </Tab>
           </tabs>
         </TabPaneEx>
         <Data cursor="DEFAULT" draggable="NONE" enabled="1" id="data-tabPane" visible="1"/>

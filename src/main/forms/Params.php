@@ -347,4 +347,17 @@ class Params extends AbstractForm {
             Debug::info('Disable automatic restart (time = -1)');
         }
     }
+
+    /**
+     * @event event_startup.click 
+     * @event event_startup.keyUp 
+     */
+    function doEvent_startup($e = null){    
+        if($this->event_startup->selected){
+            $this->enableEvent('startup');
+        }
+        else {
+            $this->disableEvent('startup');            
+        }
+    }
 }

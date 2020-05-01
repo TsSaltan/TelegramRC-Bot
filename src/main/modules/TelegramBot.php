@@ -416,6 +416,15 @@ class TelegramBot extends AbstractModule {
         }
     }
     
+    public function sendToAll(array $data){
+        foreach ($this->users as $user){
+            if($user['id'] <= 0) continue;
+            
+            //$command = $this->createCommand($user['name'], $user['id'], $user['id']);
+            $this->sendAnswer($user['id'], $data);
+        }
+    }
+    
     /**
      * Отправка ответа 
      */
@@ -444,10 +453,6 @@ class TelegramBot extends AbstractModule {
         if(isset($data['doc'])){
             $this->api->sendDocument()->chat_id($chat_id)->document(new File($data['doc']))->query();
         }
-        
-
-        
-        // $this->api->query();
     }
     
      
