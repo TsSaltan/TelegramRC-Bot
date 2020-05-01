@@ -123,11 +123,27 @@ class AppModule extends AbstractModule
         $this->tgBot->setStartCallback(function(){
             $this->systemTray->icon = new UXImage('res://.data/img/plane_arrow.png');
             $this->systemTray->tooltip = $this->trayTooltop . ': Online';
+            
+            uiLater(function(){
+                /* @var Params $form */            
+                $form = $this->form('Params');
+                if($form->visible){
+                    $form->setStartButton('on');
+                }
+            });
         });
                 
         $this->tgBot->setStopCallback(function(){
             $this->systemTray->icon = new UXImage('res://.data/img/plane_warn.png');
-            $this->systemTray->tooltip = $this->trayTooltop . ': Offline';
+            $this->systemTray->tooltip = $this->trayTooltop . ': Offline';            
+            
+            uiLater(function(){
+                /* @var Params $form */            
+                $form = $this->form('Params');
+                if($form->visible){
+                    $form->setStartButton('off');
+                }
+            });
         });     
                   
         if(Config::get('autorun')){
