@@ -1112,6 +1112,10 @@ class Commands extends AbstractModule {
             $message .= "\n" . SMILE_PC . " Компьютер работает: " . ($btime->day() - 1) . ' дней ' . $btime->hourOfDay() . ' часов ' . $btime->minute() . ' минут ' . $btime->second() . " секунд.";
         }        
         
+        if($this->isCallback()){
+            $this->sendCallback('Uptime');
+        }
+        
         $this->send($message);
     }         
       

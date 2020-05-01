@@ -1,6 +1,7 @@
 <?php
 namespace main\forms;
 
+use windows;
 use telegram\exception\TelegramException;
 use main\modules\TelegramBot;
 use std, gui, framework, main;
@@ -55,8 +56,9 @@ class Params extends AbstractForm {
         $this->tabPane->tabs->offsetGet(0)->graphic = new UXImageView(new UXImage('res://.data/img/console.png'));
         $this->tabPane->tabs->offsetGet(1)->graphic = new UXImageView(new UXImage('res://.data/img/connection.png'));
         $this->tabPane->tabs->offsetGet(2)->graphic = new UXImageView(new UXImage('res://.data/img/users.png'));
-        $this->tabPane->tabs->offsetGet(3)->graphic = new UXImageView(new UXImage('res://.data/img/bug.png'));
-        $this->tabPane->tabs->offsetGet(4)->graphic = new UXImageView(new UXImage('res://.data/img/info.png'));
+        $this->tabPane->tabs->offsetGet(3)->graphic = new UXImageView(new UXImage('res://.data/img/event.png'));
+        $this->tabPane->tabs->offsetGet(4)->graphic = new UXImageView(new UXImage('res://.data/img/bug.png'));
+        $this->tabPane->tabs->offsetGet(5)->graphic = new UXImageView(new UXImage('res://.data/img/info.png'));
         
         // При сворачивании помещаем в трей 
         $this->observer('iconified')->addListener(function($old, $new){
@@ -74,6 +76,34 @@ class Params extends AbstractForm {
             
             $this->configRestart();
         });
+        
+        // Чекбоксы с событиями
+        $eCheckboxes = $this->tabPane->tabs->offsetGet(3)->content->lookupAll('.check-box');
+        $isWin = Windows::isWin();
+        foreach ($eCheckboxes as $cb){
+            /* @var UXCheckbox $cb */
+            $id = $cb->id;
+            $eventName = str_replace('event_', '', $id);
+            
+            if(str::startsWith($cb->id, 'event')){
+                if(str::contains($cb->id, 'win') && !$isWin){
+                    $cb->visible = false;
+                }
+                
+                $cb->selected = $this->isEventEnabled($eventName);
+                $cb->observer('selected')->addListener(function($old, $new) use ($cb, $eventName){
+                    if($cb->selected){
+                        Debug::info('Enable event: ' . $eventName);
+                        $this->enableEvent($eventName);
+                    }
+                    else {
+                        Debug::info('Disable event: ' . $eventName);
+                        $this->disableEvent($eventName);            
+                    }
+                });
+            }
+        }
+        
     }
     
     public function loadUsers(){
@@ -345,19 +375,6 @@ class Params extends AbstractForm {
         } else {
             $this->appModule()->setRestartTime(-1);
             Debug::info('Disable automatic restart (time = -1)');
-        }
-    }
-
-    /**
-     * @event event_startup.click 
-     * @event event_startup.keyUp 
-     */
-    function doEvent_startup($e = null){    
-        if($this->event_startup->selected){
-            $this->enableEvent('startup');
-        }
-        else {
-            $this->disableEvent('startup');            
         }
     }
 }
