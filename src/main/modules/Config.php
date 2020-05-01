@@ -34,8 +34,8 @@ class Config extends AbstractModule {
     /**
      * Получить значение 
      */
-    public static function get($key){
-        return self::$data[$key] ?? null;
+    public static function get($key, $default = null){
+        return self::$data[$key] ?? $default;
     }
     
     /**
