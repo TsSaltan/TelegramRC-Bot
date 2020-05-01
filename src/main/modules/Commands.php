@@ -79,6 +79,10 @@ class Commands extends AbstractModule {
       
     public function setUserId(int $user_id){
         $this->user_id = $user_id;
+    }      
+    
+    public function getUserId(): int {
+        return $this->user_id;
     }    
     
     public function setUsername(string $username){

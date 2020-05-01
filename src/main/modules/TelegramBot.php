@@ -139,7 +139,82 @@ class TelegramBot extends AbstractModule {
     }
     
     public function setUsers(array $users){
-        $this->users = array_map(function($i){ return strtolower($i); }, $users);
+        // migrate to v 4.x
+        if(isset($users[0]) && is_string($users[0])){        
+            $users = array_map(function($i){ return ['name' => strtolower($i), 'id' => -1]; }, $users);    
+            Config::set('users', $users);
+        }
+        
+        $this->users = $users;
+    }
+        
+    public function setUserId(string $user, int $id){
+        $name = strtolower($user);
+        foreach ($this->users as $k => $u){
+            if(strtolower($u['name']) == $name){
+                if($u['id'] < 0){
+                    $this->users[$k]['id'] = $id;
+                    Config::set('users', $this->users);
+                }
+                break;
+            }
+        }
+    }
+        
+    public function getUsers(bool $mergeSub = true): array {
+        if($mergeSub){
+            return array_map(function($i){ return $i['name'] . ($i['id'] > 0 ? ' (id: '.$i['id'].')' : ''); }, $this->users);
+        }
+        else return $this->users;
+    }   
+    
+    public function addUser(string $user, int $id = -1){
+        $this->users[] = ['name' => $user, 'id' => $id];
+        Config::set('users', $this->users);
+    }
+        
+    public function deleteUser(string $user){
+        $name = strtolower($user);
+        foreach ($this->users as $k => $u){
+            if(strtolower($u['name']) == $name){
+                unset($this->users[$k]);
+            }
+        }
+        
+        $this->users = array_values($this->users);
+        Config::set('users', $this->users);
+    }        
+    
+    public function deleteUserByIndex(int $index){        
+        unset($this->users[$index]);
+        $this->users = array_values($this->users);
+        Config::set('users', $this->users);
+    }
+            
+    public function isUserExists(string $user): bool{
+        $name = strtolower($user);
+        foreach ($this->users as $k => $u){
+            if(strtolower($u['name']) == $name){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+     
+    /**
+     * Проверка пользователя
+     * Лучше перевести всё в нижний регистр 
+     */
+    public function checkUser($username): bool {
+        $username = strtolower($username);
+        foreach ($this->users as $k => $user){
+            if(strtolower($user['name']) == $username){
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     public function getStatus(){
@@ -305,6 +380,8 @@ class TelegramBot extends AbstractModule {
                 $commands->deniedMsg();
                 return;
             }
+            
+            $this->setUserId($commands->getUsername(), $commands->getUserId());
         
             $cmd = $this->parseCommand($commands->alias($text));
             $hasDoc = is_array($doc) && sizeof($doc) > 0;                    
@@ -337,14 +414,6 @@ class TelegramBot extends AbstractModule {
             
             $commands->errorMsg($emessage);   
         }
-    }
-    
-    /**
-     * Проверка пользователя
-     * Лучше перевести всё в нижний регистр 
-     */
-    public function checkUser($username): bool {
-        return in_array(strtolower($username), $this->users);
     }
     
     /**
