@@ -25,7 +25,7 @@ class Params extends AbstractForm {
         $this->edit_api_url->text = $api_url;
         
         // Загрузка списка пользователей
-        $users = Config::get('users');
+        $users = $this->getBot()->getUsers();
         $this->list_users->items->clear();
         $this->list_users->items->addAll($users);
         
@@ -35,6 +35,9 @@ class Params extends AbstractForm {
         if($state == 'on'){
             $this->updateBotInfo();
         }
+        
+        // Загрузка списка пользователей
+        $this->loadUsers();
         
         // Подгружаем логи    
         $this->text_debug->text = Debug::getLogs();
@@ -71,6 +74,12 @@ class Params extends AbstractForm {
             
             $this->configRestart();
         });
+    }
+    
+    public function loadUsers(){
+        $users = $this->getBot()->getUsers();
+        $this->list_users->items->clear();
+        $this->list_users->items->addAll($users);
     }
     
     /**
@@ -133,14 +142,13 @@ class Params extends AbstractForm {
         $user = $this->edit_username->text;
         if(strlen($user) == 0) return alert('Ошибка: введите имя пользователя!');
         
-        $users = $this->list_users->items->toArray();
-        if(in_array($user, $users)) return alert('Ошибка: пользователь с таким ником уже добавлен!');
+        
+        if($this->getBot()->isUserExists($user)) return alert('Ошибка: пользователь с таким ником уже добавлен!');
         
         $this->edit_username->text = null;
-        $this->list_users->items->add($user);
-        $users[] = $user;
-        Config::set('users', $users);
-        $this->getBot()->setUsers($users);
+        
+        $this->getBot()->addUser($user);
+        $this->loadUsers();
     }    
     
     /**
@@ -149,10 +157,9 @@ class Params extends AbstractForm {
      */
     function deleteUser(){   
         $this->button_delete_user->enabled = false;
-        $selected = $this->list_users->selectedIndex;
-        $this->list_users->items->removeByIndex($selected);
-        Config::set('users', $this->list_users->items->toArray());
-        $this->getBot()->setUsers($this->list_users->items->toArray());
+        $userIndex = $this->list_users->selectedIndex;
+        $this->getBot()->deleteUserByIndex($userIndex);
+        $this->loadUsers();
     }
 
     /**
