@@ -19,8 +19,8 @@ class Debug extends AbstractModule {
      */ 
     public static function Log($message, $level = 0){
         $diff = self::getTimeDiff();
-        $date = '[' . (Time::now()->toString('HH:mm:ss')) . '|+' . $diff . 's] ';
-        $fulldate = '[' . (Time::now()->toString('YYYY-MM-dd HH:mm:ss')) . ' | +' . $diff . 's] ';
+        $date = '[' . (Time::now()->toString('HH:mm:ss')) . '|' . $diff . '] ';
+        $fulldate = '[' . (Time::now()->toString('YYYY-MM-dd HH:mm:ss')) . '|' . $diff . '] ';
         
         switch($level){
             case 3:
@@ -56,8 +56,6 @@ class Debug extends AbstractModule {
                     $form->text_debug->text .= $fulldate . '['.$prefix.'] ' . $message . "\n";
                     $form->text_debug->end();
                 }
-            
-            
             });
             file_put_contents(self::$logFile, $fulldate . '['.$prefix.'] ' . $message . "\n", FILE_APPEND);
         }
@@ -93,10 +91,30 @@ class Debug extends AbstractModule {
     }
     
     public static $lastTime = 0;
-    public static function getTimeDiff(): int {
+    public static function getTimeDiff(): string {
         $diff = (self::$lastTime > 0) ? time() - self::$lastTime : 0;
         self::$lastTime = time();
-        return $diff;
+        
+        if($diff == 0){
+            return '0s';
+        }
+        
+        $str = '';
+        if($diff > 60*60){
+            $h = floor($diff / 60 / 60);
+            $diff -= $h * 60 * 60;
+            $str .= $h . 'h ';
+        }
+        
+        if($diff > 60){
+            $m = floor($diff / 60);
+            $diff -= $m * 60;
+            $str .= $m . 'm ';
+        }        
+        
+        $str .= $diff .'s';
+        
+        return '+' . $str;
     }
     
 }
