@@ -344,7 +344,7 @@ class Params extends AbstractForm {
     function doTabPaneChange(UXEvent $e = null){    
         $programTime = (time() - app()->appModule()->startup) * 1000;
         $ptime = new Time($programTime, TimeZone::UTC()); 
-        $this->label_uptime->text = ($ptime->day() - 1) . 'd ' . $ptime->hourOfDay() . 'h ' . $ptime->minute() . 'm';
+        $this->label_uptime->text = ($ptime->day() - 1) . ' дней, ' . $ptime->hourOfDay() . ' часов, ' . $ptime->minute() . ' минут';
     }
 
     /**
@@ -376,5 +376,13 @@ class Params extends AbstractForm {
             $this->appModule()->setRestartTime(-1);
             Debug::Log('Disable automatic restart (time = -1)', 0);
         }
+    }
+
+    /**
+     * @event label_debug.click 
+     */
+    function doLabel_debugClick($e = null)
+    {    
+        $this->tabPane->selectedIndex = 4;
     }
 }

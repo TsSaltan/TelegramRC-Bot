@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?import javafx.scene.*?><?import javafx.collections.*?><?import javafx.scene.layout.*?><?import javafx.scene.control.*?><?import javafx.scene.text.*?><?import javafx.scene.image.*?><?import javafx.scene.shape.*?><?import javafx.scene.paint.*?><?import javafx.scene.web.*?><?import javafx.geometry.*?><?import java.lang.*?><?import org.develnext.jphp.ext.javafx.classes.data.*?><?import org.develnext.jphp.ext.javafx.support.*?><?import org.develnext.jphp.ext.javafx.support.control.*?><?import org.develnext.jphp.ext.game.support.*?><AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" focusTraversable="false" id="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="408" prefWidth="624" styleClass="">
+<?import javafx.scene.*?><?import javafx.collections.*?><?import javafx.scene.layout.*?><?import javafx.scene.control.*?><?import javafx.scene.text.*?><?import javafx.scene.image.*?><?import javafx.scene.shape.*?><?import javafx.scene.paint.*?><?import javafx.scene.web.*?><?import javafx.geometry.*?><?import java.lang.*?><?import org.develnext.jphp.ext.javafx.classes.data.*?><?import org.develnext.jphp.ext.javafx.support.*?><?import org.develnext.jphp.ext.javafx.support.control.*?><?import org.develnext.jphp.ext.game.support.*?><AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" focusTraversable="false" id="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="408" prefWidth="648" styleClass="">
   <children>
     <Data cursor="DEFAULT" enabled="1" id="data-statusbar" visible="1"/>
-    <Panel AnchorPane.bottomAnchor="-2" AnchorPane.leftAnchor="-8" AnchorPane.rightAnchor="-8" backgroundColor="#ffffff" borderColor="#c0c0c0" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="statusbar" layoutX="-8" layoutY="384" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="26" prefWidth="640" styleClass="" titleColor="#333333" titleOffset="15" titlePosition="TOP_LEFT">
+    <Panel AnchorPane.bottomAnchor="-2" AnchorPane.leftAnchor="-8" AnchorPane.rightAnchor="-8" backgroundColor="#ffffff" borderColor="#c0c0c0" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="statusbar" layoutX="-8" layoutY="384" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="26" prefWidth="664" styleClass="" titleColor="#333333" titleOffset="15" titlePosition="TOP_LEFT">
       <children>
-        <LabelEx AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="14" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="0" id="label_debug" layoutX="17" layoutY="0" prefHeight="24" prefWidth="608" styleClass="label " text="[Debug]" textAlignment="LEFT" textFill="#000000" underline="false" wrapText="true">
+        <LabelEx AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="14" alignment="CENTER_LEFT" autoSize="false" contentDisplay="TOP" ellipsisString="..." focusTraversable="false" graphicTextGap="0" id="label_debug" layoutX="17" layoutY="0" prefHeight="24" prefWidth="608" styleClass="label " text="[Debug]" textAlignment="LEFT" textFill="#000000" underline="false" wrapText="true">
           <font>
             <Font name="System Regular" size="10"/>
           </font>
         </LabelEx>
-        <Data cursor="DEFAULT" enabled="1" id="data-label_debug" visible="1"/>
+        <Data cursor="HAND" enabled="1" id="data-label_debug" visible="1"/>
       </children>
       <titleFont>
         <Font name="System Regular" size="12"/>
       </titleFont>
     </Panel>
-    <VBox AnchorPane.bottomAnchor="24" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" alignment="TOP_LEFT" focusTraversable="false" id="main_box" layoutX="0" layoutY="0" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="384" prefWidth="624" spacing="8" styleClass="">
+    <VBox AnchorPane.bottomAnchor="24" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" alignment="TOP_LEFT" focusTraversable="false" id="main_box" layoutX="0" layoutY="0" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="384" prefWidth="648" spacing="8" styleClass="">
       <padding>
         <Insets bottom="8" left="8" right="8" top="8"/>
       </padding>
       <children>
-        <Panel AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8" backgroundColor="#ffffff" borderColor="#c0c0c0" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="panel" layoutX="8" layoutY="8" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="66" prefWidth="608" styleClass="" titleColor="#333333" titleOffset="15" titlePosition="TOP_LEFT">
+        <Panel AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8" backgroundColor="#ffffff" borderColor="#c0c0c0" borderRadius="0" borderStyle="SOLID" borderWidth="1" focusTraversable="false" id="panel" layoutX="8" layoutY="8" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="66" prefWidth="632" styleClass="" titleColor="#333333" titleOffset="15" titlePosition="TOP_LEFT">
           <children>
             <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label" layoutX="24" layoutY="8" prefHeight="24" prefWidth="72" styleClass="label " text="Имя бота:" textAlignment="LEFT" underline="false" wrapText="false">
               <font>
@@ -28,7 +28,7 @@
               </font>
             </LabelEx>
             <Data cursor="DEFAULT" enabled="1" id="data-label" visible="1"/>
-            <ToggleButton AnchorPane.rightAnchor="15" AnchorPane.topAnchor="15" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_run" layoutX="424" layoutY="16" prefHeight="32" prefWidth="168" styleClass="toggle-button " text="-" textAlignment="LEFT" underline="false" wrapText="false">
+            <ToggleButton AnchorPane.rightAnchor="15" AnchorPane.topAnchor="15" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_run" layoutX="448" layoutY="16" prefHeight="32" prefWidth="168" styleClass="toggle-button " text="-" textAlignment="LEFT" underline="false" wrapText="false">
               <font>
                 <Font name="System Regular" size="12"/>
               </font>
@@ -62,7 +62,7 @@
           <tabs>
             <Tab text="Параметры запуска">
               <content>
-                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="265" prefWidth="632" styleClass="">
                   <children>
                     <CheckBox AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="18" AnchorPane.topAnchor="16" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_iconified" layoutX="16" layoutY="16" prefHeight="24" prefWidth="574" styleClass="check-box " text="Запускать программу свёрнутой" textAlignment="LEFT" underline="false" wrapText="false">
                       <font>
@@ -96,7 +96,7 @@
             </Tab>
             <Tab text="Соединение">
               <content>
-                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="265" prefWidth="632" styleClass="">
                   <children>
                     <TextField AnchorPane.leftAnchor="80" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="16" alignment="CENTER_LEFT" editable="true" focusTraversable="true" id="edit_token" layoutX="80" layoutY="16" prefColumnCount="12" prefHeight="25" prefWidth="520" promptText="Введите token" styleClass="text-input text-field " text="">
                       <font>
@@ -104,7 +104,7 @@
                       </font>
                     </TextField>
                     <Data cursor="DEFAULT" enabled="1" id="data-edit_token" visible="1"/>
-                    <Button AnchorPane.rightAnchor="8" AnchorPane.topAnchor="240" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_save_token" layoutX="480" layoutY="240" prefHeight="24" prefWidth="120" styleClass="button " text="Сохранить" textAlignment="CENTER" underline="false" wrapText="false">
+                    <Button AnchorPane.rightAnchor="8" AnchorPane.topAnchor="240" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_save_token" layoutX="504" layoutY="240" prefHeight="24" prefWidth="120" styleClass="button " text="Сохранить" textAlignment="CENTER" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
@@ -146,7 +146,7 @@
             </Tab>
             <Tab text="Пользователи">
               <content>
-                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="265" prefWidth="632" styleClass="">
                   <children>
                     <LabelEx AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="26.799995422363" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="labelAlt" layoutX="8" layoutY="8" prefHeight="17" prefWidth="384" styleClass="label " text="Только пользователи из этого списка могут управлять ботом" textAlignment="LEFT" underline="false" wrapText="false">
                       <font>
@@ -160,7 +160,7 @@
                       </font>
                     </TextField>
                     <Data cursor="DEFAULT" enabled="1" id="data-edit_username" visible="1"/>
-                    <Button AnchorPane.rightAnchor="8" AnchorPane.topAnchor="32" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_add_user" layoutX="488" layoutY="32" prefHeight="25" prefWidth="112" styleClass="button " text="Добавить" textAlignment="CENTER" underline="false" wrapText="false">
+                    <Button AnchorPane.rightAnchor="8" AnchorPane.topAnchor="32" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_add_user" layoutX="512" layoutY="32" prefHeight="25" prefWidth="112" styleClass="button " text="Добавить" textAlignment="CENTER" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
@@ -172,7 +172,7 @@
                       </items>
                     </ListViewEx>
                     <Data cursor="DEFAULT" enabled="1" id="data-list_users" visible="1"/>
-                    <Button AnchorPane.bottomAnchor="8" AnchorPane.rightAnchor="10" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_delete_user" layoutX="486" layoutY="239" prefHeight="25" prefWidth="112" styleClass="button " text="Удалить" textAlignment="CENTER" underline="false" wrapText="false">
+                    <Button AnchorPane.bottomAnchor="8" AnchorPane.rightAnchor="10" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="button_delete_user" layoutX="510" layoutY="232" prefHeight="25" prefWidth="112" styleClass="button " text="Удалить" textAlignment="CENTER" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
@@ -184,7 +184,7 @@
             </Tab>
             <Tab text="События">
               <content>
-                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="265" prefWidth="632" styleClass="">
                   <children>
                     <LabelEx AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8" alignment="TOP_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label8" layoutX="8" layoutY="8" prefHeight="40" prefWidth="592" styleClass="label " text="Выберите события, при срабатывании которых будет отправлено сообщение всем привязанным пользователям" textAlignment="LEFT" underline="false" wrapText="true">
                       <font>
@@ -216,21 +216,21 @@
             </Tab>
             <Tab text="Логи">
               <content>
-                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="265" prefWidth="632" styleClass="">
                   <children>
-                    <TextArea AnchorPane.bottomAnchor="41" AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8" editable="true" focusTraversable="true" id="text_debug" layoutX="8" layoutY="8" prefColumnCount="40" prefHeight="184" prefWidth="592" promptText="" styleClass="text-input text-area " text="" wrapText="false">
+                    <TextArea AnchorPane.bottomAnchor="41" AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8" editable="false" focusTraversable="true" id="text_debug" layoutX="8" layoutY="8" prefColumnCount="40" prefHeight="184" prefWidth="592" promptText="" styleClass="text-input text-area " text="" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
                     </TextArea>
                     <Data cursor="DEFAULT" enabled="1" id="data-text_debug" visible="1"/>
-                    <Button AnchorPane.bottomAnchor="8" AnchorPane.rightAnchor="8" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_clear_logs" layoutX="472" layoutY="239" prefHeight="25" prefWidth="128" styleClass="button " text="Очистить логи" textAlignment="CENTER" underline="false" wrapText="false">
+                    <Button AnchorPane.bottomAnchor="8" AnchorPane.rightAnchor="8" alignment="CENTER" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="6" id="button_clear_logs" layoutX="496" layoutY="232" prefHeight="25" prefWidth="128" styleClass="button " text="Очистить логи" textAlignment="CENTER" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
                     </Button>
                     <Data cursor="DEFAULT" enabled="1" graphic=".data/img/trash.png" id="data-button_clear_logs" visible="1"/>
-                    <CheckBox AnchorPane.bottomAnchor="8" AnchorPane.leftAnchor="8" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_logs" layoutX="8" layoutY="240" prefHeight="24" prefWidth="144" styleClass="check-box " text="Сохранять логи" textAlignment="LEFT" underline="false" wrapText="false">
+                    <CheckBox AnchorPane.bottomAnchor="8" AnchorPane.leftAnchor="8" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="checkbox_logs" layoutX="8" layoutY="233" prefHeight="24" prefWidth="144" styleClass="check-box " text="Сохранять логи" textAlignment="LEFT" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
@@ -242,7 +242,7 @@
             </Tab>
             <Tab text="Информация">
               <content>
-                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="272" prefWidth="608" styleClass="">
+                <AnchorPane focusTraversable="false" id="" maxHeight="-1" maxWidth="-1" minHeight="-1" minWidth="-1" prefHeight="265" prefWidth="632" styleClass="">
                   <children>
                     <Hyperlink alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="link_about" layoutX="16" layoutY="16" prefHeight="16" prefWidth="144" styleClass="hyperlink " text="TelegramRC FAQ" textAlignment="LEFT" wrapText="false">
                       <font>
@@ -250,13 +250,13 @@
                       </font>
                     </Hyperlink>
                     <Data cursor="DEFAULT" enabled="1" graphic=".data/img/info.png" id="data-link_about" visible="1"/>
-                    <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label_uptime_title" layoutX="16" layoutY="40" prefHeight="17" prefWidth="56" styleClass="label " text="Uptime:" textAlignment="LEFT" underline="false" wrapText="false">
+                    <LabelEx alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label_uptime_title" layoutX="16" layoutY="40" prefHeight="17" prefWidth="96" styleClass="label " text="Время работы:" textAlignment="LEFT" underline="false" wrapText="false">
                       <font>
                         <Font name="System Bold" size="12"/>
                       </font>
                     </LabelEx>
                     <Data cursor="DEFAULT" enabled="1" id="data-label_uptime_title" visible="1"/>
-                    <LabelEx AnchorPane.leftAnchor="72" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="40" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label_uptime" layoutX="72" layoutY="40" prefHeight="17" prefWidth="528" styleClass="label " text="0h" textAlignment="LEFT" underline="false" wrapText="false">
+                    <LabelEx AnchorPane.leftAnchor="112" AnchorPane.rightAnchor="16" AnchorPane.topAnchor="40" alignment="CENTER_LEFT" autoSize="false" contentDisplay="LEFT" ellipsisString="..." focusTraversable="false" graphicTextGap="4" id="label_uptime" layoutX="112" layoutY="40" prefHeight="17" prefWidth="504" styleClass="label " text="0h" textAlignment="LEFT" underline="false" wrapText="false">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
