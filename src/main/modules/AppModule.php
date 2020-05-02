@@ -186,6 +186,7 @@ class AppModule extends AbstractModule
     
     /**
      * @event systemTray.click 
+     * @event systemTray.click-2x 
      */
     public function doSystemTrayClick(){    
         $form = $this->form('Params');
