@@ -371,10 +371,10 @@ class Params extends AbstractForm {
         if($this->checkbox_restart->selected && $minutes > 0){
         
             $this->appModule()->setRestartTime($minutes);        
-            Debug::info('Enable automatic restart. (time = ' . $minutes . ' minute(s))');
+            Debug::Log('Enable automatic restart. (time = ' . $minutes . ' minute(s))', 0);
         } else {
             $this->appModule()->setRestartTime(-1);
-            Debug::info('Disable automatic restart (time = -1)');
+            Debug::Log('Disable automatic restart (time = -1)', 0);
         }
     }
 }

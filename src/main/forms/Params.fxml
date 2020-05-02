@@ -198,7 +198,7 @@
                       </font>
                     </CheckBox>
                     <Data cursor="DEFAULT" enabled="1" id="data-event_startup" visible="1"/>
-                    <CheckBox AnchorPane.leftAnchor="8" AnchorPane.topAnchor="96" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="event_battery_win" layoutX="8" layoutY="96" prefHeight="17" prefWidth="600" selected="true" styleClass="check-box " text="Подключение и отключение зарядки, низкий заряд батареи (15%)" textAlignment="LEFT" underline="false" wrapText="true">
+                    <CheckBox AnchorPane.leftAnchor="8" AnchorPane.topAnchor="96" alignment="CENTER_LEFT" contentDisplay="LEFT" ellipsisString="..." focusTraversable="true" graphicTextGap="4" id="event_battery_win" layoutX="8" layoutY="96" prefHeight="17" prefWidth="600" selected="true" styleClass="check-box " text="Подключение и отключение зарядки, уровни заряда батареи (50%, 15%, 5%)" textAlignment="LEFT" underline="false" wrapText="true">
                       <font>
                         <Font name="System Regular" size="12"/>
                       </font>
